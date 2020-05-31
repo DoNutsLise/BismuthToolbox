@@ -48,8 +48,6 @@ public class AsyncFetchData extends AsyncTask<List<String>, Void, Void> {
         mContext = context;
     }
 
-    // TODO: change getInMemoryDatabase(mContext) to persistent db for production
-
     @Override
     protected Void doInBackground(List<String>... params) {
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss"), "AsyncFetchFreshData(doInBackground): called");

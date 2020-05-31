@@ -34,15 +34,10 @@ import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_S
  * This activity, just like all other activities, extends BaseActivity that implements most of the UI stuff (navigation drawer, etc)
  */
 
-//TODO: replace asynctask with multithreaded httpurl requests: https://www.youtube.com/watch?v=jH-3spGUa7c
-
-// TODO: replace getInMemoryDatabase(mContext) in asynctask and settingsFragment to persistent db for production
-
 public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched {
 
     private FrameLayout contentFrameLayout;
     private AsyncFetchData asyncFetchFreshData;
-
     private TextView tv_hypernodes_active;
     private TextView tv_hypernodes_inactive;
     private TextView tv_hypernodes_lagging;
@@ -59,20 +54,6 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // TODO: below are shared preferences added for testing purpose:
-//        sharedPreferences.edit().putString("hypernodeIP1", "163.172.222.163").apply(); // active
-//        sharedPreferences.edit().putString("hypernodeIP2", "142.93.93.4").apply(); // inactive
-//        sharedPreferences.edit().putString("hypernodeIP3", "142.93.1.1").apply(); // doesn't exist
-//        sharedPreferences.edit().putString("bisWalletAddress1", "4f92743a7f5549fe19205842b117aa9c8a611fa8533b1934b43a9ce1").apply(); // random
-//        sharedPreferences.edit().putString("bisWalletAddress2", "7d5c2999f9a2e44c23e7b2b73b4c0edae308e9d39482bf44da481edc").apply(); // casino
-//        sharedPreferences.edit().putString("bisWalletAddress3", "7d5c2999f9a2e44c23e7b2b73b4c0edae308e9d39482bf44d").apply(); // non-existent
-//        // http://bismuth.online/api/node/balancegetjson:939250d1ce3e543a2f0c3106a12a56649a2199d7ef59b7078ede127f
-//        sharedPreferences.edit().putString("miningWalletAddress1", "15158a334b969fa7486a2a1468d04a583f3b51e6e0a7d330723701c3").apply(); // 3 workers
-//        sharedPreferences.edit().putString("miningWalletAddress2", "1dfdc05f34681ef2360c2a0fa0dbe190e20981cd1cfcc425aace6a00").apply(); // 2 workers
-//        sharedPreferences.edit().putString("miningWalletAddress3", "1dfdc05f34681ef2360c2a0fa0dbe190e20981cd1cfcc425aace").apply(); // non-existent
-//        // https://eggpool.net/index.php?action=api&type=detail&miner=15158a334b969fa7486a2a1468d04a583f3b51e6e0a7d330723701c3
-
 
         contentFrameLayout = findViewById(R.id.content_frame); //Remember this is the FrameLayout area within BaseActivity.xml
         getLayoutInflater().inflate(R.layout.activity_home, contentFrameLayout);
@@ -152,18 +133,20 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         // this is called whenever the LiveData changes are detected by the observer (registered in onCreate)
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeActivity", "updateHomeScreenViews: "+
                 "called");
-        tv_hypernodes_active.setText(String.valueOf(data.getHypernodesActive()));
-        tv_hypernodes_inactive.setText(String.valueOf(data.getHypernodesInactive()));
-        tv_hypernodes_lagging.setText(String.valueOf(data.getHypernodesLagging()));
-        tv_wallets_number.setText(String.valueOf(data.getRegisteredWallets()));
-        tv_bis_balance.setText(String.valueOf(data.getBalanceBis()));
-        tv_usd_balance.setText(String.valueOf(data.getBalanceUsd()));
-        tv_mining_active.setText(String.valueOf(data.getMinersActive()));
-        tv_mining_inactive.setText(String.valueOf(data.getMinersInactive()));
-        tv_mining_hashrate.setText(String.valueOf(data.getMinersHashrate()));
-        tv_block_height.setText(String.valueOf(data.getBlockHeight()));
-        tv_bis_to_btc.setText(String.valueOf(data.getBisToBtc()));
-        tv_bis_to_usd.setText(String.valueOf(data.getBisToUsd()));
+        if (data != null) {
+            tv_hypernodes_active.setText(String.valueOf(data.getHypernodesActive()));
+            tv_hypernodes_inactive.setText(String.valueOf(data.getHypernodesInactive()));
+            tv_hypernodes_lagging.setText(String.valueOf(data.getHypernodesLagging()));
+            tv_wallets_number.setText(String.valueOf(data.getRegisteredWallets()));
+            tv_bis_balance.setText(String.valueOf(data.getBalanceBis()));
+            tv_usd_balance.setText(String.valueOf(data.getBalanceUsd()));
+            tv_mining_active.setText(String.valueOf(data.getMinersActive()));
+            tv_mining_inactive.setText(String.valueOf(data.getMinersInactive()));
+            tv_mining_hashrate.setText(String.valueOf(data.getMinersHashrate()));
+            tv_block_height.setText(String.valueOf(data.getBlockHeight()));
+            tv_bis_to_btc.setText(String.valueOf(data.getBisToBtc()));
+            tv_bis_to_usd.setText(String.valueOf(data.getBisToUsd()));
+        }
     }
 
     private void getFreshData(){
