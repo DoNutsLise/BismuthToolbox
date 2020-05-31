@@ -152,18 +152,20 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         // this is called whenever the LiveData changes are detected by the observer (registered in onCreate)
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeActivity", "updateHomeScreenViews: "+
                 "called");
-        tv_hypernodes_active.setText(String.valueOf(data.getHypernodesActive()));
-        tv_hypernodes_inactive.setText(String.valueOf(data.getHypernodesInactive()));
-        tv_hypernodes_lagging.setText(String.valueOf(data.getHypernodesLagging()));
-        tv_wallets_number.setText(String.valueOf(data.getRegisteredWallets()));
-        tv_bis_balance.setText(String.valueOf(data.getBalanceBis()));
-        tv_usd_balance.setText(String.valueOf(data.getBalanceUsd()));
-        tv_mining_active.setText(String.valueOf(data.getMinersActive()));
-        tv_mining_inactive.setText(String.valueOf(data.getMinersInactive()));
-        tv_mining_hashrate.setText(String.valueOf(data.getMinersHashrate()));
-        tv_block_height.setText(String.valueOf(data.getBlockHeight()));
-        tv_bis_to_btc.setText(String.valueOf(data.getBisToBtc()));
-        tv_bis_to_usd.setText(String.valueOf(data.getBisToUsd()));
+        if (data != null) {
+            tv_hypernodes_active.setText(String.valueOf(data.getHypernodesActive()));
+            tv_hypernodes_inactive.setText(String.valueOf(data.getHypernodesInactive()));
+            tv_hypernodes_lagging.setText(String.valueOf(data.getHypernodesLagging()));
+            tv_wallets_number.setText(String.valueOf(data.getRegisteredWallets()));
+            tv_bis_balance.setText(String.valueOf(data.getBalanceBis()));
+            tv_usd_balance.setText(String.valueOf(data.getBalanceUsd()));
+            tv_mining_active.setText(String.valueOf(data.getMinersActive()));
+            tv_mining_inactive.setText(String.valueOf(data.getMinersInactive()));
+            tv_mining_hashrate.setText(String.valueOf(data.getMinersHashrate()));
+            tv_block_height.setText(String.valueOf(data.getBlockHeight()));
+            tv_bis_to_btc.setText(String.valueOf(data.getBisToBtc()));
+            tv_bis_to_usd.setText(String.valueOf(data.getBisToUsd()));
+        }
     }
 
     private void getFreshData(){
