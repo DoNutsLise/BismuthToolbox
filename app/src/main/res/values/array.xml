@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--these arrays are for settings-->
+    <string-array name="backgroundConnectionsFrequencyEntries">
+        <item>15 min</item>
+        <item>30 min</item>
+        <item>60 min</item>
+    </string-array>
+
+    <string-array name="backgroundConnectionsFrequencyValues">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+    </string-array>
+
+    <string-array name="backgroundConnectionsEntries">
+        <item>Always</item>
+        <!-- <item>On WiFi only</item> -->
+        <item>Never</item>
+    </string-array>
+
+    <string-array name="backgroundConnectionsValues">
+        <item>1</item>
+        <!-- <item>2</item> -->
+        <item>3</item>
+    </string-array>
+
+    <string-array name="notificationTypeEntries">
+        <item>Intrusive</item>
+        <item>Non-intrusive</item>
+    </string-array>
+
+    <string-array name="notificationTypeValues">
+        <item>4</item>
+        <item>2</item>
+    </string-array>
+</resources>

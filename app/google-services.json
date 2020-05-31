@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "970216593565",
+    "firebase_url": "https://bismuth-toolbox.firebaseio.com",
+    "project_id": "bismuth-toolbox",
+    "storage_bucket": "bismuth-toolbox.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970216593565:android:d631239a0f5dcf96151c74",
+        "android_client_info": {
+          "package_name": "com.donuts.bismuth.bismuthtoolbox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "970216593565-ss2mlj35h0cd6btiugmp17elnojj3kpi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwaJtrLMChcAP2Ay1YAfTJocEqcdCL_1A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "970216593565-ss2mlj35h0cd6btiugmp17elnojj3kpi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

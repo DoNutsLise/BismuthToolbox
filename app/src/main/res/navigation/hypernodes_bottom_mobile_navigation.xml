@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_hypernodes_home">
+
+    <fragment
+        android:id="@+id/navigation_hypernodes_home"
+        android:name="com.donuts.bismuth.bismuthtoolbox.ui.hypernodesscreen.HypernodesHomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_hypernodes_home" />
+
+    <fragment
+        android:id="@+id/navigation__hypernodes_dashboard"
+        android:name="com.donuts.bismuth.bismuthtoolbox.ui.hypernodesscreen.HypernodesDashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_hypernodes_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_hypernodes_notifications"
+        android:name="com.donuts.bismuth.bismuthtoolbox.ui.hypernodesscreen.HypernodesNotificationsFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_hypernodes_notifications" />
+</navigation>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="Hypernodes"
+        app:initialExpandedChildrenCount="0"
+        android:summary="Enter your hypernodes IP addresses"
+        android:key="hypernodeIP">
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Mining"
+        app:initialExpandedChildrenCount="0"
+        android:summary="Enter your mining wallet addresses"
+        android:key="miningWalletAddress">
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Wallet"
+        app:initialExpandedChildrenCount="0"
+        android:summary="Enter your BIS wallet addresses"
+        android:key="bisWalletAddress">
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Internet connection"
+        android:summary="Option disabled">
+        />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Notifications">
+
+        <SwitchPreference
+            android:key="isPushNotifications"
+            android:title="Push notifications"
+            android:switchTextOff="off"
+            android:switchTextOn="on"
+            android:defaultValue="true"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

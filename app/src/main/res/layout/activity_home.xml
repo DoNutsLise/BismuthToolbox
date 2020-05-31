@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Lavender"
+    tools:context=".ui.homescreen.HomeActivity">
+
+        <!--screen dividers -->
+<View
+    android:id="@+id/vertical_divider"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_centerHorizontal="true" />
+
+<View
+    android:id="@+id/horizontal_divider"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_centerVertical="true" />
+
+        <!-- top left "hypernodes" layout -->
+<LinearLayout
+    android:id="@+id/ll_hypernodes"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_above="@+id/horizontal_divider"
+    android:layout_toStartOf="@id/vertical_divider"
+    android:orientation="vertical"
+    android:layout_margin="5dp"
+    android:background="@drawable/shape_homescreen_item">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/SteelBlue"
+            android:gravity="center_horizontal"
+            android:text="@string/tv_hypernodes"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"/>
+
+        <!--view with three cardviews with stats-->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="fill_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:layout_gravity="top"
+                    app:cardBackgroundColor="@color/SteelBlue"
+                    app:cardCornerRadius="4dp"
+                    android:layout_margin="12dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/active"
+                                    android:textAlignment="center"
+                                    android:background="@color/YellowGreen"
+                                    android:textSize = "16sp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"/>
+                                <TextView
+                                    android:id="@+id/tv_mainactivity_hypernodes_active"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="fill_parent"
+                                    android:textColor="@color/YellowGreen"
+                                    android:ellipsize="end"
+                                    android:gravity="center"
+                                    android:maxLines="1"
+                                    android:text="@string/na"
+                                    android:textAlignment="center"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"/>
+                        </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="fill_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:layout_gravity="top"
+                    app:cardBackgroundColor="@color/SteelBlue"
+                    app:cardCornerRadius="4dp"
+                    android:layout_margin="12dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/inactive"
+                                    android:textAlignment="center"
+                                    android:background="@color/Crimson"
+                                    android:textSize = "16sp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"/>
+                                <TextView
+                                    android:id="@+id/tv_mainactivity_hypernodes_inactive"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="fill_parent"
+                                    android:textColor="@color/Crimson"
+                                    android:ellipsize="end"
+                                    android:gravity="center"
+                                    android:maxLines="1"
+                                    android:text="@string/na"
+                                    android:textAlignment="center"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"/>
+                        </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="fill_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:layout_gravity="bottom"
+                    app:cardBackgroundColor="@color/SteelBlue"
+                    app:cardCornerRadius="4dp"
+                    android:layout_margin="12dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/lagging"
+                                    android:textAlignment="center"
+                                    android:background="@color/Coral"
+                                    android:textSize = "16sp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"/>
+                                <TextView
+                                    android:id="@+id/tv_mainactivity_hypernodes_lagging"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="fill_parent"
+                                    android:textColor="@color/Coral"
+                                    android:ellipsize="end"
+                                    android:gravity="center"
+                                    android:maxLines="1"
+                                    android:text="@string/na"
+                                    android:textAlignment="center"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"/>
+                        </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+</LinearLayout>
+
+        <!--top right layout "Mining"-->
+<LinearLayout
+    android:id="@+id/ll_mining"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_above="@+id/horizontal_divider"
+    android:layout_toEndOf="@id/vertical_divider"
+    android:orientation="vertical"
+    android:layout_margin="5dp"
+    android:background="@drawable/shape_homescreen_item">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_mining"
+            android:gravity="center_horizontal"
+            android:background="@color/SteelBlue"
+            android:textAlignment="center"
+            android:textSize = "16sp"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"/>
+
+        <!--view with three cardviews with stats-->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="fill_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:layout_gravity="top"
+                    app:cardBackgroundColor="@color/SteelBlue"
+                    app:cardCornerRadius="4dp"
+                    android:layout_margin="12dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/active"
+                                    android:textAlignment="center"
+                                    android:background="@color/YellowGreen"
+                                    android:textSize = "16sp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"/>
+                                <TextView
+                                    android:id="@+id/tv_mainactivity_mining_active"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="fill_parent"
+                                    android:textColor="@color/YellowGreen"
+                                    android:ellipsize="end"
+                                    android:gravity="center"
+                                    android:maxLines="1"
+                                    android:text="@string/na"
+                                    android:textAlignment="center"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"/>
+                        </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="fill_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:layout_gravity="top"
+                    app:cardBackgroundColor="@color/SteelBlue"
+                    app:cardCornerRadius="4dp"
+                    android:layout_margin="12dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/inactive"
+                                    android:textAlignment="center"
+                                    android:background="@color/Crimson"
+                                    android:textSize = "16sp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"/>
+                                <TextView
+                                    android:id="@+id/tv_mainactivity_mining_inactive"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="fill_parent"
+                                    android:textColor="@color/Crimson"
+                                    android:ellipsize="end"
+                                    android:gravity="center"
+                                    android:maxLines="1"
+                                    android:text="@string/na"
+                                    android:textAlignment="center"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"/>
+                        </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="fill_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:layout_gravity="bottom"
+                    app:cardBackgroundColor="@color/SteelBlue"
+                    app:cardCornerRadius="4dp"
+                    android:layout_margin="12dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/hashrate"
+                                    android:textAlignment="center"
+                                    android:background="@color/Coral"
+                                    android:textSize = "16sp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"/>
+                                <TextView
+                                    android:id="@+id/tv_mainactivity_mining_hashrate"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="fill_parent"
+                                    android:textColor="@color/Coral"
+                                    android:ellipsize="end"
+                                    android:gravity="center"
+                                    android:maxLines="1"
+                                    android:text="@string/na"
+                                    android:textAlignment="center"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"/>
+                        </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+</LinearLayout>
+
+        <!--bottom left layout "Wallet"-->
+<LinearLayout
+    android:id="@+id/ll_wallet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@id/horizontal_divider"
+    android:layout_toStartOf="@id/vertical_divider"
+    android:orientation="vertical"
+    android:layout_margin="5dp"
+    android:background="@drawable/shape_homescreen_item">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_wallet"
+            android:gravity="center_horizontal"
+            android:background="@color/SteelBlue"
+            android:textAlignment="center"
+            android:textSize = "16sp"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"/>
+
+        <!--view with three cardviews with stats-->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="fill_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:layout_gravity="top"
+                    app:cardBackgroundColor="@color/SteelBlue"
+                    app:cardCornerRadius="4dp"
+                    android:layout_margin="12dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/wallets_number"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/LightGrey"
+                                    android:background="@color/MediumSlateBlue"
+                                    android:textSize = "16sp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"/>
+                                <TextView
+                                    android:id="@+id/tv_mainactivity_wallets_number"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="fill_parent"
+                                    android:textColor="@color/LightGrey"
+                                    android:ellipsize="end"
+                                    android:gravity="center"
+                                    android:maxLines="1"
+                                    android:text="@string/na"
+                                    android:textAlignment="center"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"/>
+                        </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="fill_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:layout_gravity="top"
+                    app:cardBackgroundColor="@color/SteelBlue"
+                    app:cardCornerRadius="4dp"
+                    android:layout_margin="12dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/bis_balance"
+                                    android:textAlignment="center"
+                                    android:background="@color/MediumSlateBlue"
+                                    android:textColor="@color/LightGrey"
+                                    android:textSize = "16sp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"/>
+                                <TextView
+                                    android:id="@+id/tv_mainactivity_bis_balance"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="fill_parent"
+                                    android:textColor="@color/LightGrey"
+                                    android:ellipsize="end"
+                                    android:gravity="center"
+                                    android:maxLines="1"
+                                    android:text="@string/na"
+                                    android:textAlignment="center"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"/>
+                        </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="fill_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:layout_gravity="bottom"
+                    app:cardBackgroundColor="@color/SteelBlue"
+                    app:cardCornerRadius="4dp"
+                    android:layout_margin="12dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/usd_balance"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/LightGrey"
+                                    android:background="@color/MediumSlateBlue"
+                                    android:textSize = "16sp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"/>
+                                <TextView
+                                    android:id="@+id/tv_mainactivity_usd_balance"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="fill_parent"
+                                    android:textColor="@color/LightGrey"
+                                    android:ellipsize="end"
+                                    android:gravity="center"
+                                    android:maxLines="1"
+                                    android:text="@string/na"
+                                    android:textAlignment="center"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"/>
+                        </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+</LinearLayout>
+
+        <!--bottom right layout "Network"-->
+<LinearLayout
+    android:id="@+id/ll_network"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@id/horizontal_divider"
+    android:layout_toEndOf="@id/vertical_divider"
+    android:orientation="vertical"
+    android:layout_margin="5dp"
+    android:background="@drawable/shape_homescreen_item">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_network"
+            android:gravity="center_horizontal"
+            android:background="@color/SteelBlue"
+            android:textAlignment="center"
+            android:textSize = "16sp"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"/>
+
+        <!--view with three cardviews with stats-->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="fill_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:layout_gravity="top"
+                    app:cardBackgroundColor="@color/SteelBlue"
+                    app:cardCornerRadius="4dp"
+                    android:layout_margin="12dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/block_height"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/LightGrey"
+                                    android:background="@color/MediumSlateBlue"
+                                    android:textSize = "16sp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"/>
+                                <TextView
+                                    android:id="@+id/tv_mainactivity_block_height"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="fill_parent"
+                                    android:textColor="@color/LightGrey"
+                                    android:ellipsize="end"
+                                    android:gravity="center"
+                                    android:maxLines="1"
+                                    android:text="@string/na"
+                                    android:textAlignment="center"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"/>
+                        </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="fill_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:layout_gravity="top"
+                    app:cardBackgroundColor="@color/SteelBlue"
+                    app:cardCornerRadius="4dp"
+                    android:layout_margin="12dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/bis_to_btc"
+                                    android:textAlignment="center"
+                                    android:background="@color/MediumSlateBlue"
+                                    android:textColor="@color/LightGrey"
+                                    android:textSize = "16sp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"/>
+                                <TextView
+                                    android:id="@+id/tv_mainactivity_bis_to_btc"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="fill_parent"
+                                    android:textColor="@color/LightGrey"
+                                    android:ellipsize="end"
+                                    android:gravity="center"
+                                    android:maxLines="1"
+                                    android:text="@string/na"
+                                    android:textAlignment="center"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"/>
+                        </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="fill_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:layout_gravity="bottom"
+                    app:cardBackgroundColor="@color/SteelBlue"
+                    app:cardCornerRadius="4dp"
+                    android:layout_margin="12dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/bis_to_usd"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/LightGrey"
+                                    android:background="@color/MediumSlateBlue"
+                                    android:textSize = "16sp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"/>
+                                <TextView
+                                    android:id="@+id/tv_mainactivity_bis_to_usd"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="fill_parent"
+                                    android:textColor="@color/LightGrey"
+                                    android:ellipsize="end"
+                                    android:gravity="center"
+                                    android:maxLines="1"
+                                    android:text="@string/na"
+                                    android:textAlignment="center"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"/>
+                        </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+</LinearLayout>
+
+</RelativeLayout>

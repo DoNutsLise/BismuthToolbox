@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">Bismuth Toolbox</string>
+
+    <!-- Top toolbar -->
+    <string name="action_settings">Settings</string>
+    <string name="action_licence">Licence</string>
+    <string name="action_about">About</string>
+
+    <!-- Home screen -->
+    <string name="tv_mining">Mining</string>
+    <string name="active">Active</string>
+    <string name="inactive">Inactive</string>
+    <string name="lagging">Lagging</string>
+    <string name="na">N/A</string>
+    <string name="tv_hypernodes">Hypernodes</string>
+    <string name="tv_wallet">My $BIS wallets</string>
+    <string name="tv_network">$BIS network</string>
+    <string name="hashrate">Hashrate, GH/s</string>
+    <string name="wallets_number">Registered wallets</string>
+    <string name="bis_balance">Balance, BIS</string>
+    <string name="usd_balance">Balance, USD</string>
+    <string name="block_height">Block height</string>
+    <string name="bis_to_btc">BIS/BTC price</string>
+    <string name="bis_to_usd">BIS/USD price</string>
+    <string name="loading_data">Loading data...</string>
+
+    <!-- Navigation drawer -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Bismuth Tools</string>
+    <string name="nav_header_subtitle">https://bismuth.cz</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_hypernodes">Hypernodes</string>
+    <string name="menu_mining">Mining</string>
+    <string name="menu_wallet">Wallet</string>
+    <string name="menu_network">Network</string>
+    <string name="menu_settings">Settings</string>
+
+    <!-- Bottom navigation views for all activities -->
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <!-- messages -->
+</resources>
