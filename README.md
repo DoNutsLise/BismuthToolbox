@@ -14,3 +14,5 @@ All-in-one app for monitoring Bismuth network vitals.
     <img src="https://user-images.githubusercontent.com/49869348/83572017-be644400-a520-11ea-84de-0569c39e868c.png" width="250" title="hover text">
 </p>
 
+Note: The wallet addresses and hypernode IPs you enter in settings screen will be sent to Google's Firebase together with your device's unique ID. This data is totally anonymous and is used only to serve targeted push notifications (e.g. about problems with your hypernodes and/or miners). If you are not happy about it - just delete the last 6 lines in SendDataToFirebase class (no push notifications though).
+
