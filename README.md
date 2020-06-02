@@ -9,7 +9,7 @@ All-in-one app for monitoring Bismuth network vitals.
 * More to come soon...
 
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/49869348/83572065-d340d780-a520-11ea-9591-60e28a70229e.png" width="250" alt="accessibility text">
+    <img src="https://user-images.githubusercontent.com/49869348/83574008-6e877c00-a524-11ea-8e3a-29fc79377d85.png" width="250" alt="accessibility text">
     <img src="https://user-images.githubusercontent.com/49869348/83572052-ce7c2380-a520-11ea-9aaf-e6eccf97189e.png" width="250" alt="accessibility text">
     <img src="https://user-images.githubusercontent.com/49869348/83572017-be644400-a520-11ea-84de-0569c39e868c.png" width="250" title="hover text">
 </p>
