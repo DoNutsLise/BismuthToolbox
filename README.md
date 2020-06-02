@@ -2,8 +2,8 @@
 
 All-in-one app for monitoring Bismuth network vitals.
  Work in progress. Currently available:
-* Monitor the status of your hypernodes and receive push notifications when any of your hypernodes lags of becomes inactive
-* Monitor the status of your GPU miners (currently only for Eggpool) and receive push notifications when any of your miners becomes inactive
+* Monitor the status of your hypernodes and receive push notifications when any of your hypernodes lag of become inactive
+* Monitor the status of your GPU miners (currently only for Eggpool) and receive push notifications when any of your miners become inactive
 * Add your bismuth wallets to track their balance in $BIS and USD
 * Track network status ($BIS price, etc)
 * More to come soon...
