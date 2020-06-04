@@ -35,7 +35,7 @@ import java.util.concurrent.Executors;
  * 3. https://www.techotopia.com/index.php/An_Android_Room_Database_and_Repository_Tutorial
  */
 
-// TODO: For production: change inMemoryDatabaseBuilder to databaseBuilder and give it name
+// TODO: For production: change inMemoryDatabaseBuilder to databaseBuilder and give it name "bis_database"
 
 @Database(entities = {RawUrlData.class, ParsedHomeScreenData.class}, version = 1)
 public abstract class DataRoomDatabase extends RoomDatabase {
@@ -51,8 +51,8 @@ public abstract class DataRoomDatabase extends RoomDatabase {
     }
 
     private static DataRoomDatabase buildDatabase(final Context context) {
-        return Room.inMemoryDatabaseBuilder(context.getApplicationContext(),
-                DataRoomDatabase.class)
+        return Room.databaseBuilder(context.getApplicationContext(),
+                DataRoomDatabase.class,"bis_database")
                 // the below callback is needed to populate the entities with initial data (mostly zeros)
                 .addCallback(new Callback() {
                     @Override
