@@ -116,7 +116,7 @@ public class BaseActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_licence) {
             MyAlertDialogMessage myAlertDialogMessage = new MyAlertDialogMessage(this);
-            myAlertDialogMessage.warningMessage("W.I.P.", "Work in progress");
+            myAlertDialogMessage.warningMessage("License", this.getString(R.string.app_license));
             return true;
         }else if (id == R.id.action_about){
             MyAlertDialogMessage myAlertDialogMessage = new MyAlertDialogMessage(this);

@@ -1,15 +1,21 @@
 package com.donuts.bismuth.bismuthtoolbox.ui.settingsscreen;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
 import androidx.preference.PreferenceScreen;
+import androidx.preference.SwitchPreference;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.donuts.bismuth.bismuthtoolbox.Data.DataDAO;
 import com.donuts.bismuth.bismuthtoolbox.Data.DataRoomDatabase;
@@ -128,6 +134,38 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         //register the preferenceChange listener
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
+
+        // register PushNotifications switch listener: if enabled - ask for permission to send data to Firebase
+        Preference pushNotificationsSwitchPref = (Preference) findPreference("isPushNotifications");
+        pushNotificationsSwitchPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                // check if the consent to send data was already given or not
+                if (!PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("isPushNotificationsConsent", false) &&
+                        PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("isPushNotifications", false)){
+                    // if consent was not given and user wants to enable push notifications - ask for consent; otherwise do nothing
+
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                    alertDialogBuilder.setTitle("Please read!");
+                    alertDialogBuilder.setMessage(R.string.data_share_consent);
+                    alertDialogBuilder.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean("isPushNotificationsConsent", true).apply();
+                        }
+                    });
+                    alertDialogBuilder.setNegativeButton("Decline", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // if user didn't accept data sharing: set push notifications back to false and consent to false
+                            Preference pushNotificationsSwitchPref = (Preference) findPreference("isPushNotifications");
+                            ((SwitchPreference) pushNotificationsSwitchPref).setChecked(false);
+                        }
+                    });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -215,23 +253,24 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             /*
             * whenever settings are changed, two things need to be done:
             * 1. activities should pull fresh data: that can be forced by setting time of last refresh to >5 min from now.
-            * 2. Firebase database has to be updated with new wallet addresses and hypernodes IPs: that can be done by
+            * 2. Firebase database has to be updated with new wallet addresses and hypernodes IPs (only if data sharing consent was given): that can be done by
             * obtaining new firebase registration token and sending data to firebase.
              */
 
-            // getting new firebase registration token is a bit tricky (sometimes it's actually the same token)
-            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
-                String newRegistrationToken = instanceIdResult.getToken();
-                // after we have obtained the token we can send all the data to firebase
-                new SendDataToFirebase(getActivity()).sendData(newRegistrationToken);
-                Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " SettingsFragment", "onSuccess: "+
-                        "new token is " + newRegistrationToken);
-            });
 
-            // settings were changed, so we set url_last_update_time in RawUrlData Room database entity to a
+            // 1. settings were changed, so we set url_last_update_time in RawUrlData Room database entity to a
             // small number for all the urls. In this case switching to any other activity will trigger data update.
-                //long i = dataDAO.getNumOfRawUrlDataRecords();
-                dataDAO.updateAllUrlLastUpdateTime(1000000);
+            dataDAO.updateAllUrlLastUpdateTime(1000000);
+
+            // 2. getting new firebase registration token is a bit tricky (sometimes it's actually the same token)
+
+                FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
+                    String newRegistrationToken = instanceIdResult.getToken();
+                    // after we have obtained the token we can send all the data to firebase
+                    new SendDataToFirebase(getActivity()).sendData(newRegistrationToken);
+                    Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " SettingsFragment", "onSuccess: " +
+                            "new token is " + newRegistrationToken);
+                });
 
             isSettingsChanged = false;
         }

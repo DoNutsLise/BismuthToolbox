@@ -1,6 +1,7 @@
 package com.donuts.bismuth.bismuthtoolbox.FirebasePush;
 
 import android.content.Context;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +32,11 @@ public class SendDataToFirebase {
              * Both IP and token are extracted by a script running on my server.
              * Firebase database is read protected and I'll connect to its API with a personal authentication token.
              */
+
+            // if no consent was given for data sharing - abort here
+            if (!PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("isPushNotificationsConsent", false)) {
+                return;
+            }
 
             // get a unique device id - it remains the same for the lifetime of the device
             // it's needed to satisfy the read/write rules of the database
