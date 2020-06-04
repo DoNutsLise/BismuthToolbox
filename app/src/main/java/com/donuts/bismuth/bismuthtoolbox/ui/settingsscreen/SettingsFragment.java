@@ -224,16 +224,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 editTextPreference.setText("");
                 editTextPreference.setOrder(0);
                 preferenceGroup.addPreference(editTextPreference);
-            } else {
-                // an existing record was modified. We have two options:
-                // 1. The record was deleted (the text field cleared)
-                // 2. The record was modified => we don't need to do anything since we already updated the summary of the EditTextPreference
-                if (preferenceValue.equals("")){
-                    // The record was deleted => we need to delete the corresponding EditTextPreference and
-                    // the record in SharedPreferences
-                    preferenceGroup.removePreference(preference);
-                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().remove(preferenceKey).apply();
-                }
+            }
+            if (preferenceValue.equals("")){
+                // no matter what preference was modified, if its value == "", then delete it
+                preferenceGroup.removePreference(preference);
+                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().remove(preferenceKey).apply();
             }
 
         }

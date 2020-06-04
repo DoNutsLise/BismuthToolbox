@@ -88,8 +88,6 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
                 updateHomeScreenViews(data);
             }
         });
-
-        Toast.makeText(this, "Main Activity created", Toast.LENGTH_LONG).show();
     }
 
     @Override
