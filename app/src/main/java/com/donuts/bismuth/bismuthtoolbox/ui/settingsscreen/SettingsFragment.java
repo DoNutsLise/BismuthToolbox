@@ -214,6 +214,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             * Answer: numOfEditTextPreferencesInGroup == numOfSharedPreferenceInGroup only when a blank EditTextPreference used to enter a new preference, - see below.
              *
              */
+
             int numOfEditTextPreferencesInGroup = preferenceGroup.getPreferenceCount(); // number of EditTextPreferences in the corresponding preference category
             int numOfSharedPreferenceInGroup = categoryRecordsIds.size(); // number of preferences stored in sharedPreferences
             if (numOfEditTextPreferencesInGroup == numOfSharedPreferenceInGroup) { //(no need to check for null, since the preference has been modified, hence it exists)
@@ -224,16 +225,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 editTextPreference.setText("");
                 editTextPreference.setOrder(0);
                 preferenceGroup.addPreference(editTextPreference);
-            } else {
-                // an existing record was modified. We have two options:
-                // 1. The record was deleted (the text field cleared)
-                // 2. The record was modified => we don't need to do anything since we already updated the summary of the EditTextPreference
-                if (preferenceValue.equals("")){
-                    // The record was deleted => we need to delete the corresponding EditTextPreference and
-                    // the record in SharedPreferences
-                    preferenceGroup.removePreference(preference);
-                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().remove(preferenceKey).apply();
-                }
+            }
+            // no matter what preference was modified, if it's value =='', then delete it.
+            if (preferenceValue.equals("")){
+                // The record was deleted => we need to delete the corresponding EditTextPreference and
+                // the record in SharedPreferences
+                preferenceGroup.removePreference(preference);
+                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().remove(preferenceKey).apply();
             }
 
         }
