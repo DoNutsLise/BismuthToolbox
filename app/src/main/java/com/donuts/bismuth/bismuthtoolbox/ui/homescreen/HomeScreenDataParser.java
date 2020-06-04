@@ -113,7 +113,7 @@ class HomeScreenDataParser {
                     }catch (JSONException e){ // if IP is not found in the JSON response - a null pointer exception will be thrown and we will display a snackbar
                         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                                 "failed to parse JSON for hypernode IP " + entry.getValue());
-                        Toast.makeText(mContext, "Failed to parse JSON data for hypernode IP " + entry.getValue()
+                        Toast.makeText(mContext, "Failed to get data for hypernode IP " + entry.getValue()
                                 + ". Please double check the IP", Toast.LENGTH_LONG).show();
 
                     }
@@ -122,7 +122,7 @@ class HomeScreenDataParser {
         }catch (JSONException e) {
             Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                     "Failed to parse JSON data from"+BIS_HN_BASIC_URL);
-            Toast.makeText(mContext, "Failed to parse JSON data from"+BIS_HN_BASIC_URL, Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "Failed to get data from"+BIS_HN_BASIC_URL, Toast.LENGTH_LONG).show();
 
         }
 
@@ -157,7 +157,7 @@ class HomeScreenDataParser {
         }catch(JSONException e){
             Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                     "Failed to parse JSON data from "+ BIS_PRICE_URL);
-            Toast.makeText(mContext, "Failed to parse JSON data from" + BIS_PRICE_URL, Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "Failed to get data from" + BIS_PRICE_URL, Toast.LENGTH_LONG).show();
         }
 
         /*
@@ -188,8 +188,8 @@ class HomeScreenDataParser {
                 }catch(JSONException | ClassCastException e){
                     Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                             "Failed to parse JSON data from "+ BIS_API_URL + " for wallet " + entry.getValue());
-                    Toast.makeText(mContext, "Failed to parse JSON data from" + BIS_API_URL + " for wallet "
-                            + entry.getValue(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "Failed to get data from" + BIS_API_URL.substring(0, Math.min(BIS_API_URL.length(), 30))+ " for wallet "
+                            + String.valueOf(entry.getValue()).substring(0, Math.min(String.valueOf(entry.getValue()).length(), 7))+ "...", Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -254,8 +254,8 @@ class HomeScreenDataParser {
                 }catch(JSONException | ClassCastException e){
                     Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                             "Failed to parse JSON data from "+ EGGPOOL_MINER_STATS_URL + " for wallet " + entry.getValue());
-                    Toast.makeText(mContext, "Failed to parse JSON data from " + EGGPOOL_MINER_STATS_URL + " for wallet "
-                            + entry.getValue() , Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "Failed to get data from " + EGGPOOL_MINER_STATS_URL.substring(0, Math.min(EGGPOOL_MINER_STATS_URL.length(), 30)) + " for wallet "
+                            + String.valueOf(entry.getValue()).substring(0, Math.min(String.valueOf(entry.getValue()).length(), 7)) + "...", Toast.LENGTH_LONG).show();
                 }
             }
         }

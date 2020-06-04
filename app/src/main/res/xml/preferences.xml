@@ -5,7 +5,7 @@
     <PreferenceCategory
         android:title="Hypernodes"
         app:initialExpandedChildrenCount="0"
-        android:summary="Enter your hypernodes IP addresses"
+        android:summary="Enter your hypernode IP addresses"
         android:key="hypernodeIP">
 
     </PreferenceCategory>
@@ -40,7 +40,7 @@
             android:title="Push notifications"
             android:switchTextOff="off"
             android:switchTextOn="on"
-            android:defaultValue="true"/>
+            android:defaultValue="false"/>
 
     </PreferenceCategory>
 

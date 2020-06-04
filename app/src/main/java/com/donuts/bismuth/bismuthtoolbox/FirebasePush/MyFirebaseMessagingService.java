@@ -8,11 +8,6 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 
-/**
-* Push notifications are served through Firebase
- */
-
-
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     /*
