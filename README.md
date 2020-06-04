@@ -1,4 +1,5 @@
 # BismuthToolbox
+NOTE: 2020-06-04 - I published the app on Google play store a couple days ago; it's pending approval, but I'm affraid it will fail as it's incomplete and not very appealing for google at the moment (fingers crossed though).
 
 All-in-one app for monitoring Bismuth network vitals.
  Work in progress. Currently available:
@@ -19,4 +20,7 @@ Note: Push notifications are disabled in settings by default. When you enable th
 HOW TO INSTALL:
 1. Build from source - google it somewhere else how to do it.
 2. Downlod apk from "releases" page. Connect your mobile device with a USB cable. Run in terminal: "adb devices" - that should output something like "List of devices attached 60573ea4	device"  if connection is OK. Then run "adb install BismuthToolbox_v2.apk" (provided BismuthToolbox_v2.apk is the name of the downloaded file). Note: developer options should be enabled in your mobile device and possibly "install via USB" option, too.
+
+PARANOID? (like myself)
+apk I put  in release are not obfuscated; there are plenty of tools (including online ones) which allow you to decomplie apks and check the code.
 
