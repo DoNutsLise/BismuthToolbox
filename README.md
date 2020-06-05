@@ -18,8 +18,13 @@ All-in-one app for monitoring Bismuth network vitals.
 Note: Push notifications are disabled in settings by default. When you enable this option you will be asked if you accept sharing your hypernode IPs and mining wallets addresses. The wallet addresses and hypernode IPs you enter in the settings screen will be sent to Google's Firebase together with your device's unique ID. This data is totally anonymous and is used ONLY to serve targeted push notifications (e.g. about problems with your hypernodes and/or miners). If you are not happy about it - just click "decline" (you will receive no push notifications though).
 
 HOW TO INSTALL:
-1. Build from source - google it somewhere else how to do it.
-2. Downlod apk from "releases" page. Connect your mobile device with a USB cable. Run in terminal: "adb devices" - that should output something like "List of devices attached 60573ea4	device"  if connection is OK. Then run "adb install BismuthToolbox_v2.apk" (provided BismuthToolbox_v2.apk is the name of the downloaded file). Note: developer options should be enabled in your mobile device and possibly "install via USB" option, too.
+
+Option 1 (easy way) - install from Google Play (not available at the moment)
+Option 2 (harder way) - install a compiled apk from "releases" page:
+Here is a link with instructions: https://www.droidviews.com/install-apk-files-using-adb-commands/
+Option 3 (hardest way) - build from source:
+Here are good instructions on how to build an android apk from source using Android Studio (https://github.com/openaps/AndroidAPSdocs/blob/master/docs/EN/Installing-AndroidAPS/Building-APK.md). It's a quite involved process and I personally do not recommend it.
+
 
 PARANOID? (like myself)
 apk I put  in release are not obfuscated; there are plenty of tools (including online ones) which allow you to decomplie apks and check the code.
