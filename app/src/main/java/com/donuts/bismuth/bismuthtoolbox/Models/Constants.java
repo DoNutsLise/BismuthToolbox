@@ -9,8 +9,8 @@ public class Constants {
 
     // firebase push notifications
     public static final String CHANNEL_ID = "my_channel_01";
-    public static final String CHANNEL_NAME = "Bismuth Tools Notification";
-    public static final String CHANNEL_DESCRIPTION = "Notification from Bismuth Tools";
+    public static final String CHANNEL_NAME = "Bismuth Toolbox Notification";
+    public static final String CHANNEL_DESCRIPTION = "Notification from Bismuth Toolbox";
 
     // BIS servers API endpoints
     public static final String BIS_HN_BASIC_URL = "https://hypernodes.bismuth.live/status.json"; // only (ip:active) pair

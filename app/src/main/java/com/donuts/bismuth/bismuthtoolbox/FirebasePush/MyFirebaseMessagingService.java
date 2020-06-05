@@ -24,7 +24,6 @@ import com.google.firebase.messaging.RemoteMessage;
  * login firebase, create a project, obtain google.json and place it in the app directory, modify gradle as per firebase tutorial
  */
 
-//TODO: tokens with ip addresses and wallets must be re-sent to the server every time preferences are updated with new ip addresses and wallets
 // TODO: remove comments from above for production and github
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
