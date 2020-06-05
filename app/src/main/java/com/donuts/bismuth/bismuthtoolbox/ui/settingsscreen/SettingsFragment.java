@@ -237,7 +237,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             //
             int numOfDuplicates = 0;
             for (Map.Entry<String, ?> entry : allPreferencesKeys.entrySet()) {
-                if (entry.getValue() == preferenceValue) {
+                if (String.valueOf(entry.getValue()).equals(preferenceValue)) {
                     numOfDuplicates += 1;
                 }
             }
