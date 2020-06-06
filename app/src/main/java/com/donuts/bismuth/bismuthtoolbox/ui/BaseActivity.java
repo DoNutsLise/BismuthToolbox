@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.donuts.bismuth.bismuthtoolbox.BuildConfig;
 import com.donuts.bismuth.bismuthtoolbox.Data.DataDAO;
 import com.donuts.bismuth.bismuthtoolbox.Data.DataRoomDatabase;
 import com.donuts.bismuth.bismuthtoolbox.R;
@@ -120,7 +121,7 @@ public class BaseActivity extends AppCompatActivity
             return true;
         }else if (id == R.id.action_about){
             MyAlertDialogMessage myAlertDialogMessage = new MyAlertDialogMessage(this);
-            myAlertDialogMessage.warningMessage("W.I.P.", "Work in progress");
+            myAlertDialogMessage.warningMessage("Bismuth Toolbox", "version : " + BuildConfig.VERSION_NAME);
             return true;
         }
 
