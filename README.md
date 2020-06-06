@@ -1,5 +1,4 @@
 # BismuthToolbox
-NOTE: 2020-06-04 - I published the app on Google play store a couple days ago; it's pending approval, but I'm affraid it will fail as it's incomplete and not very appealing for google at the moment (fingers crossed though).
 
 All-in-one app for monitoring Bismuth network vitals.
  Work in progress. Currently available:
@@ -19,11 +18,13 @@ Note: Push notifications are disabled in settings by default. When you enable th
 
 HOW TO INSTALL:
 
-Option 1 (easy way) - install from Google Play (not available at the moment)
-Option 2 (harder way) - install a compiled apk from "releases" page:
-Here is a link with instructions: https://www.droidviews.com/install-apk-files-using-adb-commands/
+Option 1 (easy way) - install from Google Play (https://play.google.com/store/apps/details?id=com.donuts.bismuth.bismuthtoolbox). I would choose this option because it's easy to get updates.
+
+Option 2 (harder way) - install a compiled apk from "releases" page with adb or sideload:
+Here is a link with instructions: https://www.droidviews.com/install-apk-files-using-adb-commands/. Difficulty of installation is about the same as from Google Play, but you have to update manually every time.
+
 Option 3 (hardest way) - build from source:
-Here are good instructions on how to build an android apk from source using Android Studio (https://github.com/openaps/AndroidAPSdocs/blob/master/docs/EN/Installing-AndroidAPS/Building-APK.md). It's a quite involved process and I personally do not recommend it.
+Here are good instructions on how to build an android apk from source using Android Studio (https://github.com/openaps/AndroidAPSdocs/blob/master/docs/EN/Installing-AndroidAPS/Building-APK.md). It's a quite an involved process and I personally do not recommend it.
 
 
 PARANOID? (like myself)
