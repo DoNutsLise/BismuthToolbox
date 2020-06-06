@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.core.math.MathUtils;
+
 import com.donuts.bismuth.bismuthtoolbox.Data.DataDAO;
 import com.donuts.bismuth.bismuthtoolbox.Data.DataRoomDatabase;
 import com.donuts.bismuth.bismuthtoolbox.Data.ParsedHomeScreenData;
@@ -259,11 +261,20 @@ class HomeScreenDataParser {
                 }
             }
         }
-        // get a sum of hashrates
 
-        minersHashrate = Double.parseDouble(decimalFormat.format(minersHashrateList.stream().mapToInt(Integer::intValue).sum()/1000d));
-        numOfInactiveMiners = minersInactiveList.stream().mapToInt(Integer::intValue).sum();
-        numOfAllMiners = minersTotalList.stream().mapToInt(Integer::intValue).sum();
+        // get a sum of hashrates
+        for (int i: minersHashrateList) {
+            minersHashrate += Double.parseDouble(decimalFormat.format(i/1000d));
+        }
+        for (int i: minersInactiveList) {
+            numOfInactiveMiners += i;
+        }
+        for (int i: minersTotalList) {
+            numOfAllMiners += i;
+        }
+        //numOfInactiveMiners = minersInactiveList.stream().mapToInt(Integer::intValue).sum();
+        //minersHashrate = Double.parseDouble(decimalFormat.format(minersHashrateList.stream().mapToInt(Integer::intValue).sum()/1000d));
+        //numOfAllMiners = minersTotalList.stream().mapToInt(Integer::intValue).sum();
         numOfActiveMiners = numOfAllMiners -  numOfInactiveMiners;
 
         /*
