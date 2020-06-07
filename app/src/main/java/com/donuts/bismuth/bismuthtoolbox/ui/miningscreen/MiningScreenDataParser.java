@@ -52,7 +52,7 @@ class MiningScreenDataParser {
         int numOfAllMiners = 0;
         int numOfActiveMiners = 0;
         int numOfInactiveMiners = 0;
-        double minersHashrate = 0.0;
+        int minersHashrate = 0;
         int blockHeight = 0;
         double bisToUsd = 0;
         double bisToBtc = 0;
@@ -149,7 +149,7 @@ class MiningScreenDataParser {
             }
 
             if (bisToBtcObj instanceof Number){
-                bisToBtc = (Double) bisToBtcObj;
+                bisToBtc = (Double) bisToBtcObj*1000000;  // make it in mBTC
             }else{
                 Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                         "Can't get BIS price in BTC");
@@ -265,7 +265,7 @@ class MiningScreenDataParser {
 
         // get a sum of hashrates
         for (int i: minersHashrateList) {
-            minersHashrate += Double.parseDouble(decimalFormat.format(i/1000d));
+            minersHashrate += i;
         }
         for (int i: minersInactiveList) {
             numOfInactiveMiners += i;

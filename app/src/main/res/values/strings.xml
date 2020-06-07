@@ -15,12 +15,12 @@
     <string name="tv_hypernodes">Hypernodes</string>
     <string name="tv_wallet">My $BIS wallets</string>
     <string name="tv_network">$BIS network</string>
-    <string name="hashrate">Hashrate, GH/s</string>
+    <string name="hashrate">Hashrate, MH/s</string>
     <string name="wallets_number">Registered wallets</string>
     <string name="bis_balance">Balance, BIS</string>
     <string name="usd_balance">Balance, USD</string>
     <string name="block_height">Block height</string>
-    <string name="bis_to_btc">BIS/BTC price</string>
+    <string name="bis_to_btc">BIS/mBTC price</string>
     <string name="bis_to_usd">BIS/USD price</string>
     <string name="loading_data">Loading data…</string>
 

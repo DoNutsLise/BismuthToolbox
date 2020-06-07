@@ -54,7 +54,7 @@ class HomeScreenDataParser {
         int numOfAllMiners = 0;
         int numOfActiveMiners = 0;
         int numOfInactiveMiners = 0;
-        double minersHashrate = 0.0;
+        int minersHashrate = 0;
         int blockHeight = 0;
         double bisToUsd = 0;
         double bisToBtc = 0;
@@ -147,11 +147,10 @@ class HomeScreenDataParser {
             }else{
                 Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                         "Can't get BIS price in USD");
-
             }
 
             if (bisToBtcObj instanceof Number){
-                bisToBtc = (Double) bisToBtcObj;
+                bisToBtc = ((Double) bisToBtcObj)*1000000;
             }else{
                 Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                         "Can't get BIS price in BTC");
@@ -267,11 +266,13 @@ class HomeScreenDataParser {
 
         // get a sum of hashrates
         for (int i: minersHashrateList) {
-            minersHashrate += Double.parseDouble(decimalFormat.format(i/1000d));
+            minersHashrate += i;
         }
+
         for (int i: minersInactiveList) {
             numOfInactiveMiners += i;
         }
+
         for (int i: minersTotalList) {
             numOfAllMiners += i;
         }
@@ -284,21 +285,21 @@ class HomeScreenDataParser {
          * 5. update the database
          */
 
-        ParsedHomeScreenData parsedUrlData = new ParsedHomeScreenData();
-        parsedUrlData.setId(1);
-        parsedUrlData.setHypernodesActive(numOfActiveHypernodes);
-        parsedUrlData.setHypernodesInactive(numOfInactiveHypernodes);
-        parsedUrlData.setHypernodesLagging(numOfLaggingHypernodes);
-        parsedUrlData.setRegisteredWallets(numOfRegisteredWallets);
-        parsedUrlData.setBalanceBis(balanceBis);
-        parsedUrlData.setBalanceUsd(balanceUsd);
-        parsedUrlData.setMinersActive(numOfActiveMiners);
-        parsedUrlData.setMinersInactive(numOfInactiveMiners);
-        parsedUrlData.setMinersHashrate(minersHashrate);
-        parsedUrlData.setBlockHeight(blockHeight);
-        parsedUrlData.setBisToBtc(bisToBtc);
-        parsedUrlData.setBisToUsd(bisToUsd);
+        ParsedHomeScreenData parsedHomeScreenData = new ParsedHomeScreenData();
+        parsedHomeScreenData.setId(1);
+        parsedHomeScreenData.setHypernodesActive(numOfActiveHypernodes);
+        parsedHomeScreenData.setHypernodesInactive(numOfInactiveHypernodes);
+        parsedHomeScreenData.setHypernodesLagging(numOfLaggingHypernodes);
+        parsedHomeScreenData.setRegisteredWallets(numOfRegisteredWallets);
+        parsedHomeScreenData.setBalanceBis(balanceBis);
+        parsedHomeScreenData.setBalanceUsd(balanceUsd);
+        parsedHomeScreenData.setMinersActive(numOfActiveMiners);
+        parsedHomeScreenData.setMinersInactive(numOfInactiveMiners);
+        parsedHomeScreenData.setMinersHashrate(minersHashrate);
+        parsedHomeScreenData.setBlockHeight(blockHeight);
+        parsedHomeScreenData.setBisToBtc(bisToBtc);
+        parsedHomeScreenData.setBisToUsd(bisToUsd);
 
-        dataDAO.updateParsedHomeScreenData(parsedUrlData);
+        dataDAO.updateParsedHomeScreenData(parsedHomeScreenData);
     }
 }
