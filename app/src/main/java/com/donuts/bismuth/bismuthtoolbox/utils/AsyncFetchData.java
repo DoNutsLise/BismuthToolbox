@@ -61,7 +61,7 @@ public class AsyncFetchData extends AsyncTask<List<String>, Void, Void> {
         DataDAO dataDAO = DataRoomDatabase.getInstance(mContext.getApplicationContext()).getDataDAO();
 
         // keep this loop for testing purposes
-//        for(int i=0; i<10; i++){
+//        for(int i=0; i<5; i++){
 //            try {
 //                Thread.sleep(1000);
 //                Log.d(CurrentTime.getCurrentTime("HH:mm:ss"), "AsyncFetchFreshData(doInBackground): "+

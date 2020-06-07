@@ -35,7 +35,7 @@ public interface DataDAO {
     long getNumOfRawUrlDataRecords();
 
     /*
-    *  ParsedHomeScreenData
+     *  ParsedHomeScreenData
      */
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
@@ -52,5 +52,24 @@ public interface DataDAO {
 
     @Insert // for initializing the database with default values
     void insertAllParsedHomeScreenData(ParsedHomeScreenData... parsedHomeScreenData);
+
+    /*
+     *  ParsedMiningScreenData
+     */
+
+    @Insert (onConflict = OnConflictStrategy.REPLACE)
+    void insertParsedMiningScreenData(ParsedMiningScreenData parsedUrlData);
+
+    @Update
+    void updateParsedMiningScreenData(ParsedMiningScreenData parsedUrlData);
+
+    @Query("SELECT * from parsed_mining_screen_data")
+    ParsedMiningScreenData getParsedMiningScreenData();
+
+    @Query("SELECT * from parsed_mining_screen_data") // live data for the observer
+    LiveData<ParsedMiningScreenData> getParsedMiningScreenLiveData();
+
+    @Insert // for initializing the database with default values
+    void insertAllParsedMiningScreenData(ParsedMiningScreenData... parsedMiningScreenData);
 
 }

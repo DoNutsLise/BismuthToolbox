@@ -22,7 +22,7 @@
     <string name="block_height">Block height</string>
     <string name="bis_to_btc">BIS/BTC price</string>
     <string name="bis_to_usd">BIS/USD price</string>
-    <string name="loading_data">Loading data...</string>
+    <string name="loading_data">Loading data…</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -41,6 +41,8 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_miners">Miners</string>
+    <string name="title_payouts">Payouts</string>
 
     <!-- messages -->
 

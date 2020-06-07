@@ -26,6 +26,10 @@ android {
 
 }
 
+repositories {
+    maven { url 'https://jitpack.io' } // this repo for charts by PhilJay: https://github.com/PhilJay/MPAndroidChart
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -49,12 +53,14 @@ dependencies {
     annotationProcessor 'androidx.room:room-compiler:2.2.5'
 
     //Firebase Messaging library for Sending push Notifications
-    implementation 'com.google.firebase:firebase-core:17.4.2'
+    implementation 'com.google.firebase:firebase-core:17.4.3'
     implementation "com.google.firebase:firebase-messaging:20.2.0"
     implementation 'com.google.firebase:firebase-database:19.3.0'
     implementation 'com.google.firebase:firebase-auth:19.3.1'
     implementation 'androidx.navigation:navigation-fragment:2.2.2'
     implementation 'androidx.navigation:navigation-ui:2.2.2'
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0' // this repo for charts by PhilJay: https://github.com/PhilJay/MPAndroidChart
 }
 
 

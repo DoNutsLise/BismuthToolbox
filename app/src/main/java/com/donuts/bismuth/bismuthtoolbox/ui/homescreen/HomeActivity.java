@@ -28,6 +28,7 @@ import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_API_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_HN_BASIC_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_PRICE_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_STATS_URL;
+import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsize;
 
 /**
  * This is the main screen with overview/summary of all BIS activities (mining, hypernodes, wallets, network stats)
@@ -87,7 +88,6 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         dataDAO.getParsedHomeScreenLiveData().observe(this, new Observer<ParsedHomeScreenData>() {
             @Override
             public void onChanged(@Nullable ParsedHomeScreenData data){
-                assert data != null;
                 updateHomeScreenViews(data);
             }
         });
@@ -113,9 +113,12 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         //Create markers "active/not active" activity
         sharedPreferences.edit().putBoolean("isMainActivityForeground", false).apply();
 
-        // finish asynctask if it was running
+        // finish asynctask if it was running -
 //        if (asyncFetchFreshData != null)
 //            asyncFetchFreshData.cancel(true);
+        // if you do that, asynctask will finish downloading all the data and
+        // terminate after that only; so the data will not be returned to the activity and will not be parsed. That means
+        // you will download the data but will not use it for displaying => waste of resource.
     }
 
     @Override

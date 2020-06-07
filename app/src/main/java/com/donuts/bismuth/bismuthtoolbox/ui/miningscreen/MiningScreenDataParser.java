@@ -1,11 +1,9 @@
-package com.donuts.bismuth.bismuthtoolbox.ui.homescreen;
+package com.donuts.bismuth.bismuthtoolbox.ui.miningscreen;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
-
-import androidx.core.math.MathUtils;
 
 import com.donuts.bismuth.bismuthtoolbox.Data.DataDAO;
 import com.donuts.bismuth.bismuthtoolbox.Data.DataRoomDatabase;
@@ -30,17 +28,17 @@ import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_PRICE_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_STATS_URL;
 import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsize;
 
-class HomeScreenDataParser {
+class MiningScreenDataParser {
     private Context mContext;
     private SharedPreferences sharedPreferences;
 
-    HomeScreenDataParser(Context context){
+    MiningScreenDataParser(Context context){
         mContext = context;
     }
 
-    void parseHomeScreenData(){
-        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "
-        +"called");
+    void parseMiningScreenData(){
+        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningScreenDataParser", "parseMiningScreenData: "+
+                "called");
 
         Map<String, ?> allPreferencesKeys = android.preference.PreferenceManager.getDefaultSharedPreferences(mContext).getAll();
         DataDAO dataDAO = DataRoomDatabase.getInstance(mContext.getApplicationContext()).getDataDAO();
@@ -192,7 +190,7 @@ class HomeScreenDataParser {
                     Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                             "Failed to parse JSON data from "+ BIS_API_URL + " for wallet " + entry.getValue());
                     Toast.makeText(mContext, "Failed to get data from" + BIS_API_URL.substring(0, Math.min(BIS_API_URL.length(), 25))+ " for wallet "
-                            + ellipsize(String.valueOf(entry.getValue()), 8), Toast.LENGTH_LONG).show();
+                            + ellipsize(String.valueOf(entry.getValue()), 10), Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -260,7 +258,7 @@ class HomeScreenDataParser {
                     Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                             "Failed to parse JSON data from "+ EGGPOOL_MINER_STATS_URL + " for wallet " + entry.getValue());
                     Toast.makeText(mContext, "Failed to get data from " + EGGPOOL_MINER_STATS_URL.substring(0, Math.min(EGGPOOL_MINER_STATS_URL.length(), 25)) + " for wallet "
-                            + ellipsize(String.valueOf(entry.getValue()), 8), Toast.LENGTH_LONG).show();
+                            + ellipsize(String.valueOf(entry.getValue()), 10), Toast.LENGTH_LONG).show();
                 }
             }
         }

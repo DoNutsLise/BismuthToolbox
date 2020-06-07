@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.PREFERENCES_CATEGORIES_KEYS;
+import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsize;
 
 /**
  * All the preferences are stored in DefaultSharedPreferences. For settings like radiobuttons and switches it is simple to do
@@ -100,7 +101,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                     // ...create a new EditTextPreference
                     EditTextPreference editTextPreference = new EditTextPreference(preferenceScreen.getContext());
                     editTextPreference.setKey(entry.getKey());
-                    editTextPreference.setSummary((String) entry.getValue());
+                    editTextPreference.setSummary(ellipsize(String.valueOf(entry.getValue()),16));
                     editTextPreference.setText((String) entry.getValue());
                     preferenceGroup.addPreference(editTextPreference);
                 }
@@ -121,7 +122,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             }else{
                 editTextPreference.setKey(category + 1);
             }
-            editTextPreference.setSummary("Add a new record here");
+            editTextPreference.setSummary("Click to add a new record");
             editTextPreference.setText("");
             editTextPreference.setOrder(0);
             preferenceGroup.addPreference(editTextPreference);
@@ -139,7 +140,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 .registerOnSharedPreferenceChangeListener(this);
 
         // register PushNotifications switch listener: if enabled - ask for permission to send data to Firebase
-        Preference pushNotificationsSwitchPref = (Preference) findPreference("isPushNotifications");
+        Preference pushNotificationsSwitchPref = findPreference("isPushNotifications");
         pushNotificationsSwitchPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 // check if the consent to send data was already given or not
@@ -222,7 +223,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 // We  just need to create a new blank EditTextPreference
                 EditTextPreference editTextPreference = new EditTextPreference(preferenceScreen.getContext());
                 editTextPreference.setKey(category + (categoryRecordsIds.get(categoryRecordsIds.size() - 1) + 1));
-                editTextPreference.setSummary("Add a new record here");
+                editTextPreference.setSummary("Click to add a new record");
                 editTextPreference.setText("");
                 editTextPreference.setOrder(0);
                 preferenceGroup.addPreference(editTextPreference);

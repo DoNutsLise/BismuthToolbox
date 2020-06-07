@@ -147,4 +147,11 @@
     <color name="DarkBlue">#00008B</color>
     <color name="Navy">#000080</color>
     <color name="Black">#000000</color>
+
+    <!-- some colors imported from eggpool app -->
+    <color name="MaterialGrey700">#616161</color>
+    <color name="MaterialBlueGrey700">#455a64</color>
+    <color name="MaterialLime700">#AFB42B</color> <!--RGB 175 180 43 -->
+    <color name="MaterialTeal400">#26A69A</color> <!--RGB 38 166 154 -->
+    <color name="MaterialPurple500">#9C27B0</color> <!--RGB 156 39 176 -->
 </resources>

@@ -11,7 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.Executors;
 
-/**
+/*
  * All data is stored in Android Room database.
  * At the moment there are two entities:
  * 1. RawUrlData - with json responses from various web resources
@@ -37,7 +37,7 @@ import java.util.concurrent.Executors;
 
 // TODO: For production: change inMemoryDatabaseBuilder to databaseBuilder and give it name
 
-@Database(entities = {RawUrlData.class, ParsedHomeScreenData.class}, version = 1)
+@Database(entities = {RawUrlData.class, ParsedHomeScreenData.class, ParsedMiningScreenData.class}, version = 1, exportSchema = false)
 public abstract class DataRoomDatabase extends RoomDatabase {
     public abstract DataDAO getDataDAO();
 
@@ -62,6 +62,7 @@ public abstract class DataRoomDatabase extends RoomDatabase {
                             @Override
                             public void run() {
                                 getInstance(context).getDataDAO().insertAllParsedHomeScreenData(ParsedHomeScreenData.populateParsedHomeScreenData());
+                                getInstance(context).getDataDAO().insertAllParsedMiningScreenData(ParsedMiningScreenData.populateParsedMiningScreenData());
                             }
                         });
                     }
