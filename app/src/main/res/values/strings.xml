@@ -20,7 +20,7 @@
     <string name="bis_balance">Balance, BIS</string>
     <string name="usd_balance">Balance, USD</string>
     <string name="block_height">Block height</string>
-    <string name="bis_to_btc">BIS/mBTC price</string>
+    <string name="bis_to_btc">BIS/&#181;BTC price</string>
     <string name="bis_to_usd">BIS/USD price</string>
     <string name="loading_data">Loading data…</string>
 

@@ -18,6 +18,7 @@ import com.donuts.bismuth.bismuthtoolbox.R;
 import com.donuts.bismuth.bismuthtoolbox.utils.CurrentTime;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MiningMinersFragment extends Fragment {
 
@@ -42,13 +43,7 @@ public class MiningMinersFragment extends Fragment {
         /*
          * register listener for Room db update of the ParsedHomeScreenData entity
          */
-        ((MiningActivity) getActivity()).dataDAO.getParsedMiningScreenLiveData().observe(getActivity(), new Observer<ParsedMiningScreenData>() {
-            @Override
-            public void onChanged(@Nullable ParsedMiningScreenData data){
-                assert data != null;
-                updateMinersFragmentViews(data);
-            }
-        });
+        ((MiningActivity) requireActivity()).dataDAO.getParsedMiningScreenLiveData().observe(requireActivity(), this::updateMinersFragmentViews);
     }
 
     @Override
@@ -59,7 +54,7 @@ public class MiningMinersFragment extends Fragment {
          // used to call data update here
     }
 
-    public void updateMinersFragmentViews(ParsedMiningScreenData parsedMiningScreenData) {
+    private void updateMinersFragmentViews(ParsedMiningScreenData parsedMiningScreenData) {
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningMinersFragment", "updateMinersFragmentViews: ");
         // used to call data update here
         textView_wallet.setText(String.valueOf(parsedMiningScreenData.getTest()));

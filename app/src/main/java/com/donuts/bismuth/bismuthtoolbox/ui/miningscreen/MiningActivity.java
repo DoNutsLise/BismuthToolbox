@@ -5,15 +5,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.donuts.bismuth.bismuthtoolbox.Data.ParsedHomeScreenData;
-import com.donuts.bismuth.bismuthtoolbox.Data.ParsedMiningScreenData;
 import com.donuts.bismuth.bismuthtoolbox.R;
 import com.donuts.bismuth.bismuthtoolbox.ui.BaseActivity;
 import com.donuts.bismuth.bismuthtoolbox.utils.AsyncFetchData;
@@ -29,16 +25,13 @@ import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_PRICE_URL;
 
 public class MiningActivity extends BaseActivity implements InterfaceOnDataFetched {
 
-    private FrameLayout contentFrameLayout;
-    private AsyncFetchData asyncFetchFreshData;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningActivity", "onCreate: "+
                 "called");
 
         super.onCreate(savedInstanceState);
-        contentFrameLayout = findViewById(R.id.content_frame); //Remember this is the FrameLayout area within BaseActivity.xml
+        FrameLayout contentFrameLayout = findViewById(R.id.content_frame); //Remember this is the FrameLayout area within BaseActivity.xml
         getLayoutInflater().inflate(R.layout.activity_mining, contentFrameLayout);
 
         /*
@@ -82,8 +75,8 @@ public class MiningActivity extends BaseActivity implements InterfaceOnDataFetch
     private void getFreshData(){
 
         List<String> urls = new ArrayList<>(Arrays.asList(BIS_PRICE_URL));
-            asyncFetchFreshData = new AsyncFetchData(this); // passing context to asynctask here
-            asyncFetchFreshData.setOnDataFetchedListener(this); // setting listener to get results from asynctask
+        AsyncFetchData asyncFetchFreshData = new AsyncFetchData(this); // passing context to asynctask here
+        asyncFetchFreshData.setOnDataFetchedListener(this); // setting listener to get results from asynctask
             asyncFetchFreshData.execute(urls); // executing asynctask
 
             linearLayoutProgress.setVisibility(View.VISIBLE);

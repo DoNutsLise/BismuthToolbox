@@ -5,10 +5,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 
 import com.donuts.bismuth.bismuthtoolbox.Data.ParsedHomeScreenData;
 import com.donuts.bismuth.bismuthtoolbox.Data.RawUrlData;
@@ -18,6 +14,7 @@ import com.donuts.bismuth.bismuthtoolbox.utils.AsyncFetchData;
 import com.donuts.bismuth.bismuthtoolbox.utils.CurrentTime;
 import com.donuts.bismuth.bismuthtoolbox.utils.InterfaceOnDataFetched;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -28,7 +25,6 @@ import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_API_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_HN_BASIC_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_PRICE_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_STATS_URL;
-import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsize;
 
 /**
  * This is the main screen with overview/summary of all BIS activities (mining, hypernodes, wallets, network stats)
@@ -37,12 +33,7 @@ import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsize
 
 //TODO: replace asynctask with multithreaded httpurl requests: https://www.youtube.com/watch?v=jH-3spGUa7c
 
-// TODO: replace getInMemoryDatabase(mContext) in asynctask and settingsFragment to persistent db for production
-
 public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched {
-
-    private FrameLayout contentFrameLayout;
-    private AsyncFetchData asyncFetchFreshData;
 
     private TextView tv_hypernodes_active;
     private TextView tv_hypernodes_inactive;
@@ -78,19 +69,14 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         // https://eggpool.net/index.php?action=api&type=detail&miner=15158a334b969fa7486a2a1468d04a583f3b51e6e0a7d330723701c3
 
 
-        contentFrameLayout = findViewById(R.id.content_frame); //Remember this is the FrameLayout area within BaseActivity.xml
+        FrameLayout contentFrameLayout = findViewById(R.id.content_frame); //Remember this is the FrameLayout area within BaseActivity.xml
         getLayoutInflater().inflate(R.layout.activity_home, contentFrameLayout);
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss"), "MainActivity(onCreate): view inflated");
 
         getMainScreenViews();
 
         // register listener for Room db update of the ParsedHomeScreenData entity
-        dataDAO.getParsedHomeScreenLiveData().observe(this, new Observer<ParsedHomeScreenData>() {
-            @Override
-            public void onChanged(@Nullable ParsedHomeScreenData data){
-                updateHomeScreenViews(data);
-            }
-        });
+        dataDAO.getParsedHomeScreenLiveData().observe(this, this::updateHomeScreenViews);
     }
 
     @Override
@@ -156,19 +142,23 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         // this is called whenever the LiveData changes are detected by the observer (registered in onCreate)
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeActivity", "updateHomeScreenViews: "+
                 "called");
+        DecimalFormat df = new DecimalFormat("#,###.#");
+        DecimalFormat df1 = new DecimalFormat("#.#");
+        DecimalFormat df2 = new DecimalFormat("#.##");
+        DecimalFormat df3 = new DecimalFormat("#.###");
         if (data != null) {
             tv_hypernodes_active.setText(String.valueOf(data.getHypernodesActive()));
             tv_hypernodes_inactive.setText(String.valueOf(data.getHypernodesInactive()));
             tv_hypernodes_lagging.setText(String.valueOf(data.getHypernodesLagging()));
             tv_wallets_number.setText(String.valueOf(data.getRegisteredWallets()));
-            tv_bis_balance.setText(String.valueOf(data.getBalanceBis()));
-            tv_usd_balance.setText(String.valueOf(data.getBalanceUsd()));
+            tv_bis_balance.setText(df1.format(data.getBalanceBis()));
+            tv_usd_balance.setText(df2.format(data.getBalanceUsd()));
             tv_mining_active.setText(String.valueOf(data.getMinersActive()));
             tv_mining_inactive.setText(String.valueOf(data.getMinersInactive()));
-            tv_mining_hashrate.setText(String.valueOf(data.getMinersHashrate()));
-            tv_block_height.setText(String.valueOf(data.getBlockHeight()));
-            tv_bis_to_btc.setText(String.valueOf(data.getBisToBtc()));
-            tv_bis_to_usd.setText(String.valueOf(data.getBisToUsd()));
+            tv_mining_hashrate.setText(df.format(data.getMinersHashrate()));
+            tv_block_height.setText(df.format(data.getBlockHeight()));
+            tv_bis_to_btc.setText(df2.format(data.getBisToBtc()));
+            tv_bis_to_usd.setText(df3.format(data.getBisToUsd()));
         }
     }
 
@@ -220,7 +210,7 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         // if the List<urls> is not empty and something needs to be updated - fire up the asynctask
         if (!urls.isEmpty()) {
             // fire up an asynctask to fetch new data (it will be returned to onFreshDataReceived)
-            asyncFetchFreshData = new AsyncFetchData(this); // passing context to asynctask here
+            AsyncFetchData asyncFetchFreshData = new AsyncFetchData(this); // passing context to asynctask here
             asyncFetchFreshData.setOnDataFetchedListener(this); // setting listener to get results from asynctask
             asyncFetchFreshData.execute(urls); // executing asynctask
 

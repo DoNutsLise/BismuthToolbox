@@ -1,11 +1,8 @@
 package com.donuts.bismuth.bismuthtoolbox.ui.homescreen;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
-
-import androidx.core.math.MathUtils;
 
 import com.donuts.bismuth.bismuthtoolbox.Data.DataDAO;
 import com.donuts.bismuth.bismuthtoolbox.Data.DataRoomDatabase;
@@ -32,7 +29,6 @@ import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsize
 
 class HomeScreenDataParser {
     private Context mContext;
-    private SharedPreferences sharedPreferences;
 
     HomeScreenDataParser(Context context){
         mContext = context;
@@ -197,10 +193,9 @@ class HomeScreenDataParser {
         }
 
         // get a sum of all wallets balances in Bis
-        DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        balanceBis = Double.parseDouble(decimalFormat.format(blockHeightList.stream().mapToDouble(Double::doubleValue).sum()));
+        balanceBis = (blockHeightList.stream().mapToDouble(Double::doubleValue).sum());
         // get balances in USD
-        balanceUsd = Double.parseDouble(decimalFormat.format(balanceBis*bisToUsd));
+        balanceUsd = balanceBis*bisToUsd;
 
         /*
          * 4. parse EGGPOOL_MINER_STATS_URL (mining stats).
@@ -265,15 +260,15 @@ class HomeScreenDataParser {
         }
 
         // get a sum of hashrates
-        for (int i: minersHashrateList) {
+        for (int i: minersHashrateList){
             minersHashrate += i;
         }
 
-        for (int i: minersInactiveList) {
+        for (int i: minersInactiveList){
             numOfInactiveMiners += i;
         }
 
-        for (int i: minersTotalList) {
+        for (int i: minersTotalList){
             numOfAllMiners += i;
         }
         //numOfInactiveMiners = minersInactiveList.stream().mapToInt(Integer::intValue).sum();
