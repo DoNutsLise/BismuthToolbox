@@ -164,7 +164,7 @@ class HomeScreenDataParser {
 
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeActivity", "parseHomeScreenRawData: "+
                 "parsing wallets balances");
-        List<Double> blockHeightList = new ArrayList<>(Arrays.asList(0.0));
+        List<Double> walletBalanceList = new ArrayList<>(Arrays.asList(0.0));
 
         // loop through all the preferences looking for a biswWalletAddress
         for (Map.Entry<String, ?> entry: allPreferencesKeys.entrySet()) {
@@ -177,7 +177,7 @@ class HomeScreenDataParser {
                     Object walletBalanceObj = bisWalletRawDataJsonObj.get("balance");
                     if (walletBalanceObj instanceof String) {
                         // bis api returns values as strings. Even for non-existent wallet it returns values.
-                        blockHeightList.add(Double.parseDouble((String) walletBalanceObj));
+                        walletBalanceList.add(Double.parseDouble((String) walletBalanceObj));
                         numOfRegisteredWallets++;
                         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                                 "Wallet " + entry.getValue() +
@@ -193,7 +193,7 @@ class HomeScreenDataParser {
         }
 
         // get a sum of all wallets balances in Bis
-        balanceBis = (blockHeightList.stream().mapToDouble(Double::doubleValue).sum());
+        balanceBis = (walletBalanceList.stream().mapToDouble(Double::doubleValue).sum());
         // get balances in USD
         balanceUsd = balanceBis*bisToUsd;
 
