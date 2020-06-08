@@ -26,7 +26,7 @@ import java.util.concurrent.Executors;
  */
 
 
-/**
+/*
  * Data with api responses from various servers is stored in Android Room database
  * Refs:
  * 1. https://developer.android.com/training/data-storage/room/
@@ -35,9 +35,7 @@ import java.util.concurrent.Executors;
  * 3. https://www.techotopia.com/index.php/An_Android_Room_Database_and_Repository_Tutorial
  */
 
-// TODO: For production: change inMemoryDatabaseBuilder to databaseBuilder and give it name
-
-@Database(entities = {RawUrlData.class, ParsedHomeScreenData.class, ParsedMiningScreenData.class}, version = 1, exportSchema = false)
+@Database(entities = {RawUrlData.class, ParsedHomeScreenData.class, ParsedMiningScreenData.class}, version = 2, exportSchema = false)
 public abstract class DataRoomDatabase extends RoomDatabase {
     public abstract DataDAO getDataDAO();
 
@@ -51,23 +49,20 @@ public abstract class DataRoomDatabase extends RoomDatabase {
     }
 
     private static DataRoomDatabase buildDatabase(final Context context) {
-        return Room.inMemoryDatabaseBuilder(context.getApplicationContext(),
-                DataRoomDatabase.class)
+        return Room.databaseBuilder(context.getApplicationContext(),
+                DataRoomDatabase.class, "bis-database")
                 // the below callback is needed to populate the entities with initial data (mostly zeros)
                 .addCallback(new Callback() {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
                         super.onCreate(db);
-                        Executors.newSingleThreadScheduledExecutor().execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                getInstance(context).getDataDAO().insertAllParsedHomeScreenData(ParsedHomeScreenData.populateParsedHomeScreenData());
-                                getInstance(context).getDataDAO().insertAllParsedMiningScreenData(ParsedMiningScreenData.populateParsedMiningScreenData());
-                            }
+                        Executors.newSingleThreadScheduledExecutor().execute(() -> {
+                            getInstance(context).getDataDAO().insertAllParsedHomeScreenData(ParsedHomeScreenData.populateParsedHomeScreenData());
+                            getInstance(context).getDataDAO().insertAllParsedMiningScreenData(ParsedMiningScreenData.populateParsedMiningScreenData());
                         });
                     }
                 })
-                .allowMainThreadQueries() // TODO: remove this in production
+                .allowMainThreadQueries()
                 .build();
     }
 
