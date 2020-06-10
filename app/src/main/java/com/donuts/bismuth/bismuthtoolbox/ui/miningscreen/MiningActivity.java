@@ -10,6 +10,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.donuts.bismuth.bismuthtoolbox.Data.RawUrlData;
 import com.donuts.bismuth.bismuthtoolbox.R;
 import com.donuts.bismuth.bismuthtoolbox.ui.BaseActivity;
 import com.donuts.bismuth.bismuthtoolbox.utils.AsyncFetchData;
@@ -19,9 +20,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
-import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_PRICE_URL;
+import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_PRICE_COINGECKO_URL;
+import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_BIS_STATS_URL;
+import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_STATS_URL;
 
 public class MiningActivity extends BaseActivity implements InterfaceOnDataFetched {
 
@@ -73,15 +78,56 @@ public class MiningActivity extends BaseActivity implements InterfaceOnDataFetch
     }
 
     private void getFreshData(){
+        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningActivity", "getFreshData: "+
+                "called");
+        /*
+         * This method checks if the data in Room database is up-to-date (<5 min old), and if not it will request AsyncFetchData to fetch fresh data.
+         * 1. Identify all urls that are needed to be updated for Mining Screen (all fragments) and add them to the list.
+         * 2. Check every url in Room database - when was it last updated.
+         * 3. If the url does'n needs to be updated - delete it from the list.
+         * 4. Request AsyncFetchFreshData to update all urls from the list in Room database.
+         */
 
-        List<String> urls = new ArrayList<>(Arrays.asList(BIS_PRICE_URL));
-        AsyncFetchData asyncFetchFreshData = new AsyncFetchData(this); // passing context to asynctask here
-        asyncFetchFreshData.setOnDataFetchedListener(this); // setting listener to get results from asynctask
+        /*
+         * Minimum data for the Mining Screen (all fragments) is this:
+         * 1. EGGPOOL_BIS_STATS_URL ("https://eggpool.net/api/currencies")
+         * 2. BIS_PRICE_COINGECKO_URL => BIS price from coingecko vs BTC and USD. ("https://api.coingecko.com/api/v3/simple/price?ids=bismuth&vs_currencies=usd,btc")
+         * 3. miningWalletAddress eggpool specific: EGGPOOL_MINER_STATS_URL+"939250d1ce3e543a2f0c3106a12a56649a2199d7ef59b7078ede127f". ("https://eggpool.net/index.php?action=api&type=detail&miner="+walletAddress)
+         * The later two have to be for each registered in settings address.
+         */
+
+        Map<String, ?> allPreferencesKeys = android.preference.PreferenceManager.getDefaultSharedPreferences(this).getAll();
+        List<String> urls = new ArrayList<>(Arrays.asList(BIS_PRICE_COINGECKO_URL, EGGPOOL_BIS_STATS_URL));// some hardcoded urls come from the constant; and wallet specific urls will be added to this list later.
+
+        // loop through all the preferences and if a mining wallet address found - add it to the list of urls (properly modified)
+        for (Map.Entry<String, ?> entry: allPreferencesKeys.entrySet()) {
+            if (entry.getKey().matches("miningWalletAddress"+"\\d+")) {
+                // if a mining wallet address found
+                urls.add(EGGPOOL_MINER_STATS_URL +  entry.getValue());
+            }
+        }
+
+        /* At this point List<urls> contains all the urls for Mining Screen update.
+         * Now we loop through the List<urls> and for each of them get timeLastUpdated from Room database.
+         * If the timeLatUpdate <5 min - delete url from the list and pass the remaining List to AsyncFetchData.
+         */
+        for (Iterator<String> iterator = urls.listIterator(); iterator.hasNext(); ){
+            RawUrlData rawUrlDataFromDb = dataDAO.getUrlDataByUrl(iterator.next());
+            if (rawUrlDataFromDb != null && (System.currentTimeMillis() - rawUrlDataFromDb.getUrlLastUpdatedTime() )<300000) {
+                iterator.remove();
+            }
+        }
+
+        // if the List<urls> is not empty and something needs to be updated - fire up the asynctask
+        if (!urls.isEmpty()) {
+            AsyncFetchData asyncFetchFreshData = new AsyncFetchData(this); // passing context to asynctask here
+            asyncFetchFreshData.setOnDataFetchedListener(this); // setting listener to get results from asynctask
             asyncFetchFreshData.execute(urls); // executing asynctask
 
             linearLayoutProgress.setVisibility(View.VISIBLE);
-        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningActivity", "getFreshData: "+
-                "requested fresh data");
+            Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningActivity", "getFreshData: " +
+                    "requested fresh data");
+        }
     }
 
     public void onDataFetched() {
@@ -91,6 +137,11 @@ public class MiningActivity extends BaseActivity implements InterfaceOnDataFetch
 
         //disable progressbar
         linearLayoutProgress.setVisibility(View.GONE);
+
+        // request to parse the data
+        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningActivity", "onDataFetched: "+
+                "calling data parser");
+        new MiningScreenDataParser(this).parseMiningScreenData();
     }
 
 

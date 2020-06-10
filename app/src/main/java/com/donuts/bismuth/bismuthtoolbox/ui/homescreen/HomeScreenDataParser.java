@@ -13,7 +13,6 @@ import com.donuts.bismuth.bismuthtoolbox.utils.CurrentTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,7 +22,7 @@ import java.util.Map;
 
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_API_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_HN_BASIC_URL;
-import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_PRICE_URL;
+import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_PRICE_COINGECKO_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_STATS_URL;
 import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsize;
 
@@ -121,18 +120,18 @@ class HomeScreenDataParser {
         }catch (JSONException e) {
             Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                     "Failed to parse JSON data from"+BIS_HN_BASIC_URL);
-            Toast.makeText(mContext, "Failed to get data from"+BIS_HN_BASIC_URL.substring(0, Math.min(BIS_HN_BASIC_URL.length(), 25)), Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "Failed to get data from"+ellipsize(BIS_HN_BASIC_URL, 25), Toast.LENGTH_LONG).show();
 
         }
 
         /*
-         * 2. parse BIS_PRICE_URL (get bis to usd and bis to btc prices)
+         * 2. parse BIS_PRICE_COINGECKO_URL (get bis to usd and bis to btc prices)
          */
 
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
-                "parsing BIS_PRICE_URL");
+                "parsing BIS_PRICE_COINGECKO_URL");
         // get json response string from the db
-        String bisPriceRawData = dataDAO.getUrlDataByUrl(BIS_PRICE_URL).getUrlJsonResponse();
+        String bisPriceRawData = dataDAO.getUrlDataByUrl(BIS_PRICE_COINGECKO_URL).getUrlJsonResponse();
         try{
             JSONObject bisPriceRawDataJsonObj = new JSONObject(bisPriceRawData);
             Object bisToUsdObj = bisPriceRawDataJsonObj.getJSONObject("bismuth").get("usd");
@@ -154,8 +153,8 @@ class HomeScreenDataParser {
             }
         }catch(JSONException e){
             Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
-                    "Failed to parse JSON data from "+ BIS_PRICE_URL);
-            Toast.makeText(mContext, "Failed to get data from" + BIS_PRICE_URL.substring(0, Math.min(BIS_PRICE_URL.length(), 25)), Toast.LENGTH_LONG).show();
+                    "Failed to parse JSON data from "+ BIS_PRICE_COINGECKO_URL);
+            Toast.makeText(mContext, "Failed to get data from" + ellipsize(BIS_PRICE_COINGECKO_URL, 25), Toast.LENGTH_LONG).show();
         }
 
         /*
@@ -186,14 +185,17 @@ class HomeScreenDataParser {
                 }catch(JSONException | ClassCastException e){
                     Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                             "Failed to parse JSON data from "+ BIS_API_URL + " for wallet " + entry.getValue());
-                    Toast.makeText(mContext, "Failed to get data from" + BIS_API_URL.substring(0, Math.min(BIS_API_URL.length(), 25))+ " for wallet "
+                    Toast.makeText(mContext, "Failed to get data from" + ellipsize(BIS_API_URL, 25)+ " for wallet "
                             + ellipsize(String.valueOf(entry.getValue()), 8), Toast.LENGTH_LONG).show();
                 }
             }
         }
 
         // get a sum of all wallets balances in Bis
-        balanceBis = (walletBalanceList.stream().mapToDouble(Double::doubleValue).sum());
+        for (double i: walletBalanceList){
+            balanceBis += i;
+        }
+
         // get balances in USD
         balanceUsd = balanceBis*bisToUsd;
 
@@ -253,7 +255,7 @@ class HomeScreenDataParser {
                 }catch(JSONException | ClassCastException e){
                     Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                             "Failed to parse JSON data from "+ EGGPOOL_MINER_STATS_URL + " for wallet " + entry.getValue());
-                    Toast.makeText(mContext, "Failed to get data from " + EGGPOOL_MINER_STATS_URL.substring(0, Math.min(EGGPOOL_MINER_STATS_URL.length(), 25)) + " for wallet "
+                    Toast.makeText(mContext, "Failed to get data from " + ellipsize(EGGPOOL_MINER_STATS_URL, 25)+ " for wallet "
                             + ellipsize(String.valueOf(entry.getValue()), 8), Toast.LENGTH_LONG).show();
                 }
             }
@@ -271,9 +273,7 @@ class HomeScreenDataParser {
         for (int i: minersTotalList){
             numOfAllMiners += i;
         }
-        //numOfInactiveMiners = minersInactiveList.stream().mapToInt(Integer::intValue).sum();
-        //minersHashrate = Double.parseDouble(decimalFormat.format(minersHashrateList.stream().mapToInt(Integer::intValue).sum()/1000d));
-        //numOfAllMiners = minersTotalList.stream().mapToInt(Integer::intValue).sum();
+
         numOfActiveMiners = numOfAllMiners -  numOfInactiveMiners;
 
         /*

@@ -23,7 +23,7 @@ import java.util.Map;
 
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_API_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_HN_BASIC_URL;
-import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_PRICE_URL;
+import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_PRICE_COINGECKO_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_STATS_URL;
 
 /**
@@ -53,18 +53,18 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         super.onCreate(savedInstanceState);
 
         // TODO: below are shared preferences added for testing purpose:
-//        sharedPreferences.edit().putString("hypernodeIP1", "163.172.222.163").apply(); // active
-//        sharedPreferences.edit().putString("hypernodeIP2", "142.93.93.4").apply(); // inactive
-//        sharedPreferences.edit().putString("hypernodeIP3", "142.93.1.1").apply(); // doesn't exist
-//        sharedPreferences.edit().putString("hypernodeIP4", "114.207.111.94").apply(); // lagging
-//        sharedPreferences.edit().putString("bisWalletAddress1", "4f92743a7f5549fe19205842b117aa9c8a611fa8533b1934b43a9ce1").apply(); // random
-//        sharedPreferences.edit().putString("bisWalletAddress2", "7d5c2999f9a2e44c23e7b2b73b4c0edae308e9d39482bf44da481edc").apply(); // casino
+        sharedPreferences.edit().putString("hypernodeIP1", "163.172.222.163").apply(); // active
+        sharedPreferences.edit().putString("hypernodeIP2", "142.93.93.4").apply(); // inactive
+        sharedPreferences.edit().putString("hypernodeIP3", "142.93.1.1").apply(); // doesn't exist
+        sharedPreferences.edit().putString("hypernodeIP4", "114.207.111.94").apply(); // lagging
+        sharedPreferences.edit().putString("bisWalletAddress1", "4f92743a7f5549fe19205842b117aa9c8a611fa8533b1934b43a9ce1").apply(); // random
+        sharedPreferences.edit().putString("bisWalletAddress2", "7d5c2999f9a2e44c23e7b2b73b4c0edae308e9d39482bf44da481edc").apply(); // casino
         sharedPreferences.edit().putString("bisWalletAddress3", "f9b7baef3d7fa6d452719396d5782fef2020b51dcb10defa52213b9c").apply(); // non-existent
 //        // http://bismuth.online/api/node/balancegetjson:939250d1ce3e543a2f0c3106a12a56649a2199d7ef59b7078ede127f
-//        sharedPreferences.edit().putString("miningWalletAddress1", "15158a334b969fa7486a2a1468d04a583f3b51e6e0a7d330723701c3").apply(); // 3 workers
-//        sharedPreferences.edit().putString("miningWalletAddress2", "1dfdc05f34681ef2360c2a0fa0dbe190e20981cd1cfcc425aace6a00").apply(); // 2 workers
-//        sharedPreferences.edit().putString("miningWalletAddress3", "ba50c90230ddc99cfba6ccea881f5e91b3145aedbfd51c1fff84adeb").apply(); // problem
-//        sharedPreferences.edit().putString("miningWalletAddress4", "70a799988c7a80300915b9a1d4ca83237b296a5e0f16b72a90391e24").apply(); // problem
+        sharedPreferences.edit().putString("miningWalletAddress1", "15158a334b969fa7486a2a1468d04a583f3b51e6e0a7d330723701c3").apply(); // 3 workers
+        sharedPreferences.edit().putString("miningWalletAddress2", "1dfdc05f34681ef2360c2a0fa0dbe190e20981cd1cfcc425aace6a00").apply(); // 2 workers
+        sharedPreferences.edit().putString("miningWalletAddress3", "ba50c90230ddc99cfba6ccea881f5e91b3145aedbfd51c1fff84adeb").apply(); // problem
+        sharedPreferences.edit().putString("miningWalletAddress4", "70a799988c7a80300915b9a1d4ca83237b296a5e0f16b72a90391e24").apply(); // problem
 
         // https://eggpool.net/index.php?action=api&type=detail&miner=15158a334b969fa7486a2a1468d04a583f3b51e6e0a7d330723701c3
 
@@ -140,25 +140,24 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
 
     private void updateHomeScreenViews(ParsedHomeScreenData data){
         // this is called whenever the LiveData changes are detected by the observer (registered in onCreate)
-        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeActivity", "updateHomeScreenViews: "+
+        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeActivity", "updateHomeScreenViews: " +
                 "called");
-        DecimalFormat df = new DecimalFormat("#,###.#");
-        DecimalFormat df1 = new DecimalFormat("#.#");
-        DecimalFormat df2 = new DecimalFormat("#.##");
-        DecimalFormat df3 = new DecimalFormat("#.###");
+        DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
+        DecimalFormat decimalFormat1 = new DecimalFormat("#,###.###");
+
         if (data != null) {
             tv_hypernodes_active.setText(String.valueOf(data.getHypernodesActive()));
             tv_hypernodes_inactive.setText(String.valueOf(data.getHypernodesInactive()));
             tv_hypernodes_lagging.setText(String.valueOf(data.getHypernodesLagging()));
             tv_wallets_number.setText(String.valueOf(data.getRegisteredWallets()));
-            tv_bis_balance.setText(df1.format(data.getBalanceBis()));
-            tv_usd_balance.setText(df2.format(data.getBalanceUsd()));
+            tv_bis_balance.setText(decimalFormat.format(data.getBalanceBis()));
+            tv_usd_balance.setText(decimalFormat.format(data.getBalanceUsd()));
             tv_mining_active.setText(String.valueOf(data.getMinersActive()));
             tv_mining_inactive.setText(String.valueOf(data.getMinersInactive()));
-            tv_mining_hashrate.setText(df.format(data.getMinersHashrate()));
-            tv_block_height.setText(df.format(data.getBlockHeight()));
-            tv_bis_to_btc.setText(df2.format(data.getBisToBtc()));
-            tv_bis_to_usd.setText(df3.format(data.getBisToUsd()));
+            tv_mining_hashrate.setText(decimalFormat .format(data.getMinersHashrate()));
+            tv_block_height.setText(decimalFormat.format(data.getBlockHeight()));
+            tv_bis_to_btc.setText(decimalFormat1.format(data.getBisToBtc()));
+            tv_bis_to_usd.setText(decimalFormat1.format(data.getBisToUsd()));
         }
     }
 
@@ -176,14 +175,14 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         /*
         * Minimum data for the main screen is this:
         * 1. BIS_HN_BASIC_URL // all hypernodes stats.
-        * 2. BIS_PRICE_URL // BIS price from coingecko vs BTC and USD.
+        * 2. BIS_PRICE_COINGECKO_URL // BIS price from coingecko vs BTC and USD.
         * 3. bisWalletAddress specific balance: BIS_API_URL+ "node" + "/" + "balancegetjson:939250d1ce3e543a2f0c3106a12a56649a2199d7ef59b7078ede127f".
         * 4. miningWalletAddress eggpool specific: EGGPOOL_MINER_STATS_URL+"939250d1ce3e543a2f0c3106a12a56649a2199d7ef59b7078ede127f".
         * The later two have to be for each registered in settings address.
          */
 
         Map<String, ?> allPreferencesKeys = android.preference.PreferenceManager.getDefaultSharedPreferences(this).getAll();
-        List<String> urls = new ArrayList<>(Arrays.asList(BIS_PRICE_URL, BIS_HN_BASIC_URL));// some hardcoded urls come from the constant; and wallet specific urls will be added to this list later.
+        List<String> urls = new ArrayList<>(Arrays.asList(BIS_PRICE_COINGECKO_URL, BIS_HN_BASIC_URL));// some hardcoded urls come from the constant; and wallet specific urls will be added to this list later.
 
         // loop through all the preferences and if a wallet address found - add it to the list of urls (properly modified)
         for (Map.Entry<String, ?> entry: allPreferencesKeys.entrySet()) {
