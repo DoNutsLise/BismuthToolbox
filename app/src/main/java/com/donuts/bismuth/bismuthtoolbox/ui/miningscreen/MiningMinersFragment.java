@@ -34,9 +34,8 @@ public class MiningMinersFragment extends Fragment {
     private TextView textView_averageShares;
     private TextView textView_workersOnline;
     private TextView textView_workersOffline;
-    MiningMinersRecyclerViewAdapter minersRecyclerViewAdapter;
-    RecyclerView minersStatsRecyclerView;
-    List<MinersStatsModel> mMinersStatsModel;
+    private MiningMinersRecyclerViewAdapter minersRecyclerViewAdapter;
+    private List<MinersStatsModel> mMinersStatsModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -86,7 +85,7 @@ public class MiningMinersFragment extends Fragment {
         mMinersStatsModel =new ArrayList<>();
 
         // Setting the minersRecyclerViewAdapter
-        minersStatsRecyclerView = getView().findViewById(R.id.recyclerView_miners);
+        RecyclerView minersStatsRecyclerView = getView().findViewById(R.id.recyclerView_miners);
 
         // set true if your RecyclerView is finite and has fixed size
         minersStatsRecyclerView.setHasFixedSize(false);
