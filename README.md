@@ -30,3 +30,10 @@ Here are good instructions on how to build an android apk from source using Andr
 PARANOID? (like myself)
 apk I put  in release are not obfuscated; there are plenty of tools (including online ones) which allow you to decomplie apks and check the code.
 
+Requested features:
+* details about missing miner/hypernode in push notification
+* import/export of settings (including addresses)
+* clock height for POW and POS chains
+* POW difficulty
+* ROI, percentage of coin supply, weekly, monthly. yearly rewards in bis and usd.
+
