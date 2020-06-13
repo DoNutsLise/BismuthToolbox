@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_gravity="start"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Date"
+        android:textSize = "12sp"
+        android:layout_marginLeft="5dp"
+        android:id="@+id/textView_payoutDate_header"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Amount"
+        android:textSize = "12sp"
+        android:layout_marginLeft="5dp"
+        android:id="@+id/textView_payoutAmount_header"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="TxID"
+        android:textAlignment="center"
+        android:textSize = "12sp"
+        android:layout_marginLeft="5dp"
+        android:id="@+id/textView_payoutTxID_header"/>
+
+</LinearLayout>

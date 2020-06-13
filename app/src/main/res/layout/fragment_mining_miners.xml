@@ -5,6 +5,7 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
 android:orientation="vertical"
+android:background="@color/Lavender"
 tools:context=".ui.miningscreen.MiningActivity">
 
 <RelativeLayout
@@ -16,29 +17,6 @@ tools:context=".ui.miningscreen.MiningActivity">
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical">
-
-        <!--top panel with wallet address-->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Wallet: "
-                android:textSize = "12sp" />
-            <TextView
-                android:id="@+id/text_dashboard1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="blank"
-                android:singleLine="true"
-                android:ellipsize="middle"
-                android:textSize = "12sp"/>
-        </LinearLayout>
 
         <!--view with three cardviews with hashrate, shares and workers-->
         <LinearLayout
@@ -52,7 +30,7 @@ tools:context=".ui.miningscreen.MiningActivity">
                 android:layout_weight="1"
                 android:layout_height="fill_parent"
                 android:layout_gravity="start"
-                app:cardBackgroundColor="@color/colorPrimary"
+                app:cardBackgroundColor="@color/SteelBlue"
                 app:cardCornerRadius="4dp">
 
                 <LinearLayout
@@ -65,12 +43,14 @@ tools:context=".ui.miningscreen.MiningActivity">
                         android:layout_height="wrap_content"
                         android:text="HashRate, MH/s"
                         android:textAlignment="center"
-                        android:background="@color/MaterialLime700"
+                        android:background="@color/MediumSlateBlue"
+                        android:textColor="@color/LightGrey"
                         android:textSize = "12sp"/>
                     <TextView
                         android:id="@+id/dashboard_textView_currentHashRate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/LightGrey"
                         android:text="0 (current)"
                         android:textAlignment="center"
                         android:textSize = "12sp"/>
@@ -78,6 +58,7 @@ tools:context=".ui.miningscreen.MiningActivity">
                         android:id="@+id/dashboard_textView_averageHashRate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/LightGrey"
                         android:text="0 (average)"
                         android:textAlignment="center"
                         android:textSize = "12sp"/>
@@ -90,7 +71,7 @@ tools:context=".ui.miningscreen.MiningActivity">
                 android:layout_weight="1"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
-                app:cardBackgroundColor="@color/colorPrimary"
+                app:cardBackgroundColor="@color/SteelBlue"
                 app:cardCornerRadius="4dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp">
@@ -105,12 +86,14 @@ tools:context=".ui.miningscreen.MiningActivity">
                         android:layout_height="wrap_content"
                         android:text="Shares"
                         android:textAlignment="center"
-                        android:background="@color/MaterialTeal400"
+                        android:background="@color/MediumSlateBlue"
+                        android:textColor="@color/LightGrey"
                         android:textSize = "12sp"/>
                     <TextView
                         android:id="@+id/dashboard_textView_currentShares"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/LightGrey"
                         android:text="0 (current)"
                         android:textAlignment="center"
                         android:textSize = "12sp"/>
@@ -118,6 +101,7 @@ tools:context=".ui.miningscreen.MiningActivity">
                         android:id="@+id/dashboard_textView_averageShares"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/LightGrey"
                         android:text="0 (average)"
                         android:textAlignment="center"
                         android:textSize = "12sp"/>
@@ -130,7 +114,7 @@ tools:context=".ui.miningscreen.MiningActivity">
                 android:layout_height="fill_parent"
                 android:layout_gravity="end"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@color/colorPrimary"
+                app:cardBackgroundColor="@color/SteelBlue"
                 app:cardCornerRadius="4dp">
 
                 <LinearLayout
@@ -143,12 +127,15 @@ tools:context=".ui.miningscreen.MiningActivity">
                         android:layout_height="wrap_content"
                         android:text="Workers"
                         android:textAlignment="center"
-                        android:background="@color/MaterialPurple500"
+                        android:background="@color/MediumSlateBlue"
+                        android:textColor="@color/LightGrey"
                         android:textSize = "12sp"/>
                     <TextView
                         android:id="@+id/dashboard_textView_workersOnline"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/LightGrey"
+
                         android:text="0 (online)"
                         android:textAlignment="center"
                         android:textSize = "12sp"/>
@@ -156,6 +143,7 @@ tools:context=".ui.miningscreen.MiningActivity">
                         android:id="@+id/dashboard_textView_workersOffline"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:textColor="@color/LightGrey"
                         android:text="0 (offline)"
                         android:textAlignment="center"
                         android:textSize = "12sp"/>
@@ -205,7 +193,7 @@ tools:context=".ui.miningscreen.MiningActivity">
                 android:layout_height="fill_parent"
                 android:layout_gravity="start"
                 android:layout_weight="1.3"
-                app:cardBackgroundColor="@color/colorPrimary">
+                app:cardBackgroundColor="@color/SteelBlue">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -224,7 +212,7 @@ tools:context=".ui.miningscreen.MiningActivity">
                 android:layout_marginStart="0.5dp"
                 android:layout_marginEnd="0.5dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@color/colorPrimary">
+                app:cardBackgroundColor="@color/SteelBlue">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -241,7 +229,7 @@ tools:context=".ui.miningscreen.MiningActivity">
                 android:layout_height="fill_parent"
                 android:layout_gravity="end"
                 android:layout_weight="2"
-                app:cardBackgroundColor="@color/colorPrimary">
+                app:cardBackgroundColor="@color/SteelBlue">
 
                 <TextView
                     android:layout_width="wrap_content"

@@ -24,6 +24,14 @@
     <string name="bis_to_usd">BIS/USD price</string>
     <string name="loading_data">Loading data…</string>
 
+    <!-- Mining screen -->
+    <string name="hashrate_average_tv">%1$s (average)</string>
+    <string name="hashrate_current_tv">%1$s (current)</string>
+    <string name="shares_average_tv">%1$s (average)</string>
+    <string name="shares_current_tv">%1$s (current)</string>
+    <string name="miners_active_tv">%1$s (active)</string>
+    <string name="miners_inactive_tv">%1$s (inactive)</string>
+
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

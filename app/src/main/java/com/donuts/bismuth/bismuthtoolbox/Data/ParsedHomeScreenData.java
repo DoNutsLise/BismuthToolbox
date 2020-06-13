@@ -38,7 +38,7 @@ public class ParsedHomeScreenData {
     @ColumnInfo(name = "miners_active")
     private int minersActive;
 
-    @ColumnInfo(name = "minersInactive")
+    @ColumnInfo(name = "miners_inactive")
     private int minersInactive;
 
     @ColumnInfo(name = "miners_hashrate")

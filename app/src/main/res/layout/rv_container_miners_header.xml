@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_gravity="start"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Miner"
+        android:textSize = "12sp"
+        android:layout_marginLeft="5dp"
+        android:id="@+id/textView_workerName_header"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Hashrate, MH/s"
+        android:textSize = "12sp"
+        android:layout_marginLeft="5dp"
+        android:id="@+id/textView_hashRate_header"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Last seen"
+        android:textAlignment="center"
+        android:textSize = "12sp"
+        android:layout_marginLeft="5dp"
+        android:id="@+id/textView_lastSeen_header"/>
+
+</LinearLayout>

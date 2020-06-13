@@ -75,7 +75,9 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
 
         getMainScreenViews();
 
-        // register listener for Room db update of the ParsedHomeScreenData entity
+        /*
+         * register listener for Room db update of the ParsedHomeScreenData entity
+         */
         dataDAO.getParsedHomeScreenLiveData().observe(this, this::updateHomeScreenViews);
     }
 
@@ -138,26 +140,26 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         tv_bis_to_usd = findViewById(R.id.tv_mainactivity_bis_to_usd);
     }
 
-    private void updateHomeScreenViews(ParsedHomeScreenData data){
+    private void updateHomeScreenViews(ParsedHomeScreenData parsedHomeScreenData){
         // this is called whenever the LiveData changes are detected by the observer (registered in onCreate)
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeActivity", "updateHomeScreenViews: " +
                 "called");
         DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
         DecimalFormat decimalFormat1 = new DecimalFormat("#,###.###");
 
-        if (data != null) {
-            tv_hypernodes_active.setText(String.valueOf(data.getHypernodesActive()));
-            tv_hypernodes_inactive.setText(String.valueOf(data.getHypernodesInactive()));
-            tv_hypernodes_lagging.setText(String.valueOf(data.getHypernodesLagging()));
-            tv_wallets_number.setText(String.valueOf(data.getRegisteredWallets()));
-            tv_bis_balance.setText(decimalFormat.format(data.getBalanceBis()));
-            tv_usd_balance.setText(decimalFormat.format(data.getBalanceUsd()));
-            tv_mining_active.setText(String.valueOf(data.getMinersActive()));
-            tv_mining_inactive.setText(String.valueOf(data.getMinersInactive()));
-            tv_mining_hashrate.setText(decimalFormat .format(data.getMinersHashrate()));
-            tv_block_height.setText(decimalFormat.format(data.getBlockHeight()));
-            tv_bis_to_btc.setText(decimalFormat1.format(data.getBisToBtc()));
-            tv_bis_to_usd.setText(decimalFormat1.format(data.getBisToUsd()));
+        if (parsedHomeScreenData != null) {
+            tv_hypernodes_active.setText(String.valueOf(parsedHomeScreenData.getHypernodesActive()));
+            tv_hypernodes_inactive.setText(String.valueOf(parsedHomeScreenData.getHypernodesInactive()));
+            tv_hypernodes_lagging.setText(String.valueOf(parsedHomeScreenData.getHypernodesLagging()));
+            tv_wallets_number.setText(String.valueOf(parsedHomeScreenData.getRegisteredWallets()));
+            tv_bis_balance.setText(decimalFormat.format(parsedHomeScreenData.getBalanceBis()));
+            tv_usd_balance.setText(decimalFormat.format(parsedHomeScreenData.getBalanceUsd()));
+            tv_mining_active.setText(String.valueOf(parsedHomeScreenData.getMinersActive()));
+            tv_mining_inactive.setText(String.valueOf(parsedHomeScreenData.getMinersInactive()));
+            tv_mining_hashrate.setText(decimalFormat .format(parsedHomeScreenData.getMinersHashrate()));
+            tv_block_height.setText(decimalFormat.format(parsedHomeScreenData.getBlockHeight()));
+            tv_bis_to_btc.setText(decimalFormat1.format(parsedHomeScreenData.getBisToBtc()));
+            tv_bis_to_usd.setText(decimalFormat1.format(parsedHomeScreenData.getBisToUsd()));
         }
     }
 

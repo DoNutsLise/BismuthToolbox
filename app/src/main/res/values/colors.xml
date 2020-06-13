@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+
+    <color name="colorPrimary">#8A2BE2</color>
+    <color name="colorPrimaryDark">#4B0082</color>
+    <color name="colorAccent">#00008B</color>
+    <color name="colorBackground">#78909c</color>
+
+<!--
+    <color name="colorPrimary">#616161</color>
+    <color name="colorAccent200">#448aff</color>
+    <color name="colorBackground">#78909c</color>
+-->
 
     <!--    list of colors imported from
             https://www.codexpedia.com/android/list-of-color-names-and-color-code-for-android/
@@ -151,6 +159,7 @@
     <!-- some colors imported from eggpool app -->
     <color name="MaterialGrey700">#616161</color>
     <color name="MaterialBlueGrey700">#455a64</color>
+    <color name="black">#000000</color>
     <color name="MaterialLime700">#AFB42B</color> <!--RGB 175 180 43 -->
     <color name="MaterialTeal400">#26A69A</color> <!--RGB 38 166 154 -->
     <color name="MaterialPurple500">#9C27B0</color> <!--RGB 156 39 176 -->

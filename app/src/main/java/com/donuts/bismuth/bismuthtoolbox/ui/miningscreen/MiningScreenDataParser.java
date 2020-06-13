@@ -1,32 +1,26 @@
 package com.donuts.bismuth.bismuthtoolbox.ui.miningscreen;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.donuts.bismuth.bismuthtoolbox.Data.DataDAO;
 import com.donuts.bismuth.bismuthtoolbox.Data.DataRoomDatabase;
-import com.donuts.bismuth.bismuthtoolbox.Data.ParsedHomeScreenData;
 import com.donuts.bismuth.bismuthtoolbox.Data.ParsedMiningScreenData;
-import com.donuts.bismuth.bismuthtoolbox.Data.RawUrlData;
+import com.donuts.bismuth.bismuthtoolbox.Models.MinersStatsModel;
 import com.donuts.bismuth.bismuthtoolbox.utils.CurrentTime;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_API_URL;
-import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_HN_BASIC_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_PRICE_COINGECKO_URL;
-import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_BIS_STATS_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_STATS_URL;
 import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsize;
 
@@ -75,7 +69,7 @@ class MiningScreenDataParser {
             }
 
             if (bisToBtcObj instanceof Number){
-                bisToBtc = (Double) bisToBtcObj*1000000;  // make it in mBTC
+                bisToBtc = (Double) bisToBtcObj*1000000;  // make it in uBTC
             }else{
                 Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningScreenDataParser", "parseMiningScreenData: "+
                         "Failed to get BIS price in BTC");
@@ -93,11 +87,9 @@ class MiningScreenDataParser {
          *  until hashrate is estimated (miner sends first share in the round), and only then real hashrates appear.
          */
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningScreenDataParser", "parseMiningScreenData: "+
-                "parsing mining stats");
+                "parsing mining stats...");
 
-        List<Integer> minersHashrateList = new ArrayList<>(Arrays.asList(0));
-        List<Integer> minersInactiveList = new ArrayList<>(Arrays.asList(0));
-        List<Integer> minersTotalList = new ArrayList<>(Arrays.asList(0));
+        List<MinersStatsModel> minersStatsModelList = new ArrayList<>();
 
         // loop through all the preferences looking for a miningWalletAddress
         for (Map.Entry<String, ?> entry: allPreferencesKeys.entrySet()) {
@@ -107,41 +99,75 @@ class MiningScreenDataParser {
                 // then parse json for this wallet
                 try {
                     JSONObject miningWalletRawDataJsonObj = new JSONObject(miningWalletRawData);
-                    // get object "round" and check it for null
-                    JSONObject minersRoundJsonObj;
-                    if (miningWalletRawDataJsonObj.isNull("round")){
-                        // if the Round object is null - try to get hashrate from previous round
-                        minersRoundJsonObj = miningWalletRawDataJsonObj.getJSONObject("lastround");
-                    }else{
-                        minersRoundJsonObj = miningWalletRawDataJsonObj.getJSONObject("round");
-                    }
-                    // if both Round and lastround are nulls - then fail to parse json and value remains 0.
-                    Object minersHashrateObj = minersRoundJsonObj.get("hr"); // current hashrate in MH/s
-                    if (minersHashrateObj instanceof Number) {
-                        minersHashrateList.add((Integer) minersHashrateObj);
-                        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
-                                "hashrate for wallet " + entry.getValue() +
-                                "is " + minersHashrateObj);
-                    }
-                    // get total number of miners for this wallet
-                    Object minersTotalObj = miningWalletRawDataJsonObj.getJSONObject("workers").get("count");
-                    if (minersTotalObj instanceof Number) {
-                        minersTotalList.add((Integer) minersTotalObj);
-                        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
-                                "total miners for wallet " + entry.getValue()+
-                                "is " + minersTotalObj);
-                    }
+                    // 1. check: if there are no miners associated with this wallet ("count"<1); if so - send a toast and move to the next address
+                        if (miningWalletRawDataJsonObj.getJSONObject("workers").optInt("count", 0)<1) {
+                            Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningScreenDataParser", "parseMiningScreenData: " +
+                                    "there are no miners associated with the wallet " + ellipsize(entry.getKey(), 10));
+                            Toast.makeText(mContext, "There are no miners associated with the wallet " + ellipsize(entry.getKey(), 10) +
+                                    ". Please check the wallet address. ", Toast.LENGTH_LONG).show();
+                            continue;
+                        }
+                    // 2. get object "detail" and loop through it (if not null) and add information about every miner to the minersStatsModelList
+                        if (miningWalletRawDataJsonObj.getJSONObject("workers").isNull("detail")){
+                            // if "detail" object is null - go to the next miningWalletAddress
+                            Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningScreenDataParser", "parseMiningScreenData: "+
+                                    " details object is null for wallet " + ellipsize(entry.getKey(), 10));
+                            continue;
+                        }
+                        JSONObject workersDetailJsonObject = miningWalletRawDataJsonObj.getJSONObject("workers").getJSONObject("detail");
+                        Iterator<String> keys = workersDetailJsonObject.keys();
 
-                    // get total missing miners for this wallet
-                    Object minersInactiveObj = miningWalletRawDataJsonObj.getJSONObject("workers").get("missing_count");
-                    if (minersInactiveObj  instanceof Number) {
-                        minersInactiveList.add((Integer) minersInactiveObj);
-                        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
-                                "inactive miners for wallet " + entry.getValue() +
-                                "is " + minersInactiveObj );
-                    }
+                        for(int j=0; j<workersDetailJsonObject.length(); j++) {
+                            String key = workersDetailJsonObject.names().getString(j); // miner's name
+                            if (workersDetailJsonObject.get(key) instanceof JSONArray) {
+                                MinersStatsModel minersStatsModel = new MinersStatsModel();
+                                minersStatsModel.minerName = key;
+
+                                // for a given miner there is an array with the following stats:
+                                // 0: current hashrate (double). Value can be 0 for a missing miner and int from the previous round at the beginning of the round.
+                                // 1: miner last seen (timestamp long).
+                                // 2: hashrate for the last 12h (array of int) + current hashrate. The 13th value can be 0 at the beginning of the round. Array can be empty (or null) for a missing miner.
+                                // 3: shares for the last 12h  (array of int) + current shares. The 13th value can be 0 at the beginning of the round. Array can be empty (or null) for a missing miner.
+
+                                JSONArray minerStatsJsonArray = (JSONArray) workersDetailJsonObject.get(key);
+                                // 0.
+                                    minersStatsModel.minerHashrate = minerStatsJsonArray.optDouble(0, 0);
+                                // 1.
+                                    minersStatsModel.minerLastSeen = minerStatsJsonArray.optLong(1, 1);
+                                // 2.
+                                    JSONArray minerHashrate12hJsonArray = minerStatsJsonArray.optJSONArray(2);
+                                    // Deal with the case of a non-array value: fill the list with 13 zeros
+                                    if (minerHashrate12hJsonArray == null) {
+                                        minersStatsModel.minerHashrate12hList = Collections.nCopies(13, 0);
+                                    }else {
+                                        for (int i = 0; i < minerHashrate12hJsonArray.length(); ++i) {
+                                            minersStatsModel.minerHashrate12hList.add(minerHashrate12hJsonArray.optInt(i, 0));
+                                        }
+                                    }
+                                // 3.
+                                    JSONArray minerShares12hJsonArray = minerStatsJsonArray.optJSONArray(3);
+                                    // Deal with the case of a non-array value: fill the list with 13 zeros
+                                    if (minerShares12hJsonArray == null) {
+                                        minersStatsModel.minerShares12hList = Collections.nCopies(13, 0);
+                                    }else {
+                                        for (int i = 0; i < minerShares12hJsonArray.length(); ++i) {
+                                            minersStatsModel.minerShares12hList.add(minerShares12hJsonArray.optInt(i, 0));
+                                        }
+                                    }
+
+                                minersStatsModel.isMinerOnline = (System.currentTimeMillis() - minersStatsModel.minerLastSeen * 1000) / 60000 <= 10; // if timeLastSeen is > 10 min from now, then miner is missing
+
+                                minersStatsModelList.add(minersStatsModel);
+                            }else{
+                                Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningScreenDataParser", "parseMiningScreenData: " +
+                                        "Failed to parse JSON data from "+ EGGPOOL_MINER_STATS_URL + " for wallet " + entry.getValue() + ", miner " +
+                                        key);
+                                Toast.makeText(mContext, "Failed to get data from " + ellipsize(EGGPOOL_MINER_STATS_URL, 25) + " for wallet "
+                                        + ellipsize(String.valueOf(entry.getValue()), 10)+ ", miner " + key, Toast.LENGTH_LONG).show();
+                            }
+                        }
                 }catch(JSONException | ClassCastException e){
-                    Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
+                    Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningScreenDataParser", "parseMiningScreenData: " +
                             "Failed to parse JSON data from "+ EGGPOOL_MINER_STATS_URL + " for wallet " + entry.getValue());
                     Toast.makeText(mContext, "Failed to get data from " + ellipsize(EGGPOOL_MINER_STATS_URL, 25) + " for wallet "
                             + ellipsize(String.valueOf(entry.getValue()), 10), Toast.LENGTH_LONG).show();
@@ -149,13 +175,47 @@ class MiningScreenDataParser {
             }
         }
 
-        /*
-         * 5. update the database
-         */
+        // at this point we looped through all mining wallets and through all miners in each wallet and we got a list of all miners with their stats (minersStatsModelList).
+        // now we get stats for views from this list:
 
+        for (MinersStatsModel minersStatsModel : minersStatsModelList){
+            if (minersStatsModel.isMinerOnline) {
+                numOfActiveMiners += 1;
+            }else{
+                numOfInactiveMiners += 1;
+            }
+
+            totalHashrateCurrent += minersStatsModel.minerHashrate; // it's better to get is from here, because the 13th value in the array of historic hashrates can be zero at the beginning of the round.
+            totalSharesCurrent += minersStatsModel.minerShares12hList.get(12);
+
+            // to get averaged values - loop through lists:
+            int sumHashrate = 0;
+            for (int j=0; j<minersStatsModel.minerHashrate12hList.size()-1; j++){ // discard the 13th value as it can be zero at the beginning of the round
+                sumHashrate += minersStatsModel.minerHashrate12hList.get(j);
+            }
+            totalHashrateAverage +=  sumHashrate /minersStatsModel.minerHashrate12hList.size();
+
+            int sumShares = 0;
+            for (int j=0; j<minersStatsModel.minerShares12hList.size()-1; j++){ // discard the 13th value as it can be zero at the beginning of the round
+                sumShares += minersStatsModel.minerShares12hList.get(j);
+            }
+            totalSharesAverage +=  sumShares/minersStatsModel.minerShares12hList.size();
+        }
+
+
+        /*
+         * 3. update the database
+         */
+        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningScreenDataParser", "parseMiningScreenData: "+
+                "updating Room database with parsed values...");
         ParsedMiningScreenData parsedMiningScreenData = new ParsedMiningScreenData();
         parsedMiningScreenData.setId(1);
-        parsedMiningScreenData.setTest(99);
+        parsedMiningScreenData.setMinersActive(numOfActiveMiners);
+        parsedMiningScreenData.setMinersInactive(numOfInactiveMiners);
+        parsedMiningScreenData.setHashrateAverage(totalHashrateAverage);
+        parsedMiningScreenData.setHashrateCurrent(totalHashrateCurrent);
+        parsedMiningScreenData.setSharesAverage(totalSharesAverage);
+        parsedMiningScreenData.setSharesCurrent(totalSharesCurrent);
 
         dataDAO.updateParsedMiningScreenData(parsedMiningScreenData);
     }
