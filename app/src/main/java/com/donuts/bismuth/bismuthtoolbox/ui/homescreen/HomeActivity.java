@@ -1,10 +1,13 @@
 package com.donuts.bismuth.bismuthtoolbox.ui.homescreen;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
 
 import com.donuts.bismuth.bismuthtoolbox.Data.ParsedHomeScreenData;
 import com.donuts.bismuth.bismuthtoolbox.Data.RawUrlData;
@@ -15,11 +18,15 @@ import com.donuts.bismuth.bismuthtoolbox.utils.CurrentTime;
 import com.donuts.bismuth.bismuthtoolbox.utils.InterfaceOnDataFetched;
 
 import java.text.DecimalFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_API_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_HN_BASIC_URL;
@@ -47,6 +54,7 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
     private TextView tv_block_height;
     private TextView tv_bis_to_btc;
     private TextView tv_bis_to_usd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

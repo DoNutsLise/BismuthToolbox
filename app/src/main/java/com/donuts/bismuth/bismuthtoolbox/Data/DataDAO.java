@@ -8,6 +8,8 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import java.util.List;
+
 @Dao
 public interface DataDAO {
 
@@ -53,23 +55,60 @@ public interface DataDAO {
     @Insert // for initializing the database with default values
     void insertAllParsedHomeScreenData(ParsedHomeScreenData... parsedHomeScreenData);
 
+
     /*
-     *  ParsedMiningScreenData
+     *  Eggpool Miners Data
      */
 
-    @Insert (onConflict = OnConflictStrategy.REPLACE)
-    void insertParsedMiningScreenData(ParsedMiningScreenData parsedUrlData);
-
-    @Update
-    void updateParsedMiningScreenData(ParsedMiningScreenData parsedUrlData);
-
-    @Query("SELECT * from parsed_mining_screen_data")
-    ParsedMiningScreenData getParsedMiningScreenData();
-
-    @Query("SELECT * from parsed_mining_screen_data") // live data for the observer
-    LiveData<ParsedMiningScreenData> getParsedMiningScreenLiveData();
+    @Query("SELECT COUNT(miner_name) from EggpoolMinersData")
+    long getNumOfMiners();
 
     @Insert // for initializing the database with default values
-    void insertAllParsedMiningScreenData(ParsedMiningScreenData... parsedMiningScreenData);
+    void insertAllMiners(EggpoolMinersData... miners);
 
+    @Query("SELECT * from EggpoolMinersData") // live data for the observer (all Miners data)
+    List<EggpoolMinersData> getMinersDataList();
+
+    @Query("SELECT * FROM EggpoolMinersData") // live data for the observer (all Miners data)
+    LiveData<List<EggpoolMinersData>> getMinersForRecyclerViewLiveData();
+
+    @Query("SELECT SUM (hashrate_average) FROM EggpoolMinersData") // it's a sum of individual miners average hashrates
+    int getAllMinersAverageHashrate();
+
+    @Query("SELECT SUM (shares_average) FROM EggpoolMinersData") // it's a sum of individual miners average shares
+    int getAllMinersAverageShares();
+
+    @Query("SELECT SUM (hashrate_current) FROM EggpoolMinersData")
+    int getAllMinersCurrentHashrate();
+
+    @Query("SELECT SUM (shares_current) FROM EggpoolMinersData")
+    int getAllMinersCurrentShares();
+
+    @Query("SELECT COUNT(miner_name) FROM EggpoolMinersData WHERE is_active=1")
+    int getNumOfActiveMiners();
+
+    @Query("SELECT COUNT(miner_name) FROM EggpoolMinersData WHERE is_active=0")
+    int getNumOfInactiveMiners();
+
+    @Query("DELETE FROM EggpoolMinersData")
+    void clearMinersTableInDb();
+
+    @Insert (onConflict = OnConflictStrategy.REPLACE)
+    void insertMinersData(EggpoolMinersData eggpoolMinersData);
+
+    /*
+     *  Eggpool Payouts Data
+     */
+
+    @Query("SELECT * from EggpoolPayoutsData") // live data for the observer
+    List<EggpoolPayoutsData> getPayoutsDataList();
+
+    @Query("SELECT * FROM EggpoolPayoutsData") // live data for the observer (all Miners data)
+    LiveData<List<EggpoolPayoutsData>> getPayoutsForRecyclerViewLiveData();
+
+    @Insert (onConflict = OnConflictStrategy.REPLACE)
+    void insertPayoutsData(EggpoolPayoutsData eggpoolPayoutsData);
+
+    @Insert // for initializing the database with default values
+    void insertAllPayouts(EggpoolPayoutsData... payouts);
 }

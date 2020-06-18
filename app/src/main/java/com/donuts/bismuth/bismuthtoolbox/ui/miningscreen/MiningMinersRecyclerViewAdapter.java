@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.donuts.bismuth.bismuthtoolbox.Models.MinersStatsModel;
+import com.donuts.bismuth.bismuthtoolbox.Data.EggpoolMinersData;
 import com.donuts.bismuth.bismuthtoolbox.R;
 
 import java.util.List;
@@ -15,15 +15,15 @@ import java.util.List;
 public class MiningMinersRecyclerViewAdapter extends
         RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<MinersStatsModel> minersStatsList;
+    private List<EggpoolMinersData> minersStatsList;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
 
-    MiningMinersRecyclerViewAdapter(List<MinersStatsModel> minersData) {
-        if (minersData == null) {
+    MiningMinersRecyclerViewAdapter(List<EggpoolMinersData> eggpoolMinersData) {
+        if (eggpoolMinersData == null) {
             throw new IllegalArgumentException("minersData must not be null");
         }
-        minersStatsList = minersData;
+        minersStatsList = eggpoolMinersData;
     }
 
     @Override
@@ -61,21 +61,21 @@ public class MiningMinersRecyclerViewAdapter extends
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder minersViewHolder, int position) {
         if (minersViewHolder instanceof MinersItemViewHolder) {
-            MinersStatsModel miners = minersStatsList.get(position);// change to <payoutsStatsList.get(position-1)> if you want to have a header
-            ((MinersItemViewHolder) minersViewHolder).workerNameTextViewItem.setText(String.valueOf(miners.minerName));
-            ((MinersItemViewHolder) minersViewHolder).hashRateTextViewItem.setText(String.valueOf(miners.minerHashrate));
-            ((MinersItemViewHolder) minersViewHolder).lastSeenTextViewItem.setText(String.valueOf(miners.minerLastSeen));
+            EggpoolMinersData miners = minersStatsList.get(position);// change to <minersStatsList.get(position-1)> if you want to have a header
+            ((MinersItemViewHolder) minersViewHolder).workerNameTextViewItem.setText(miners.getMinerName());
+            ((MinersItemViewHolder) minersViewHolder).hashRateTextViewItem.setText(String.valueOf(miners.getHashrateCurrent()));
+            ((MinersItemViewHolder) minersViewHolder).lastSeenTextViewItem.setText(String.valueOf((System.currentTimeMillis() - miners.getLastSeen() * 1000) / 60000) + " min ago");
         }else if (minersViewHolder instanceof MinersHeaderViewHolder) {
-            MinersStatsModel miners = minersStatsList.get(position);
-            ((MinersHeaderViewHolder) minersViewHolder).workerNameTextViewHeader.setText(String.valueOf(miners.minerName));
-            ((MinersHeaderViewHolder) minersViewHolder).hashRateTextViewHeader.setText(String.valueOf(miners.minerHashrate));
-            ((MinersHeaderViewHolder) minersViewHolder).lastSeenTextViewHeader.setText(String.valueOf(miners.minerLastSeen));
+            EggpoolMinersData miners = minersStatsList.get(position);
+            ((MinersHeaderViewHolder) minersViewHolder).workerNameTextViewHeader.setText(miners.getMinerName());
+            ((MinersHeaderViewHolder) minersViewHolder).hashRateTextViewHeader.setText(String.valueOf(miners.getHashrateCurrent()));
+            ((MinersHeaderViewHolder) minersViewHolder).lastSeenTextViewHeader.setText(String.valueOf((System.currentTimeMillis() - miners.getLastSeen() * 1000) / 60000) + " min ago");
         }
     }
 
     @Override
     public int getItemCount() {
-        return minersStatsList.size(); // change to <return payoutsStatsList.size()+1;> if you want to have a header
+        return minersStatsList.size(); // change to <return minersStatsList.size()+1;> if you want to have a header
     }
 
     public final static class MinersItemViewHolder extends RecyclerView.ViewHolder {

@@ -1,24 +1,382 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
     android:background="@color/Lavender"
     tools:context=".ui.miningscreen.MiningActivity">
 
-    <TextView
-        android:id="@+id/text_dashboard2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!--top part of the screen with stats-->
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0sp"
+        android:layout_weight="0.13">
+
+        <!--view with three cardviews with immature balance, unpaid balance, total paid-->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="horizontal"
+            android:layout_margin="10sp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0sp"
+                android:layout_weight="1"
+                android:layout_height="fill_parent"
+                android:layout_gravity="start"
+                app:cardBackgroundColor="@color/SteelBlue"
+                app:cardCornerRadius="4sp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Immature"
+                        android:gravity="center"
+                        android:background="@color/MediumSlateBlue"
+                        android:textColor="@color/LightGrey"
+                        android:textSize = "12sp"
+                        android:layout_weight="0.7"/>
+
+                    <TextView
+                        android:id="@+id/payouts_textView_immatureBalance"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:text="0 $BIS"
+                        android:textColor="@color/LightGrey"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0sp"
+                android:layout_weight="1"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                app:cardBackgroundColor="@color/SteelBlue"
+                app:cardCornerRadius="4sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Unpaid"
+                        android:gravity="center"
+                        android:background="@color/MediumSlateBlue"
+                        android:textSize = "12sp"
+                        android:textColor="@color/LightGrey"
+                        android:layout_weight="0.7"/>
+
+                    <TextView
+                        android:id="@+id/payouts_textView_unpaidBalance"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:textColor="@color/LightGrey"
+                        android:text="0 $BIS"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0sp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                app:cardBackgroundColor="@color/SteelBlue"
+                app:cardCornerRadius="4sp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Total Paid"
+                        android:gravity="center"
+                        android:background="@color/MediumSlateBlue"
+                        android:textSize = "12sp"
+                        android:textColor="@color/LightGrey"
+                        android:layout_weight="0.7"/>
+
+                    <TextView
+                        android:id="@+id/payouts_textView_totalPaid"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:text="0 $BIS"
+                        android:textColor="@color/LightGrey"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <!--center part of the screen with calculator-->
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0sp"
+        android:layout_weight="0.17">
+
+        <!-- draw a separator line -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2sp"
+            android:background="@color/colorBackground" />
+
+        <!-- table with profit calculations -->
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:stretchColumns="0,1,2,3">
+
+            <!-- 1st row with title -->
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="3sp" >
+
+                <TextView
+                    android:text="Profitability calculator"
+                    android:gravity="center"
+                    android:layout_span="4"
+                    android:textSize = "12sp"/>
+            </TableRow>
+
+            <!-- 2nd row with headers -->
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="3sp">
+
+                <TextView
+                    android:text=""
+                    android:gravity="center"
+                    android:textSize = "12sp"/>
+
+                <TextView
+                    android:text="BIS"
+                    android:gravity="center"
+                    android:textSize = "12sp"/>
+
+                <TextView
+                    android:text="BTC"
+                    android:gravity="center"
+                    android:textSize = "12sp"/>
+
+                <TextView
+                    android:text="USD"
+                    android:gravity="center"
+                    android:textSize = "12sp"/>
+            </TableRow>
+
+
+            <!-- 3rd row daily profit-->
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="3sp">
+
+                <TextView
+                    android:text="Day"
+                    android:gravity="center"
+                    android:textSize = "12sp"/>
+
+                <TextView
+                    android:id="@+id/payouts_textView_profitBisDay"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize = "12sp"/>
+
+                <TextView
+                    android:id="@+id/payouts_textView_profitBtcDay"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize = "12sp"/>
+
+                <TextView
+                    android:id="@+id/payouts_textView_profitUsdDay"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize = "12sp"/>
+            </TableRow>
+
+            <!-- 4th row with monthly profit -->
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="3sp">
+
+                <TextView
+                    android:text="Month"
+                    android:gravity="center"
+                    android:textSize = "12sp"/>
+
+                <TextView
+                    android:id="@+id/payouts_textView_profitBisMonth"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize = "12sp"/>
+
+                <TextView
+                    android:id="@+id/payouts_textView_profitBtcMonth"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize = "12sp"/>
+
+                <TextView
+                    android:id="@+id/payouts_textView_profitUsdMonth"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize = "12sp"/>
+            </TableRow>
+
+        </TableLayout>
+
+    </RelativeLayout> <!--end of center part of the screen with calculator-->
+
+    <!-- chart with payouts -->
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0sp"
+        android:layout_weight="0.3" >
+
+        <!-- draw a separator line -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2sp"
+            android:background="@color/colorBackground" />
+
+        <com.github.mikephil.charting.charts.CombinedChart
+            android:id="@+id/linearChartPayouts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+
+    <!--bottom part of the screen with recyclerview and headers-->
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0sp"
+        android:layout_weight="0.4">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <!-- draw a separator line -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2sp"
+                android:background="@color/colorBackground" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
+                android:layout_marginStart="5sp"
+                android:layout_marginEnd="5sp"
+                android:orientation="horizontal">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="start"
+                    android:layout_weight="1.5"
+                    app:cardBackgroundColor="@color/SteelBlue">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Date"
+                        android:textAlignment="center"
+                        android:textColor="@color/LightGrey"
+                        android:textSize="12sp" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="0.5sp"
+                    android:layout_marginEnd="0.5sp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/SteelBlue">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Amount (BIS)"
+                        android:textAlignment="center"
+                        android:textColor="@color/LightGrey"
+                        android:textSize="12sp" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0sp"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="2"
+                    app:cardBackgroundColor="@color/SteelBlue">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Tx ID"
+                        android:textAlignment="center"
+                        android:textColor="@color/LightGrey"
+                        android:textSize="12sp" />
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_payouts"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="5sp"
+                android:layout_marginEnd="5sp"
+                android:layout_weight="1">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
+
+    </RelativeLayout >
+
+</LinearLayout>

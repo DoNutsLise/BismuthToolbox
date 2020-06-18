@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.Executors;
@@ -26,16 +27,8 @@ import java.util.concurrent.Executors;
  */
 
 
-/*
- * Data with api responses from various servers is stored in Android Room database
- * Refs:
- * 1. https://developer.android.com/training/data-storage/room/
- * 2. https://medium.com/@ajaysaini.official/building-database-with-room-persistence-library-ecf7d0b8f3e9
- * 2. http://thetechnocafe.com/how-to-use-room-in-android-all-you-need-to-know-to-get-started/
- * 3. https://www.techotopia.com/index.php/An_Android_Room_Database_and_Repository_Tutorial
- */
-
-@Database(entities = {RawUrlData.class, ParsedHomeScreenData.class, ParsedMiningScreenData.class}, version = 2, exportSchema = false)
+@Database(entities = {RawUrlData.class, ParsedHomeScreenData.class, EggpoolMinersData.class, EggpoolPayoutsData.class}, version = 2, exportSchema = false)
+@TypeConverters({DataTypeConverter.class})
 public abstract class DataRoomDatabase extends RoomDatabase {
     public abstract DataDAO getDataDAO();
 
@@ -58,7 +51,8 @@ public abstract class DataRoomDatabase extends RoomDatabase {
                         super.onCreate(db);
                         Executors.newSingleThreadScheduledExecutor().execute(() -> {
                             getInstance(context).getDataDAO().insertAllParsedHomeScreenData(ParsedHomeScreenData.populateParsedHomeScreenData());
-                            getInstance(context).getDataDAO().insertAllParsedMiningScreenData(ParsedMiningScreenData.populateParsedMiningScreenData());
+                            getInstance(context).getDataDAO().insertAllMiners(EggpoolMinersData.populateMiners());
+                            getInstance(context).getDataDAO().insertAllPayouts(EggpoolPayoutsData.populatePayouts());
                         });
                     }
                 })

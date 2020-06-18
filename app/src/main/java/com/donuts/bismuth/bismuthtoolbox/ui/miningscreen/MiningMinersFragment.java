@@ -1,6 +1,7 @@
 package com.donuts.bismuth.bismuthtoolbox.ui.miningscreen;
 
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,12 +16,21 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.donuts.bismuth.bismuthtoolbox.Data.ParsedMiningScreenData;
-import com.donuts.bismuth.bismuthtoolbox.Models.MinersStatsModel;
+import com.donuts.bismuth.bismuthtoolbox.Data.EggpoolMinersData;
 import com.donuts.bismuth.bismuthtoolbox.R;
 import com.donuts.bismuth.bismuthtoolbox.utils.CurrentTime;
 
-import org.json.JSONArray;
+import com.github.mikephil.charting.charts.CombinedChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.CombinedData;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -35,7 +45,7 @@ public class MiningMinersFragment extends Fragment {
     private TextView textView_workersOnline;
     private TextView textView_workersOffline;
     private MiningMinersRecyclerViewAdapter minersRecyclerViewAdapter;
-    private List<MinersStatsModel> mMinersStatsModel;
+    private List<EggpoolMinersData> eggpoolMinersDataModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -49,13 +59,14 @@ public class MiningMinersFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningMinersFragment", "onActivityCreated: "+
                 "called");
+
         // set views including recyclerview here
         getMiningMinersFragmentViews();
 
         /*
          * register listener for Room db update of the ParsedMiningScreenData entity
          */
-        ((MiningActivity) requireActivity()).dataDAO.getParsedMiningScreenLiveData().observe(requireActivity(), this::updateMiningMinersFragmentViews);
+        ((MiningActivity) requireActivity()).dataDAO.getMinersForRecyclerViewLiveData().observe(requireActivity(), this::updateMinersFragmentViews);
     }
 
     @Override
@@ -81,8 +92,8 @@ public class MiningMinersFragment extends Fragment {
         * set recyclerview for miners
          */
 
-        // create mMinersStats object to set empty minersRecyclerViewAdapter
-        mMinersStatsModel =new ArrayList<>();
+        // create minersDataModel object to set empty minersRecyclerViewAdapter
+        eggpoolMinersDataModel =  ((MiningActivity) requireActivity()).dataDAO.getMinersDataList();
 
         // Setting the minersRecyclerViewAdapter
         RecyclerView minersStatsRecyclerView = getView().findViewById(R.id.recyclerView_miners);
@@ -101,62 +112,142 @@ public class MiningMinersFragment extends Fragment {
         minersStatsRecyclerView.addItemDecoration(dividerItemDecoration);
 
         // Initialize and set the RecyclerView Adapter
-        minersRecyclerViewAdapter = new MiningMinersRecyclerViewAdapter(mMinersStatsModel);
+        minersRecyclerViewAdapter = new MiningMinersRecyclerViewAdapter(eggpoolMinersDataModel);
         minersStatsRecyclerView.setAdapter(minersRecyclerViewAdapter);
 
     }
 
-    private void updateMiningMinersFragmentViews(ParsedMiningScreenData parsedMiningScreenData) {
-        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningMinersFragment", "updateMinersFragmentViews: "+
+    private void updateMinersFragmentViews(List<EggpoolMinersData> eggpoolMinersData) {
+        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningMinersFragment", "updateMiningMinersFragmentViews: "+
                 "called");
+        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningMinersFragment", "updateFragmentViews: " +
+                "updating recyclerview, all textviews and chart...");
 
-        if (parsedMiningScreenData != null) {
-            Resources resources = getResources();
-            DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
-
-            textView_currentHashRate.setText(String.format(resources.getString(R.string.hashrate_current_tv), decimalFormat.format(parsedMiningScreenData.getHashrateCurrent())));
-            textView_averageHashRate.setText(String.format(resources.getString(R.string.hashrate_average_tv), decimalFormat.format(parsedMiningScreenData.getHashrateAverage())));
-            textView_currentShares.setText(String.format(resources.getString(R.string.shares_current_tv), decimalFormat.format(parsedMiningScreenData.getSharesCurrent())));
-            textView_averageShares.setText(String.format(resources.getString(R.string.shares_average_tv), decimalFormat.format(parsedMiningScreenData.getSharesAverage())));
-            textView_workersOnline.setText(String.format(resources.getString(R.string.miners_active_tv), decimalFormat.format(parsedMiningScreenData.getMinersActive())));
-            textView_workersOffline.setText(String.format(resources.getString(R.string.miners_inactive_tv), decimalFormat.format(parsedMiningScreenData.getMinersInactive())));
+        if (eggpoolMinersData == null) {
+            return;
         }
 
+        // update textviews with stats at the top of screen:
+        Resources resources = getResources();
+        DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
+
+        textView_currentHashRate.setText(String.format(resources.getString(R.string.hashrate_current_tv),
+                decimalFormat.format(((MiningActivity) requireActivity()).dataDAO.getAllMinersCurrentHashrate())));
+        textView_averageHashRate.setText(String.format(resources.getString(R.string.hashrate_average_tv),
+                decimalFormat.format(((MiningActivity) requireActivity()).dataDAO.getAllMinersAverageHashrate())));
+        textView_currentShares.setText(String.format(resources.getString(R.string.shares_current_tv),
+                decimalFormat.format(((MiningActivity) requireActivity()).dataDAO.getAllMinersCurrentShares())));
+        textView_averageShares.setText(String.format(resources.getString(R.string.shares_average_tv),
+                decimalFormat.format(((MiningActivity) requireActivity()).dataDAO.getAllMinersAverageShares())));
+        textView_workersOnline.setText(String.format(resources.getString(R.string.miners_active_tv),
+                decimalFormat.format(((MiningActivity) requireActivity()).dataDAO.getNumOfActiveMiners())));
+        textView_workersOffline.setText(String.format(resources.getString(R.string.miners_inactive_tv),
+                decimalFormat.format(((MiningActivity) requireActivity()).dataDAO.getNumOfInactiveMiners())));
+
         // update recyclerview: To update minersRecyclerViewAdapter: 1. clear previous data; 2. Set new data
-        List<MinersStatsModel> minersStatsModel = new ArrayList<>();
-        MinersStatsModel minersStatsTMP = new MinersStatsModel();
-        minersStatsTMP.minerName = "test";
-        minersStatsTMP.minerHashrate = 9;
-        minersStatsTMP.minerLastSeen = 10000000;
-        minersStatsModel.add(minersStatsTMP);
-
-        MinersStatsModel minersStatsTMP1 = new MinersStatsModel();
-        minersStatsTMP1.minerName = "test1";
-        minersStatsTMP1.minerHashrate = 99;
-        minersStatsTMP1.minerLastSeen = 100000090;
-        minersStatsModel.add(minersStatsTMP1);
-
-        MinersStatsModel minersStatsTMP2 = new MinersStatsModel();
-        minersStatsTMP2.minerName = "te2st";
-        minersStatsTMP2.minerHashrate = 92;
-        minersStatsTMP2.minerLastSeen = 100000020;
-        minersStatsModel.add(minersStatsTMP2);
-
-        MinersStatsModel minersStatsTMP4 = new MinersStatsModel();
-        minersStatsTMP4.minerName = "te4st";
-        minersStatsTMP4.minerHashrate = 49;
-        minersStatsTMP4.minerLastSeen = 100004000;
-        minersStatsModel.add(minersStatsTMP4);
-
-        MinersStatsModel minersStatsTMP5 = new MinersStatsModel();
-        minersStatsTMP5.minerName = "te4s5t";
-        minersStatsTMP5.minerHashrate = 495;
-        minersStatsTMP5.minerLastSeen = 1000054000;
-        minersStatsModel.add(minersStatsTMP5);
-
-
-        mMinersStatsModel.clear();
-        mMinersStatsModel.addAll(minersStatsModel);
+        eggpoolMinersDataModel.clear();
+        eggpoolMinersDataModel.addAll(eggpoolMinersData);
         minersRecyclerViewAdapter.notifyDataSetChanged();
+
+        /*
+        * update the chart
+         */
+        // 1. build a List, which is a sum of hashrates lists of individual miners, i.e. from shares12hList of each miner to shares12hList sum of all
+        int[] hashrate12hSumArray = new int[13];
+        for (EggpoolMinersData nextEggpoolMinersData : eggpoolMinersData) {
+            for (int i = 0; i < nextEggpoolMinersData.getHashrate12hList().size(); i++){
+                hashrate12hSumArray[i] += nextEggpoolMinersData.getHashrate12hList().get(i);
+            }
+        }
+        // 2. build a List, which is a sum of shares lists of individual miners, i.e. from shares12hList of each miner to shares12hList sum of all
+        int[] shares12hSumArray = new int[13];
+        for (EggpoolMinersData nextEggpoolMinersData : eggpoolMinersData) {
+            for (int i = 0; i < nextEggpoolMinersData.getShares12hList().size(); i++){
+                shares12hSumArray[i] += nextEggpoolMinersData.getShares12hList().get(i);
+            }
+        }
+
+        // 3. build <Entry> lists for plots, which are list of (x,y) values for plotting
+        List<Entry> lineEntries = new ArrayList<>();
+        for(int i=0; i<hashrate12hSumArray .length; i++){
+            lineEntries.add(new Entry(i, hashrate12hSumArray [i]));
+        }
+
+        List<BarEntry> barEntries = new ArrayList<>();
+        for(int i=0; i<shares12hSumArray.length; i++){
+            barEntries.add(new BarEntry(i, shares12hSumArray[i]));
+        }
+
+        List<String> xLabels = new ArrayList<>();
+        for(int i=0; i<shares12hSumArray.length; i++){
+            //xLabels.add(timeStamp[i]);
+            xLabels.add(String.valueOf(i));
+        }
+
+        // setting up the Line chart
+
+        LineDataSet lineDataSet = new LineDataSet(lineEntries, "Hashrate, MH/s"); // add entries to dataset
+        lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        lineDataSet.setColor(Color.rgb(156, 39, 176));
+        lineDataSet.setCircleColor(Color.rgb(156, 39, 176));
+        lineDataSet.setCircleHoleColor(Color.rgb(156, 39, 176));
+        lineDataSet.setCircleRadius(3f);
+        lineDataSet.setDrawValues(false);
+        LineData lineData = new LineData(lineDataSet);
+
+        // setting up the Bar chart
+        BarDataSet barDataSet = new BarDataSet(barEntries, "Shares"); // add entries to dataset
+        barDataSet.setAxisDependency(YAxis.AxisDependency.RIGHT);
+        barDataSet.setColor(Color.rgb(38, 166, 154));
+        barDataSet.setDrawValues(false);
+        BarData barData = new BarData(barDataSet);
+        barData.setBarWidth(0.5f);
+
+        // setting up the Combined chart
+        CombinedChart combinedChart = getView().findViewById(R.id.combinedChartMinersStats);
+        CombinedData combinedData = new CombinedData();
+        combinedData.setData(lineData);
+        combinedData.setData(barData);
+        combinedChart.setData(combinedData);
+        combinedChart.invalidate(); // refresh
+
+        // decorating combined chart
+
+        // legend
+        Legend legend = combinedChart.getLegend();
+        legend.setTextColor(Color.DKGRAY);
+
+        // description
+        combinedChart.getDescription().setText("Stats for the last 12h");
+        combinedChart.getDescription().setTextColor(Color.DKGRAY);
+        //combinedChart.getDescription().setPosition(3f,3f);
+
+
+        //  X axis
+        XAxis xAxis = combinedChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextSize(10f);
+        xAxis.setTextColor(Color.DKGRAY);
+        //xAxis.setAxisLineColor(Color.WHITE);
+        xAxis.setDrawAxisLine(true);
+        xAxis.setDrawGridLines(true);
+
+        // left Y axis
+        YAxis leftAxis = combinedChart.getAxisLeft();
+        leftAxis.setTextSize(10f);
+        leftAxis.setTextColor(Color.rgb(156, 39, 176));
+        //leftAxis.setAxisLineColor(Color.WHITE);
+        leftAxis.setDrawAxisLine(true);
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setSpaceTop(30f);
+
+        // right Y axis
+        YAxis rightAxis = combinedChart.getAxisRight();
+        rightAxis.setAxisMinimum(0);
+        rightAxis.setTextSize(10f);
+        rightAxis.setTextColor(Color.rgb(38, 166, 154));
+        //rightAxis.setAxisLineColor(Color.WHITE);
+        rightAxis.setDrawAxisLine(true);
+        rightAxis.setDrawGridLines(false);
     }
 }

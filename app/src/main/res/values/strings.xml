@@ -31,6 +31,7 @@
     <string name="shares_current_tv">%1$s (current)</string>
     <string name="miners_active_tv">%1$s (active)</string>
     <string name="miners_inactive_tv">%1$s (inactive)</string>
+    <string name="miner_last_seen_rv">%1$s min ago</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -57,7 +58,7 @@
     <!-- settings screen -->
     <string name="data_share_consent">If you enable push notifications, some of your data entered on this settings screen (i.e. hypernode IPs and wallets addresses)
         together with your device unique ID will be sent to the Google Firebase. This data is submitted anonymously and will be used by the author ONLY for the purpose
-        of serving you with targeted push notifications about any problems with your hypernodes and miners. If you accept it, please click "accept" button. If you do not accept
+        of serving you with targeted push notifications about any problems with your hypernodes and eggpoolMinersData. If you accept it, please click "accept" button. If you do not accept
         it, please click "decline" button (note: you will not receive any push notifications, although you can change your mind latter).
     </string>
 

@@ -16,6 +16,7 @@ import com.donuts.bismuth.bismuthtoolbox.ui.BaseActivity;
 import com.donuts.bismuth.bismuthtoolbox.utils.AsyncFetchData;
 import com.donuts.bismuth.bismuthtoolbox.utils.CurrentTime;
 import com.donuts.bismuth.bismuthtoolbox.utils.InterfaceOnDataFetched;
+import com.donuts.bismuth.bismuthtoolbox.utils.EggpoolMinersDataParser;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public class MiningActivity extends BaseActivity implements InterfaceOnDataFetch
          * This method checks if the data in Room database is up-to-date (<5 min old), and if not it will request AsyncFetchData to fetch fresh data.
          * 1. Identify all urls that are needed to be updated for Mining Screen (all fragments) and add them to the list.
          * 2. Check every url in Room database - when was it last updated.
-         * 3. If the url does'n needs to be updated - delete it from the list.
+         * 3. If the url doesn't need to be updated - delete it from the list and pass the remaining list to asynctask for update.
          * 4. Request AsyncFetchFreshData to update all urls from the list in Room database.
          */
 
@@ -141,7 +142,7 @@ public class MiningActivity extends BaseActivity implements InterfaceOnDataFetch
         // request to parse the data
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningActivity", "onDataFetched: "+
                 "calling data parser");
-        new MiningScreenDataParser(this).parseMiningScreenData();
+        new EggpoolMinersDataParser(this).parseMinersData();
     }
 
 
