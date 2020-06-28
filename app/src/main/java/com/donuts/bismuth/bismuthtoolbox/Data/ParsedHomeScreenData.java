@@ -38,11 +38,11 @@ public class ParsedHomeScreenData {
     @ColumnInfo(name = "miners_active")
     private int minersActive;
 
-    @ColumnInfo(name = "minersInactive")
+    @ColumnInfo(name = "miners_inactive")
     private int minersInactive;
 
     @ColumnInfo(name = "miners_hashrate")
-    private double minersHashrate;
+    private int minersHashrate;
 
     @ColumnInfo(name = "block_height")
     private int blockHeight;
@@ -128,11 +128,11 @@ public class ParsedHomeScreenData {
         this.minersInactive = minersInactive;
     }
 
-    public double getMinersHashrate() {
+    public int getMinersHashrate() {
         return minersHashrate;
     }
 
-    public void setMinersHashrate(double minersHashrate) {
+    public void setMinersHashrate(int minersHashrate) {
         this.minersHashrate = minersHashrate;
     }
 

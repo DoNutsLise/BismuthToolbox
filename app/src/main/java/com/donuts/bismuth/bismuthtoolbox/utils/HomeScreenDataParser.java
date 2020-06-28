@@ -1,7 +1,6 @@
-package com.donuts.bismuth.bismuthtoolbox.ui.homescreen;
+package com.donuts.bismuth.bismuthtoolbox.utils;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -14,7 +13,6 @@ import com.donuts.bismuth.bismuthtoolbox.utils.CurrentTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,18 +22,18 @@ import java.util.Map;
 
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_API_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_HN_BASIC_URL;
-import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_PRICE_URL;
+import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.COINGECKO_BIS_PRICE_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_STATS_URL;
+import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsize;
 
-class HomeScreenDataParser {
+public class HomeScreenDataParser {
     private Context mContext;
-    private SharedPreferences sharedPreferences;
 
-    HomeScreenDataParser(Context context){
+    public HomeScreenDataParser(Context context){
         mContext = context;
     }
 
-    void parseHomeScreenData(){
+    public void parseHomeScreenData(){
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "
         +"called");
 
@@ -51,7 +49,7 @@ class HomeScreenDataParser {
         int numOfAllMiners = 0;
         int numOfActiveMiners = 0;
         int numOfInactiveMiners = 0;
-        double minersHashrate = 0.0;
+        int minersHashrate = 0;
         int blockHeight = 0;
         double bisToUsd = 0;
         double bisToBtc = 0;
@@ -122,18 +120,18 @@ class HomeScreenDataParser {
         }catch (JSONException e) {
             Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                     "Failed to parse JSON data from"+BIS_HN_BASIC_URL);
-            Toast.makeText(mContext, "Failed to get data from"+BIS_HN_BASIC_URL, Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "Failed to get data from"+ellipsize(BIS_HN_BASIC_URL, 25), Toast.LENGTH_LONG).show();
 
         }
 
         /*
-         * 2. parse BIS_PRICE_URL (get bis to usd and bis to btc prices)
+         * 2. parse BIS_PRICE_COINGECKO_URL (get bis to usd and bis to btc prices)
          */
 
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
-                "parsing BIS_PRICE_URL");
+                "parsing BIS_PRICE_COINGECKO_URL");
         // get json response string from the db
-        String bisPriceRawData = dataDAO.getUrlDataByUrl(BIS_PRICE_URL).getUrlJsonResponse();
+        String bisPriceRawData = dataDAO.getUrlDataByUrl(COINGECKO_BIS_PRICE_URL).getUrlJsonResponse();
         try{
             JSONObject bisPriceRawDataJsonObj = new JSONObject(bisPriceRawData);
             Object bisToUsdObj = bisPriceRawDataJsonObj.getJSONObject("bismuth").get("usd");
@@ -144,11 +142,10 @@ class HomeScreenDataParser {
             }else{
                 Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                         "Can't get BIS price in USD");
-
             }
 
             if (bisToBtcObj instanceof Number){
-                bisToBtc = (Double) bisToBtcObj;
+                bisToBtc = ((Double) bisToBtcObj)*1000000;
             }else{
                 Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                         "Can't get BIS price in BTC");
@@ -156,8 +153,8 @@ class HomeScreenDataParser {
             }
         }catch(JSONException e){
             Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
-                    "Failed to parse JSON data from "+ BIS_PRICE_URL);
-            Toast.makeText(mContext, "Failed to get data from" + BIS_PRICE_URL, Toast.LENGTH_LONG).show();
+                    "Failed to parse JSON data from "+ COINGECKO_BIS_PRICE_URL);
+            Toast.makeText(mContext, "Failed to get data from" + ellipsize(COINGECKO_BIS_PRICE_URL, 25), Toast.LENGTH_LONG).show();
         }
 
         /*
@@ -166,7 +163,7 @@ class HomeScreenDataParser {
 
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeActivity", "parseHomeScreenRawData: "+
                 "parsing wallets balances");
-        List<Double> blockHeightList = new ArrayList<>(Arrays.asList(0.0));
+        List<Double> walletBalanceList = new ArrayList<>(Arrays.asList(0.0));
 
         // loop through all the preferences looking for a biswWalletAddress
         for (Map.Entry<String, ?> entry: allPreferencesKeys.entrySet()) {
@@ -179,7 +176,7 @@ class HomeScreenDataParser {
                     Object walletBalanceObj = bisWalletRawDataJsonObj.get("balance");
                     if (walletBalanceObj instanceof String) {
                         // bis api returns values as strings. Even for non-existent wallet it returns values.
-                        blockHeightList.add(Double.parseDouble((String) walletBalanceObj));
+                        walletBalanceList.add(Double.parseDouble((String) walletBalanceObj));
                         numOfRegisteredWallets++;
                         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                                 "Wallet " + entry.getValue() +
@@ -188,17 +185,19 @@ class HomeScreenDataParser {
                 }catch(JSONException | ClassCastException e){
                     Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                             "Failed to parse JSON data from "+ BIS_API_URL + " for wallet " + entry.getValue());
-                    Toast.makeText(mContext, "Failed to get data from" + BIS_API_URL.substring(0, Math.min(BIS_API_URL.length(), 30))+ " for wallet "
-                            + String.valueOf(entry.getValue()).substring(0, Math.min(String.valueOf(entry.getValue()).length(), 7))+ "...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "Failed to get data from" + ellipsize(BIS_API_URL, 25)+ " for wallet "
+                            + ellipsize(String.valueOf(entry.getValue()), 8), Toast.LENGTH_LONG).show();
                 }
             }
         }
 
         // get a sum of all wallets balances in Bis
-        DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        balanceBis = Double.parseDouble(decimalFormat.format(blockHeightList.stream().mapToDouble(Double::doubleValue).sum()));
+        for (double i: walletBalanceList){
+            balanceBis += i;
+        }
+
         // get balances in USD
-        balanceUsd = Double.parseDouble(decimalFormat.format(balanceBis*bisToUsd));
+        balanceUsd = balanceBis*bisToUsd;
 
         /*
          * 4. parse EGGPOOL_MINER_STATS_URL (mining stats).
@@ -221,10 +220,12 @@ class HomeScreenDataParser {
                 try {
                     JSONObject miningWalletRawDataJsonObj = new JSONObject(miningWalletRawData);
                     // get object "round" and check it for null
-                    JSONObject minersRoundJsonObj = miningWalletRawDataJsonObj.getJSONObject("round"); // current hashrate in MH/s
-                    if (minersRoundJsonObj == null){
+                    JSONObject minersRoundJsonObj;
+                    if (miningWalletRawDataJsonObj.isNull("round")){
                         // if the Round object is null - try to get hashrate from previous round
-                        minersRoundJsonObj = miningWalletRawDataJsonObj.getJSONObject("lastround"); // current hashrate in MH/s
+                        minersRoundJsonObj = miningWalletRawDataJsonObj.getJSONObject("lastround");
+                    }else{
+                        minersRoundJsonObj = miningWalletRawDataJsonObj.getJSONObject("round");
                     }
                     // if both Round and lastround are nulls - then fail to parse json and value remains 0.
                     Object minersHashrateObj = minersRoundJsonObj.get("hr"); // current hashrate in MH/s
@@ -254,37 +255,46 @@ class HomeScreenDataParser {
                 }catch(JSONException | ClassCastException e){
                     Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                             "Failed to parse JSON data from "+ EGGPOOL_MINER_STATS_URL + " for wallet " + entry.getValue());
-                    Toast.makeText(mContext, "Failed to get data from " + EGGPOOL_MINER_STATS_URL.substring(0, Math.min(EGGPOOL_MINER_STATS_URL.length(), 30)) + " for wallet "
-                            + String.valueOf(entry.getValue()).substring(0, Math.min(String.valueOf(entry.getValue()).length(), 7)) + "...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "Failed to get data from " + ellipsize(EGGPOOL_MINER_STATS_URL, 25)+ " for wallet "
+                            + ellipsize(String.valueOf(entry.getValue()), 8), Toast.LENGTH_LONG).show();
                 }
             }
         }
-        // get a sum of hashrates
 
-        minersHashrate = Double.parseDouble(decimalFormat.format(minersHashrateList.stream().mapToInt(Integer::intValue).sum()/1000d));
-        numOfInactiveMiners = minersInactiveList.stream().mapToInt(Integer::intValue).sum();
-        numOfAllMiners = minersTotalList.stream().mapToInt(Integer::intValue).sum();
+        // get a sum of hashrates
+        for (int i: minersHashrateList){
+            minersHashrate += i;
+        }
+
+        for (int i: minersInactiveList){
+            numOfInactiveMiners += i;
+        }
+
+        for (int i: minersTotalList){
+            numOfAllMiners += i;
+        }
+
         numOfActiveMiners = numOfAllMiners -  numOfInactiveMiners;
 
         /*
          * 5. update the database
          */
 
-        ParsedHomeScreenData parsedUrlData = new ParsedHomeScreenData();
-        parsedUrlData.setId(1);
-        parsedUrlData.setHypernodesActive(numOfActiveHypernodes);
-        parsedUrlData.setHypernodesInactive(numOfInactiveHypernodes);
-        parsedUrlData.setHypernodesLagging(numOfLaggingHypernodes);
-        parsedUrlData.setRegisteredWallets(numOfRegisteredWallets);
-        parsedUrlData.setBalanceBis(balanceBis);
-        parsedUrlData.setBalanceUsd(balanceUsd);
-        parsedUrlData.setMinersActive(numOfActiveMiners);
-        parsedUrlData.setMinersInactive(numOfInactiveMiners);
-        parsedUrlData.setMinersHashrate(minersHashrate);
-        parsedUrlData.setBlockHeight(blockHeight);
-        parsedUrlData.setBisToBtc(bisToBtc);
-        parsedUrlData.setBisToUsd(bisToUsd);
+        ParsedHomeScreenData parsedHomeScreenData = new ParsedHomeScreenData();
+        parsedHomeScreenData.setId(1);
+        parsedHomeScreenData.setHypernodesActive(numOfActiveHypernodes);
+        parsedHomeScreenData.setHypernodesInactive(numOfInactiveHypernodes);
+        parsedHomeScreenData.setHypernodesLagging(numOfLaggingHypernodes);
+        parsedHomeScreenData.setRegisteredWallets(numOfRegisteredWallets);
+        parsedHomeScreenData.setBalanceBis(balanceBis);
+        parsedHomeScreenData.setBalanceUsd(balanceUsd);
+        parsedHomeScreenData.setMinersActive(numOfActiveMiners);
+        parsedHomeScreenData.setMinersInactive(numOfInactiveMiners);
+        parsedHomeScreenData.setMinersHashrate(minersHashrate);
+        parsedHomeScreenData.setBlockHeight(blockHeight);
+        parsedHomeScreenData.setBisToBtc(bisToBtc);
+        parsedHomeScreenData.setBisToUsd(bisToUsd);
 
-        dataDAO.updateParsedHomeScreenData(parsedUrlData);
+        dataDAO.updateParsedHomeScreenData(parsedHomeScreenData);
     }
 }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/textView_payoutDate_item"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_gravity="start"
+        android:layout_weight="1.5"
+        android:textSize = "12sp"
+        android:textAlignment="viewStart"/>
+
+    <TextView
+        android:id="@+id/textView_payoutAmount_item"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:textSize = "12sp"
+        android:textAlignment="center"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/textView_payoutTxID_item"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_gravity="end"
+        android:textSize = "12sp"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:layout_weight="1.8"
+        android:linksClickable="true"/>
+
+</LinearLayout>

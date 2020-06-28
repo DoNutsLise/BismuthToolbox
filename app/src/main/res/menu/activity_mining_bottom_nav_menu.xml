@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_mining_miners"
+        android:icon="@drawable/ic_bottom_nav_miners"
+        android:title="@string/title_miners" />
+
+    <item
+        android:id="@+id/navigation_mining_payouts"
+        android:icon="@drawable/ic_bottom_nav_payouts"
+        android:title="@string/title_payouts" />
+
+</menu>

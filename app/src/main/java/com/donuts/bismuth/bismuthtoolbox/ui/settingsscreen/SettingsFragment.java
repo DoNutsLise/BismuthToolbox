@@ -22,14 +22,18 @@ import com.donuts.bismuth.bismuthtoolbox.Data.DataRoomDatabase;
 import com.donuts.bismuth.bismuthtoolbox.FirebasePush.SendDataToFirebase;
 import com.donuts.bismuth.bismuthtoolbox.R;
 import com.donuts.bismuth.bismuthtoolbox.utils.CurrentTime;
+import com.donuts.bismuth.bismuthtoolbox.utils.MyAlertDialogMessage;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.PREFERENCES_CATEGORIES_KEYS;
+import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsize;
 
 /**
  * All the preferences are stored in DefaultSharedPreferences. For settings like radiobuttons and switches it is simple to do
@@ -97,7 +101,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                     // ...create a new EditTextPreference
                     EditTextPreference editTextPreference = new EditTextPreference(preferenceScreen.getContext());
                     editTextPreference.setKey(entry.getKey());
-                    editTextPreference.setSummary((String) entry.getValue());
+                    editTextPreference.setSummary(ellipsize(String.valueOf(entry.getValue()),16));
                     editTextPreference.setText((String) entry.getValue());
                     preferenceGroup.addPreference(editTextPreference);
                 }
@@ -118,7 +122,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             }else{
                 editTextPreference.setKey(category + 1);
             }
-            editTextPreference.setSummary("Add a new record here");
+            editTextPreference.setSummary("Click to add a new record");
             editTextPreference.setText("");
             editTextPreference.setOrder(0);
             preferenceGroup.addPreference(editTextPreference);
@@ -136,7 +140,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 .registerOnSharedPreferenceChangeListener(this);
 
         // register PushNotifications switch listener: if enabled - ask for permission to send data to Firebase
-        Preference pushNotificationsSwitchPref = (Preference) findPreference("isPushNotifications");
+        Preference pushNotificationsSwitchPref = findPreference("isPushNotifications");
         pushNotificationsSwitchPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 // check if the consent to send data was already given or not
@@ -174,7 +178,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
         // find which preference changed
         Preference preference = findPreference(preferenceKey);
-        allPreferencesKeys = PreferenceManager.getDefaultSharedPreferences(getActivity()).getAll();
 
         /* if EditTextPreference was changed (these are the only ones we care about),
          * then the options are:
@@ -220,20 +223,28 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 // We  just need to create a new blank EditTextPreference
                 EditTextPreference editTextPreference = new EditTextPreference(preferenceScreen.getContext());
                 editTextPreference.setKey(category + (categoryRecordsIds.get(categoryRecordsIds.size() - 1) + 1));
-                editTextPreference.setSummary("Add a new record here");
+                editTextPreference.setSummary("Click to add a new record");
                 editTextPreference.setText("");
                 editTextPreference.setOrder(0);
                 preferenceGroup.addPreference(editTextPreference);
-            } else {
-                // an existing record was modified. We have two options:
-                // 1. The record was deleted (the text field cleared)
-                // 2. The record was modified => we don't need to do anything since we already updated the summary of the EditTextPreference
-                if (preferenceValue.equals("")){
-                    // The record was deleted => we need to delete the corresponding EditTextPreference and
-                    // the record in SharedPreferences
-                    preferenceGroup.removePreference(preference);
-                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().remove(preferenceKey).apply();
+            }
+            if (preferenceValue.equals("")){
+                // no matter what preference was modified, if its value == "", then delete it
+                preferenceGroup.removePreference(preference);
+                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().remove(preferenceKey).apply();
+            }
+
+            // for user's sake heck if it's a duplicate entry (notify and ask to delete manually if so)
+            //
+            int numOfDuplicates = 0;
+            for (Map.Entry<String, ?> entry : allPreferencesKeys.entrySet()) {
+                if (String.valueOf(entry.getValue()).equals(preferenceValue)) {
+                    numOfDuplicates += 1;
                 }
+            }
+            if (numOfDuplicates > 1) {  // there should be more then one to consider it a duplicate, because it will always find itself - that's one.
+                MyAlertDialogMessage myAlertDialogMessage = new MyAlertDialogMessage(getActivity());
+                myAlertDialogMessage.warningMessage("Warning!", "You have already entered this address before. Please check and delete if necessary.");
             }
 
         }
@@ -257,13 +268,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             * obtaining new firebase registration token and sending data to firebase.
              */
 
-
             // 1. settings were changed, so we set url_last_update_time in RawUrlData Room database entity to a
             // small number for all the urls. In this case switching to any other activity will trigger data update.
             dataDAO.updateAllUrlLastUpdateTime(1000000);
 
             // 2. getting new firebase registration token is a bit tricky (sometimes it's actually the same token)
-
                 FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
                     String newRegistrationToken = instanceIdResult.getToken();
                     // after we have obtained the token we can send all the data to firebase

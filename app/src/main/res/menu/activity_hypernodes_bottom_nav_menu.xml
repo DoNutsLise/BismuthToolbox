@@ -7,7 +7,7 @@
         android:title="@string/title_home" />
 
     <item
-        android:id="@+id/navigation__hypernodes_dashboard"
+        android:id="@+id/navigation_hypernodes_dashboard"
         android:icon="@drawable/ic_hypernodes_dashboard_black_24dp"
         android:title="@string/title_dashboard" />
 

@@ -5,10 +5,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 
 import com.donuts.bismuth.bismuthtoolbox.Data.ParsedHomeScreenData;
 import com.donuts.bismuth.bismuthtoolbox.Data.RawUrlData;
@@ -16,8 +12,10 @@ import com.donuts.bismuth.bismuthtoolbox.R;
 import com.donuts.bismuth.bismuthtoolbox.ui.BaseActivity;
 import com.donuts.bismuth.bismuthtoolbox.utils.AsyncFetchData;
 import com.donuts.bismuth.bismuthtoolbox.utils.CurrentTime;
+import com.donuts.bismuth.bismuthtoolbox.utils.HomeScreenDataParser;
 import com.donuts.bismuth.bismuthtoolbox.utils.InterfaceOnDataFetched;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -26,7 +24,7 @@ import java.util.Map;
 
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_API_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_HN_BASIC_URL;
-import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_PRICE_URL;
+import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.COINGECKO_BIS_PRICE_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_STATS_URL;
 
 /**
@@ -34,10 +32,9 @@ import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_S
  * This activity, just like all other activities, extends BaseActivity that implements most of the UI stuff (navigation drawer, etc)
  */
 
-public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched {
+//TODO: replace asynctask with multithreaded httpurl requests: https://www.youtube.com/watch?v=jH-3spGUa7c
 
-    private FrameLayout contentFrameLayout;
-    private AsyncFetchData asyncFetchFreshData;
+public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched {
 
     private TextView tv_hypernodes_active;
     private TextView tv_hypernodes_inactive;
@@ -52,26 +49,38 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
     private TextView tv_bis_to_btc;
     private TextView tv_bis_to_usd;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        contentFrameLayout = findViewById(R.id.content_frame); //Remember this is the FrameLayout area within BaseActivity.xml
+        // TODO: below are shared preferences added for testing purpose:
+        sharedPreferences.edit().putString("hypernodeIP1", "163.172.222.163").apply(); // active
+        sharedPreferences.edit().putString("hypernodeIP2", "142.93.93.4").apply(); // inactive
+        sharedPreferences.edit().putString("hypernodeIP3", "142.93.1.1").apply(); // doesn't exist
+        sharedPreferences.edit().putString("hypernodeIP4", "114.207.111.94").apply(); // lagging
+        sharedPreferences.edit().putString("bisWalletAddress1", "4f92743a7f5549fe19205842b117aa9c8a611fa8533b1934b43a9ce1").apply(); // random
+        sharedPreferences.edit().putString("bisWalletAddress2", "7d5c2999f9a2e44c23e7b2b73b4c0edae308e9d39482bf44da481edc").apply(); // casino
+        sharedPreferences.edit().putString("bisWalletAddress3", "f9b7baef3d7fa6d452719396d5782fef2020b51dcb10defa52213b9c").apply(); // non-existent
+//        // http://bismuth.online/api/node/balancegetjson:939250d1ce3e543a2f0c3106a12a56649a2199d7ef59b7078ede127f
+        sharedPreferences.edit().putString("miningWalletAddress1", "15158a334b969fa7486a2a1468d04a583f3b51e6e0a7d330723701c3").apply(); // 3 workers
+//        sharedPreferences.edit().putString("miningWalletAddress2", "1dfdc05f34681ef2360c2a0fa0dbe190e20981cd1cfcc425aace6a00").apply(); // 2 workers
+//        sharedPreferences.edit().putString("miningWalletAddress3", "ba50c90230ddc99cfba6ccea881f5e91b3145aedbfd51c1fff84adeb").apply(); // problem
+//        sharedPreferences.edit().putString("miningWalletAddress4", "70a799988c7a80300915b9a1d4ca83237b296a5e0f16b72a90391e24").apply(); // problem
+
+        // https://eggpool.net/index.php?action=api&type=detail&miner=15158a334b969fa7486a2a1468d04a583f3b51e6e0a7d330723701c3
+
+
+        FrameLayout contentFrameLayout = findViewById(R.id.content_frame); //Remember this is the FrameLayout area within BaseActivity.xml
         getLayoutInflater().inflate(R.layout.activity_home, contentFrameLayout);
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss"), "MainActivity(onCreate): view inflated");
 
         getMainScreenViews();
 
-        // register listener for Room db update of the ParsedHomeScreenData entity
-        dataDAO.getParsedHomeScreenLiveData().observe(this, new Observer<ParsedHomeScreenData>() {
-            @Override
-            public void onChanged(@Nullable ParsedHomeScreenData data){
-                assert data != null;
-                updateHomeScreenViews(data);
-            }
-        });
-
-        Toast.makeText(this, "Main Activity created", Toast.LENGTH_LONG).show();
+        /*
+         * register listener for Room db update of the ParsedHomeScreenData entity
+         */
+        dataDAO.getParsedHomeScreenLiveData().observe(this, this::updateHomeScreenViews);
     }
 
     @Override
@@ -94,9 +103,12 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         //Create markers "active/not active" activity
         sharedPreferences.edit().putBoolean("isMainActivityForeground", false).apply();
 
-        // finish asynctask if it was running
+        // finish asynctask if it was running -
 //        if (asyncFetchFreshData != null)
 //            asyncFetchFreshData.cancel(true);
+        // if you do that, asynctask will finish downloading all the data and
+        // terminate after that only; so the data will not be returned to the activity and will not be parsed. That means
+        // you will download the data but will not use it for displaying => waste of resource.
     }
 
     @Override
@@ -130,23 +142,26 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         tv_bis_to_usd = findViewById(R.id.tv_mainactivity_bis_to_usd);
     }
 
-    private void updateHomeScreenViews(ParsedHomeScreenData data){
+    private void updateHomeScreenViews(ParsedHomeScreenData parsedHomeScreenData){
         // this is called whenever the LiveData changes are detected by the observer (registered in onCreate)
-        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeActivity", "updateHomeScreenViews: "+
+        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeActivity", "updateHomeScreenViews: " +
                 "called");
-        if (data != null) {
-            tv_hypernodes_active.setText(String.valueOf(data.getHypernodesActive()));
-            tv_hypernodes_inactive.setText(String.valueOf(data.getHypernodesInactive()));
-            tv_hypernodes_lagging.setText(String.valueOf(data.getHypernodesLagging()));
-            tv_wallets_number.setText(String.valueOf(data.getRegisteredWallets()));
-            tv_bis_balance.setText(String.valueOf(data.getBalanceBis()));
-            tv_usd_balance.setText(String.valueOf(data.getBalanceUsd()));
-            tv_mining_active.setText(String.valueOf(data.getMinersActive()));
-            tv_mining_inactive.setText(String.valueOf(data.getMinersInactive()));
-            tv_mining_hashrate.setText(String.valueOf(data.getMinersHashrate()));
-            tv_block_height.setText(String.valueOf(data.getBlockHeight()));
-            tv_bis_to_btc.setText(String.valueOf(data.getBisToBtc()));
-            tv_bis_to_usd.setText(String.valueOf(data.getBisToUsd()));
+        DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
+        DecimalFormat decimalFormat1 = new DecimalFormat("#,###.###");
+
+        if (parsedHomeScreenData != null) {
+            tv_hypernodes_active.setText(String.valueOf(parsedHomeScreenData.getHypernodesActive()));
+            tv_hypernodes_inactive.setText(String.valueOf(parsedHomeScreenData.getHypernodesInactive()));
+            tv_hypernodes_lagging.setText(String.valueOf(parsedHomeScreenData.getHypernodesLagging()));
+            tv_wallets_number.setText(String.valueOf(parsedHomeScreenData.getRegisteredWallets()));
+            tv_bis_balance.setText(decimalFormat.format(parsedHomeScreenData.getBalanceBis()));
+            tv_usd_balance.setText(decimalFormat.format(parsedHomeScreenData.getBalanceUsd()));
+            tv_mining_active.setText(String.valueOf(parsedHomeScreenData.getMinersActive()));
+            tv_mining_inactive.setText(String.valueOf(parsedHomeScreenData.getMinersInactive()));
+            tv_mining_hashrate.setText(decimalFormat .format(parsedHomeScreenData.getMinersHashrate()));
+            tv_block_height.setText(decimalFormat.format(parsedHomeScreenData.getBlockHeight()));
+            tv_bis_to_btc.setText(decimalFormat1.format(parsedHomeScreenData.getBisToBtc()));
+            tv_bis_to_usd.setText(decimalFormat1.format(parsedHomeScreenData.getBisToUsd()));
         }
     }
 
@@ -164,14 +179,14 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         /*
         * Minimum data for the main screen is this:
         * 1. BIS_HN_BASIC_URL // all hypernodes stats.
-        * 2. BIS_PRICE_URL // BIS price from coingecko vs BTC and USD.
+        * 2. BIS_PRICE_COINGECKO_URL // BIS price from coingecko vs BTC and USD.
         * 3. bisWalletAddress specific balance: BIS_API_URL+ "node" + "/" + "balancegetjson:939250d1ce3e543a2f0c3106a12a56649a2199d7ef59b7078ede127f".
         * 4. miningWalletAddress eggpool specific: EGGPOOL_MINER_STATS_URL+"939250d1ce3e543a2f0c3106a12a56649a2199d7ef59b7078ede127f".
         * The later two have to be for each registered in settings address.
          */
 
         Map<String, ?> allPreferencesKeys = android.preference.PreferenceManager.getDefaultSharedPreferences(this).getAll();
-        List<String> urls = new ArrayList<>(Arrays.asList(BIS_PRICE_URL, BIS_HN_BASIC_URL));// some hardcoded urls come from the constant; and wallet specific urls will be added to this list later.
+        List<String> urls = new ArrayList<>(Arrays.asList(COINGECKO_BIS_PRICE_URL, BIS_HN_BASIC_URL));// some hardcoded urls come from the constant; and wallet specific urls will be added to this list later.
 
         // loop through all the preferences and if a wallet address found - add it to the list of urls (properly modified)
         for (Map.Entry<String, ?> entry: allPreferencesKeys.entrySet()) {
@@ -198,7 +213,7 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         // if the List<urls> is not empty and something needs to be updated - fire up the asynctask
         if (!urls.isEmpty()) {
             // fire up an asynctask to fetch new data (it will be returned to onFreshDataReceived)
-            asyncFetchFreshData = new AsyncFetchData(this); // passing context to asynctask here
+            AsyncFetchData asyncFetchFreshData = new AsyncFetchData(this); // passing context to asynctask here
             asyncFetchFreshData.setOnDataFetchedListener(this); // setting listener to get results from asynctask
             asyncFetchFreshData.execute(urls); // executing asynctask
 

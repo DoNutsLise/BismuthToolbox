@@ -5,7 +5,7 @@
     <PreferenceCategory
         android:title="Hypernodes"
         app:initialExpandedChildrenCount="0"
-        android:summary="Enter your hypernode IP addresses"
+        android:summary="Enter your hypernode IP addresses below"
         android:key="hypernodeIP">
 
     </PreferenceCategory>
@@ -13,7 +13,7 @@
     <PreferenceCategory
         android:title="Mining"
         app:initialExpandedChildrenCount="0"
-        android:summary="Enter your mining wallet addresses"
+        android:summary="Enter your mining wallet addresses below"
         android:key="miningWalletAddress">
 
     </PreferenceCategory>
@@ -21,7 +21,7 @@
     <PreferenceCategory
         android:title="Wallet"
         app:initialExpandedChildrenCount="0"
-        android:summary="Enter your BIS wallet addresses"
+        android:summary="Enter your BIS wallet addresses below"
         android:key="bisWalletAddress">
 
     </PreferenceCategory>
