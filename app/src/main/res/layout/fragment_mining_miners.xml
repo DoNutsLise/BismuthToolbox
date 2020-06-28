@@ -162,7 +162,15 @@ tools:context=".ui.miningscreen.MiningActivity">
             <com.github.mikephil.charting.charts.CombinedChart
                 android:id="@+id/combinedChartMinersStats"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Hashrate and shares for Eggpool miners"
+                android:textAlignment="center"
+                android:textSize="12sp" />
+            </com.github.mikephil.charting.charts.CombinedChart>
         </LinearLayout>
 
     </LinearLayout>

@@ -10,10 +10,12 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Entity for storing details about payouts from Eggpool. One entry in db holds info for one wallet.
+ * Entity for storing payouts data from Eggpool (for payouts recyclerview). For each registered wallet
+ * there will be 10 payouts from eggpool api (currently they are not sorted by time, but rather all
+ * record for one wallet followed by all records from the next wallet)
  */
 
-@Entity(tableName = "eggpoolPayoutsData")
+@Entity(tableName = "eggpool_payouts_data")
 public class EggpoolPayoutsData {
 
     public EggpoolPayoutsData() {
@@ -64,7 +66,7 @@ public class EggpoolPayoutsData {
     // this method is called in DataRoomDatabase in override method in database builder
     public static EggpoolPayoutsData populatePayouts() {
         EggpoolPayoutsData eggpoolPayoutsData = new EggpoolPayoutsData();
-        eggpoolPayoutsData.setPayoutTime("N/A");
+        eggpoolPayoutsData.setPayoutTime("2019-06-03 08:17:26");
         eggpoolPayoutsData.setPayoutAmount(0);
         eggpoolPayoutsData.setPayoutTx("N/A");
 

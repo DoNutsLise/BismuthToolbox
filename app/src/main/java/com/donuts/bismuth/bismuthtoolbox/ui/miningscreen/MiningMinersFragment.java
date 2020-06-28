@@ -152,14 +152,14 @@ public class MiningMinersFragment extends Fragment {
         /*
         * update the chart
          */
-        // 1. build a List, which is a sum of hashrates lists of individual miners, i.e. from shares12hList of each miner to shares12hList sum of all
+        // 1. build an array, which is a sum of hashrates lists of individual miners, i.e. from shares12hList of each miner to shares12hList sum of all
         int[] hashrate12hSumArray = new int[13];
         for (EggpoolMinersData nextEggpoolMinersData : eggpoolMinersData) {
             for (int i = 0; i < nextEggpoolMinersData.getHashrate12hList().size(); i++){
                 hashrate12hSumArray[i] += nextEggpoolMinersData.getHashrate12hList().get(i);
             }
         }
-        // 2. build a List, which is a sum of shares lists of individual miners, i.e. from shares12hList of each miner to shares12hList sum of all
+        // 2. build an array, which is a sum of shares lists of individual miners, i.e. from shares12hList of each miner to shares12hList sum of all
         int[] shares12hSumArray = new int[13];
         for (EggpoolMinersData nextEggpoolMinersData : eggpoolMinersData) {
             for (int i = 0; i < nextEggpoolMinersData.getShares12hList().size(); i++){
@@ -169,7 +169,7 @@ public class MiningMinersFragment extends Fragment {
 
         // 3. build <Entry> lists for plots, which are list of (x,y) values for plotting
         List<Entry> lineEntries = new ArrayList<>();
-        for(int i=0; i<hashrate12hSumArray .length; i++){
+        for(int i=0; i<hashrate12hSumArray.length; i++){
             lineEntries.add(new Entry(i, hashrate12hSumArray [i]));
         }
 
@@ -221,7 +221,6 @@ public class MiningMinersFragment extends Fragment {
         combinedChart.getDescription().setText("Stats for the last 12h");
         combinedChart.getDescription().setTextColor(Color.DKGRAY);
         //combinedChart.getDescription().setPosition(3f,3f);
-
 
         //  X axis
         XAxis xAxis = combinedChart.getXAxis();

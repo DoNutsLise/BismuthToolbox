@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * deprecated class
+ */
+
 public class MinersStatsModel {
     public String minerName;
     public double minerHashrate;

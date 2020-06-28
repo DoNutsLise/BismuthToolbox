@@ -1,4 +1,4 @@
-package com.donuts.bismuth.bismuthtoolbox.ui.homescreen;
+package com.donuts.bismuth.bismuthtoolbox.utils;
 
 import android.content.Context;
 import android.util.Log;
@@ -22,18 +22,18 @@ import java.util.Map;
 
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_API_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_HN_BASIC_URL;
-import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_PRICE_COINGECKO_URL;
+import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.COINGECKO_BIS_PRICE_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_STATS_URL;
 import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsize;
 
-class HomeScreenDataParser {
+public class HomeScreenDataParser {
     private Context mContext;
 
-    HomeScreenDataParser(Context context){
+    public HomeScreenDataParser(Context context){
         mContext = context;
     }
 
-    void parseHomeScreenData(){
+    public void parseHomeScreenData(){
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "
         +"called");
 
@@ -131,7 +131,7 @@ class HomeScreenDataParser {
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                 "parsing BIS_PRICE_COINGECKO_URL");
         // get json response string from the db
-        String bisPriceRawData = dataDAO.getUrlDataByUrl(BIS_PRICE_COINGECKO_URL).getUrlJsonResponse();
+        String bisPriceRawData = dataDAO.getUrlDataByUrl(COINGECKO_BIS_PRICE_URL).getUrlJsonResponse();
         try{
             JSONObject bisPriceRawDataJsonObj = new JSONObject(bisPriceRawData);
             Object bisToUsdObj = bisPriceRawDataJsonObj.getJSONObject("bismuth").get("usd");
@@ -153,8 +153,8 @@ class HomeScreenDataParser {
             }
         }catch(JSONException e){
             Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
-                    "Failed to parse JSON data from "+ BIS_PRICE_COINGECKO_URL);
-            Toast.makeText(mContext, "Failed to get data from" + ellipsize(BIS_PRICE_COINGECKO_URL, 25), Toast.LENGTH_LONG).show();
+                    "Failed to parse JSON data from "+ COINGECKO_BIS_PRICE_URL);
+            Toast.makeText(mContext, "Failed to get data from" + ellipsize(COINGECKO_BIS_PRICE_URL, 25), Toast.LENGTH_LONG).show();
         }
 
         /*

@@ -27,7 +27,8 @@ import java.util.concurrent.Executors;
  */
 
 
-@Database(entities = {RawUrlData.class, ParsedHomeScreenData.class, EggpoolMinersData.class, EggpoolPayoutsData.class}, version = 2, exportSchema = false)
+@Database(entities = {RawUrlData.class, ParsedHomeScreenData.class, EggpoolMinersData.class, EggpoolPayoutsData.class,
+        EggpoolBalanceData.class, EggpoolBisStatsData.class, CoingeckoBisPriceData.class}, version = 2, exportSchema = false)
 @TypeConverters({DataTypeConverter.class})
 public abstract class DataRoomDatabase extends RoomDatabase {
     public abstract DataDAO getDataDAO();
@@ -53,6 +54,9 @@ public abstract class DataRoomDatabase extends RoomDatabase {
                             getInstance(context).getDataDAO().insertAllParsedHomeScreenData(ParsedHomeScreenData.populateParsedHomeScreenData());
                             getInstance(context).getDataDAO().insertAllMiners(EggpoolMinersData.populateMiners());
                             getInstance(context).getDataDAO().insertAllPayouts(EggpoolPayoutsData.populatePayouts());
+                            getInstance(context).getDataDAO().insertAllEggpoolBalanceData(EggpoolBalanceData.populateEggpoolBalanceData());
+                            getInstance(context).getDataDAO().insertAllEggpoolBisStatsData(EggpoolBisStatsData.populateEggpoolBisStatsData());
+                            getInstance(context).getDataDAO().insertAllCoingeckoBisPriceData(CoingeckoBisPriceData.populateCoingeckoBisPriceData());
                         });
                     }
                 })

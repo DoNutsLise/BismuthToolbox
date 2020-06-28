@@ -14,7 +14,9 @@ import com.donuts.bismuth.bismuthtoolbox.Data.RawUrlData;
 import com.donuts.bismuth.bismuthtoolbox.R;
 import com.donuts.bismuth.bismuthtoolbox.ui.BaseActivity;
 import com.donuts.bismuth.bismuthtoolbox.utils.AsyncFetchData;
+import com.donuts.bismuth.bismuthtoolbox.utils.CoingeckoBisPriceDataParser;
 import com.donuts.bismuth.bismuthtoolbox.utils.CurrentTime;
+import com.donuts.bismuth.bismuthtoolbox.utils.EggpoolBisStatsDataParser;
 import com.donuts.bismuth.bismuthtoolbox.utils.InterfaceOnDataFetched;
 import com.donuts.bismuth.bismuthtoolbox.utils.EggpoolMinersDataParser;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -25,7 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_PRICE_COINGECKO_URL;
+import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.COINGECKO_BIS_PRICE_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_BIS_STATS_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_STATS_URL;
 
@@ -98,7 +100,7 @@ public class MiningActivity extends BaseActivity implements InterfaceOnDataFetch
          */
 
         Map<String, ?> allPreferencesKeys = android.preference.PreferenceManager.getDefaultSharedPreferences(this).getAll();
-        List<String> urls = new ArrayList<>(Arrays.asList(BIS_PRICE_COINGECKO_URL, EGGPOOL_BIS_STATS_URL));// some hardcoded urls come from the constant; and wallet specific urls will be added to this list later.
+        List<String> urls = new ArrayList<>(Arrays.asList(COINGECKO_BIS_PRICE_URL, EGGPOOL_BIS_STATS_URL));// some hardcoded urls come from the constant; and wallet specific urls will be added to this list later.
 
         // loop through all the preferences and if a mining wallet address found - add it to the list of urls (properly modified)
         for (Map.Entry<String, ?> entry: allPreferencesKeys.entrySet()) {
@@ -127,22 +129,24 @@ public class MiningActivity extends BaseActivity implements InterfaceOnDataFetch
 
             linearLayoutProgress.setVisibility(View.VISIBLE);
             Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningActivity", "getFreshData: " +
-                    "requested fresh data");
+                    "requested to fetch fresh data");
         }
     }
 
     public void onDataFetched() {
         // this method is called through a InterfaceOnFreshData listener when AsyncFetchFreshData is finished
-        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningActivity", "onDataFetched: "+
+        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningActivity", "onDataFetched: " +
                 "received fresh data");
 
         //disable progressbar
         linearLayoutProgress.setVisibility(View.GONE);
 
         // request to parse the data
-        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningActivity", "onDataFetched: "+
+        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningActivity", "onDataFetched: " +
                 "calling data parser");
         new EggpoolMinersDataParser(this).parseMinersData();
+        new CoingeckoBisPriceDataParser(this).parseCoingeckoBisPriceData();
+        new EggpoolBisStatsDataParser(this).parseBisStatsData();
     }
 
 

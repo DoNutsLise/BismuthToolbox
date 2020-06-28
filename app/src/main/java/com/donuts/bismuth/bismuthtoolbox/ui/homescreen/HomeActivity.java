@@ -1,13 +1,10 @@
 package com.donuts.bismuth.bismuthtoolbox.ui.homescreen;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-
-import androidx.annotation.RequiresApi;
 
 import com.donuts.bismuth.bismuthtoolbox.Data.ParsedHomeScreenData;
 import com.donuts.bismuth.bismuthtoolbox.Data.RawUrlData;
@@ -15,22 +12,19 @@ import com.donuts.bismuth.bismuthtoolbox.R;
 import com.donuts.bismuth.bismuthtoolbox.ui.BaseActivity;
 import com.donuts.bismuth.bismuthtoolbox.utils.AsyncFetchData;
 import com.donuts.bismuth.bismuthtoolbox.utils.CurrentTime;
+import com.donuts.bismuth.bismuthtoolbox.utils.HomeScreenDataParser;
 import com.donuts.bismuth.bismuthtoolbox.utils.InterfaceOnDataFetched;
 
 import java.text.DecimalFormat;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_API_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_HN_BASIC_URL;
-import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_PRICE_COINGECKO_URL;
+import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.COINGECKO_BIS_PRICE_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_STATS_URL;
 
 /**
@@ -70,9 +64,9 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         sharedPreferences.edit().putString("bisWalletAddress3", "f9b7baef3d7fa6d452719396d5782fef2020b51dcb10defa52213b9c").apply(); // non-existent
 //        // http://bismuth.online/api/node/balancegetjson:939250d1ce3e543a2f0c3106a12a56649a2199d7ef59b7078ede127f
         sharedPreferences.edit().putString("miningWalletAddress1", "15158a334b969fa7486a2a1468d04a583f3b51e6e0a7d330723701c3").apply(); // 3 workers
-        sharedPreferences.edit().putString("miningWalletAddress2", "1dfdc05f34681ef2360c2a0fa0dbe190e20981cd1cfcc425aace6a00").apply(); // 2 workers
-        sharedPreferences.edit().putString("miningWalletAddress3", "ba50c90230ddc99cfba6ccea881f5e91b3145aedbfd51c1fff84adeb").apply(); // problem
-        sharedPreferences.edit().putString("miningWalletAddress4", "70a799988c7a80300915b9a1d4ca83237b296a5e0f16b72a90391e24").apply(); // problem
+//        sharedPreferences.edit().putString("miningWalletAddress2", "1dfdc05f34681ef2360c2a0fa0dbe190e20981cd1cfcc425aace6a00").apply(); // 2 workers
+//        sharedPreferences.edit().putString("miningWalletAddress3", "ba50c90230ddc99cfba6ccea881f5e91b3145aedbfd51c1fff84adeb").apply(); // problem
+//        sharedPreferences.edit().putString("miningWalletAddress4", "70a799988c7a80300915b9a1d4ca83237b296a5e0f16b72a90391e24").apply(); // problem
 
         // https://eggpool.net/index.php?action=api&type=detail&miner=15158a334b969fa7486a2a1468d04a583f3b51e6e0a7d330723701c3
 
@@ -192,7 +186,7 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
          */
 
         Map<String, ?> allPreferencesKeys = android.preference.PreferenceManager.getDefaultSharedPreferences(this).getAll();
-        List<String> urls = new ArrayList<>(Arrays.asList(BIS_PRICE_COINGECKO_URL, BIS_HN_BASIC_URL));// some hardcoded urls come from the constant; and wallet specific urls will be added to this list later.
+        List<String> urls = new ArrayList<>(Arrays.asList(COINGECKO_BIS_PRICE_URL, BIS_HN_BASIC_URL));// some hardcoded urls come from the constant; and wallet specific urls will be added to this list later.
 
         // loop through all the preferences and if a wallet address found - add it to the list of urls (properly modified)
         for (Map.Entry<String, ?> entry: allPreferencesKeys.entrySet()) {

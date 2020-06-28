@@ -189,7 +189,7 @@
                     android:textSize = "12sp"/>
 
                 <TextView
-                    android:text="BTC"
+                    android:text="&#181;BTC"
                     android:gravity="center"
                     android:textSize = "12sp"/>
 
@@ -276,10 +276,19 @@
             android:layout_height="2sp"
             android:background="@color/colorBackground" />
 
-        <com.github.mikephil.charting.charts.CombinedChart
-            android:id="@+id/linearChartPayouts"
+        <com.github.mikephil.charting.charts.ScatterChart
+            android:id="@+id/scatterChartPayouts"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Recent payouts from Eggpool"
+                android:textAlignment="center"
+                android:textSize="12sp" />
+        </com.github.mikephil.charting.charts.ScatterChart>
     </RelativeLayout>
 
     <!--bottom part of the screen with recyclerview and headers-->

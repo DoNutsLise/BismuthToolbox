@@ -10,10 +10,10 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Entity for storing details about miners
+ * Entity for storing miners data from Eggpool:  a list of miners with their individual stats
  */
 
-@Entity(tableName = "eggpoolMinersData")
+@Entity(tableName = "eggpool_miners_data")
 public class EggpoolMinersData {
 
     public EggpoolMinersData() {
@@ -28,7 +28,7 @@ public class EggpoolMinersData {
     private int hashrateCurrent; // current for a given miner
 
     @ColumnInfo(name = "hashrate_average")
-    private int hashrateAverage; // 13h average for a given miner
+    private int hashrateAverage; // 13h average for a given miner, MH/s
 
     @ColumnInfo(name = "shares_current")
     private int sharesCurrent; // current for a given miner

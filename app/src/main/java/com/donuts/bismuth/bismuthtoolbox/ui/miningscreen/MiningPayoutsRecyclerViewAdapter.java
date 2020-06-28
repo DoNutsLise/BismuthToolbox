@@ -15,6 +15,7 @@ import com.donuts.bismuth.bismuthtoolbox.Data.EggpoolMinersData;
 import com.donuts.bismuth.bismuthtoolbox.Data.EggpoolPayoutsData;
 import com.donuts.bismuth.bismuthtoolbox.R;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class MiningPayoutsRecyclerViewAdapter extends
@@ -66,10 +67,11 @@ public class MiningPayoutsRecyclerViewAdapter extends
     @SuppressWarnings("deprecation")
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder payoutsViewHolder, int position) {
+        DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
         if (payoutsViewHolder instanceof PayoutsItemViewHolder) {
             EggpoolPayoutsData payouts = payoutsStatsList.get(position);// change to <payoutsStatsList.get(position-1)> if you want to have a header
             ((PayoutsItemViewHolder) payoutsViewHolder).datePayoutItem.setText(payouts.getPayoutTime());
-            ((PayoutsItemViewHolder) payoutsViewHolder).amountPayoutItem.setText(String.valueOf(payouts.getPayoutAmount()));
+            ((PayoutsItemViewHolder) payoutsViewHolder).amountPayoutItem.setText(decimalFormat.format(payouts.getPayoutAmount()));
 
             //HTML.fromHtml method is depricated in api lvl 24
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -81,7 +83,7 @@ public class MiningPayoutsRecyclerViewAdapter extends
         }else if (payoutsViewHolder instanceof PayoutsHeaderViewHolder) {
             EggpoolPayoutsData payouts = payoutsStatsList.get(position);
             ((PayoutsHeaderViewHolder) payoutsViewHolder).datePayoutHeader.setText(payouts.getPayoutTime());
-            ((PayoutsHeaderViewHolder) payoutsViewHolder).amountPayoutHeader.setText(String.valueOf(payouts.getPayoutAmount()));
+            ((PayoutsHeaderViewHolder) payoutsViewHolder).amountPayoutHeader.setText(decimalFormat.format(payouts.getPayoutAmount()));
             ((PayoutsHeaderViewHolder) payoutsViewHolder).txIDpayoutHeader.setText(String.valueOf(payouts.getPayoutTx()));
         }
     }
