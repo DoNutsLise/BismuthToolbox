@@ -1,3 +1,6 @@
+def versionMajor = 1
+def versionMinor = 1
+def versionPatch = 0
 apply plugin: 'com.android.application'
 
 android {
@@ -8,8 +11,8 @@ android {
         applicationId "com.donuts.bismuth.bismuthtoolbox"
         minSdkVersion 24
         targetSdkVersion 29
-        versionCode 3
-        versionName "1.0.2"
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -24,6 +27,10 @@ android {
         targetCompatibility = 1.8
     }
 
+}
+
+repositories {
+    maven { url 'https://jitpack.io' } // this repo for charts by PhilJay: https://github.com/PhilJay/MPAndroidChart
 }
 
 dependencies {
@@ -49,12 +56,14 @@ dependencies {
     annotationProcessor 'androidx.room:room-compiler:2.2.5'
 
     //Firebase Messaging library for Sending push Notifications
-    implementation 'com.google.firebase:firebase-core:17.4.2'
-    implementation "com.google.firebase:firebase-messaging:20.2.0"
-    implementation 'com.google.firebase:firebase-database:19.3.0'
+    implementation 'com.google.firebase:firebase-core:17.4.3'
+    implementation "com.google.firebase:firebase-messaging:20.2.1"
+    implementation 'com.google.firebase:firebase-database:19.3.1'
     implementation 'com.google.firebase:firebase-auth:19.3.1'
-    implementation 'androidx.navigation:navigation-fragment:2.2.2'
-    implementation 'androidx.navigation:navigation-ui:2.2.2'
+    implementation 'androidx.navigation:navigation-fragment:2.3.0'
+    implementation 'androidx.navigation:navigation-ui:2.3.0'
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0' // this repo for charts by PhilJay: https://github.com/PhilJay/MPAndroidChart
 }
 
 

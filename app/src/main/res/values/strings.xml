@@ -15,14 +15,23 @@
     <string name="tv_hypernodes">Hypernodes</string>
     <string name="tv_wallet">My $BIS wallets</string>
     <string name="tv_network">$BIS network</string>
-    <string name="hashrate">Hashrate, GH/s</string>
+    <string name="hashrate">Hashrate, MH/s</string>
     <string name="wallets_number">Registered wallets</string>
     <string name="bis_balance">Balance, BIS</string>
     <string name="usd_balance">Balance, USD</string>
     <string name="block_height">Block height</string>
-    <string name="bis_to_btc">BIS/BTC price</string>
+    <string name="bis_to_btc">BIS/&#181;BTC price</string>
     <string name="bis_to_usd">BIS/USD price</string>
-    <string name="loading_data">Loading data...</string>
+    <string name="loading_data">Loading data…</string>
+
+    <!-- Mining screen -->
+    <string name="hashrate_average_tv">%1$s (average)</string>
+    <string name="hashrate_current_tv">%1$s (current)</string>
+    <string name="shares_average_tv">%1$s (average)</string>
+    <string name="shares_current_tv">%1$s (current)</string>
+    <string name="miners_active_tv">%1$s (active)</string>
+    <string name="miners_inactive_tv">%1$s (inactive)</string>
+    <string name="miner_last_seen_rv">%1$s min ago</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -41,13 +50,15 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_miners">Miners</string>
+    <string name="title_payouts">Payouts</string>
 
     <!-- messages -->
 
     <!-- settings screen -->
     <string name="data_share_consent">If you enable push notifications, some of your data entered on this settings screen (i.e. hypernode IPs and wallets addresses)
         together with your device unique ID will be sent to the Google Firebase. This data is submitted anonymously and will be used by the author ONLY for the purpose
-        of serving you with targeted push notifications about any problems with your hypernodes and miners. If you accept it, please click "accept" button. If you do not accept
+        of serving you with targeted push notifications about any problems with your hypernodes and eggpoolMinersData. If you accept it, please click "accept" button. If you do not accept
         it, please click "decline" button (note: you will not receive any push notifications, although you can change your mind latter).
     </string>
 

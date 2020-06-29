@@ -24,8 +24,6 @@ public class NetworkActivity extends BaseActivity {
 
         // WIP message
         MyAlertDialogMessage myAlertDialogMessage = new MyAlertDialogMessage(this);
-        myAlertDialogMessage.warningMessage("W.I.P.", "Work in progress");
-
-        Toast.makeText(this, "Network Activity is W.I.P", Toast.LENGTH_LONG).show();
+        myAlertDialogMessage.warningMessage("Coming soon...", "This section of the app is under development. Please check back later!");
     }
 }
