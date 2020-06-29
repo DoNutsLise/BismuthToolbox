@@ -162,8 +162,8 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         * Minimum data for the main screen is this:
         * 1. BIS_HN_BASIC_URL // all hypernodes stats.
         * 2. BIS_PRICE_COINGECKO_URL // BIS price from coingecko vs BTC and USD.
-        * 3. bisWalletAddress specific balance: BIS_API_URL+ "node" + "/" + "balancegetjson:939250d1ce3e543a2f0c3106a12a56649a2199d7ef59b7078ede127f".
-        * 4. miningWalletAddress eggpool specific: EGGPOOL_MINER_STATS_URL+"939250d1ce3e543a2f0c3106a12a56649a2199d7ef59b7078ede127f".
+        * 3. bisWalletAddress specific balance: BIS_API_URL+ "node" + "/" + "balancegetjson:939250d1ce3e543a2f0c3106a12a56649a2199d7ef59b7078ede127".
+        * 4. miningWalletAddress eggpool specific: EGGPOOL_MINER_STATS_URL+"939250d1ce3e543a2f0c3106a12a56649a2199d7ef59b7078ede127".
         * The later two have to be for each registered in settings address.
          */
 
