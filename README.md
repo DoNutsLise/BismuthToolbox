@@ -1,4 +1,4 @@
-# BismuthToolbox
+## BismuthToolbox
 
 All-in-one app for monitoring Bismuth network vitals.
  Work in progress. Currently available:
@@ -16,7 +16,26 @@ All-in-one app for monitoring Bismuth network vitals.
 
 Note: Push notifications are disabled in settings by default. When you enable this option you will be asked if you accept sharing your hypernode IPs and mining wallets addresses. The wallet addresses and hypernode IPs you enter in the settings screen will be sent to Google's Firebase together with your device's unique ID. This data is totally anonymous and is used ONLY to serve targeted push notifications (e.g. about problems with your hypernodes and/or miners). If you are not happy about it - just click "decline" (you will receive no push notifications though).
 
-HOW TO INSTALL:
-1. Build from source - google it somewhere else how to do it.
-2. Downlod apk from "releases" page. Connect your mobile device with a USB cable. Run in terminal: "adb devices" - that should output something like "List of devices attached 60573ea4	device"  if connection is OK. Then run "adb install BismuthToolbox_v2.apk" (provided BismuthToolbox_v2.apk is the name of the downloaded file). Note: developer options should be enabled in your mobile device and possibly "install via USB" option, too.
+## HOW TO INSTALL:
+
+Option 1 (easy way) - install from Google Play (https://play.google.com/store/apps/details?id=com.donuts.bismuth.bismuthtoolbox). I would choose this option because it's easy to get updates.
+
+Option 2 (harder way) - install a compiled apk from "releases" page with adb or sideload:
+Here is a link with instructions: https://www.droidviews.com/install-apk-files-using-adb-commands/. Difficulty of installation is about the same as from Google Play, but you have to update manually every time.
+
+Option 3 (hardest way) - build from source:
+Here are good instructions on how to build an android apk from source using Android Studio (https://github.com/openaps/AndroidAPSdocs/blob/master/docs/EN/Installing-AndroidAPS/Building-APK.md). It's a quite an involved process and I personally do not recommend it.
+
+NOTE: github  apks are released with a certain delay after a new version of the app was published on Goole Play store. The reason is that I get bug reports through Google Play console (thanks to responsible users) and can act on them  quickly. So, I use Google Play releases as some sort of a testing platform before I release a stable version on github.
+
+PARANOID? (like myself)
+apk I put  in release are not obfuscated; there are plenty of tools (including online ones) which allow you to decomplie apks and check the code.
+
+## Requested features:
+* details about missing miner/hypernode in push notification
+* import/export of settings (including addresses)
+* clock height for POW and POS chains
+* POW difficulty
+* ROI, percentage of coin supply, weekly, monthly. yearly rewards in bis and usd.
+* Check for a duplicate entry in setting (warn user when he enters a duplicate IP or wallet address) - done.
 
