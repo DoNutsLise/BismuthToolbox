@@ -64,9 +64,9 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         sharedPreferences.edit().putString("bisWalletAddress3", "f9b7baef3d7fa6d452719396d5782fef2020b51dcb10defa52213b9c").apply(); // non-existent
 //        // http://bismuth.online/api/node/balancegetjson:939250d1ce3e543a2f0c3106a12a56649a2199d7ef59b7078ede127f
         sharedPreferences.edit().putString("miningWalletAddress1", "15158a334b969fa7486a2a1468d04a583f3b51e6e0a7d330723701c3").apply(); // 3 workers
-//        sharedPreferences.edit().putString("miningWalletAddress2", "1dfdc05f34681ef2360c2a0fa0dbe190e20981cd1cfcc425aace6a00").apply(); // 2 workers
-//        sharedPreferences.edit().putString("miningWalletAddress3", "ba50c90230ddc99cfba6ccea881f5e91b3145aedbfd51c1fff84adeb").apply(); // problem
-//        sharedPreferences.edit().putString("miningWalletAddress4", "70a799988c7a80300915b9a1d4ca83237b296a5e0f16b72a90391e24").apply(); // problem
+        sharedPreferences.edit().putString("miningWalletAddress2", "1dfdc05f34681ef2360c2a0fa0dbe190e20981cd1cfcc425aace6a00").apply(); // 2 workers
+        sharedPreferences.edit().putString("miningWalletAddress3", "ba50c90230ddc99cfba6ccea881f5e91b3145aedbfd51c1fff84adeb").apply(); // problem
+        sharedPreferences.edit().putString("miningWalletAddress4", "70a799988c7a80300915b9a1d4ca83237b296a5e0f16b72a90391e24").apply(); // problem
 
         // https://eggpool.net/index.php?action=api&type=detail&miner=15158a334b969fa7486a2a1468d04a583f3b51e6e0a7d330723701c3
 
@@ -180,8 +180,8 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         * Minimum data for the main screen is this:
         * 1. BIS_HN_BASIC_URL // all hypernodes stats.
         * 2. BIS_PRICE_COINGECKO_URL // BIS price from coingecko vs BTC and USD.
-        * 3. bisWalletAddress specific balance: BIS_API_URL+ "node" + "/" + "balancegetjson:939250d1ce3e543a2f0c3106a12a56649a2199d7ef59b7078ede127f".
-        * 4. miningWalletAddress eggpool specific: EGGPOOL_MINER_STATS_URL+"939250d1ce3e543a2f0c3106a12a56649a2199d7ef59b7078ede127f".
+        * 3. bisWalletAddress specific balance: BIS_API_URL+ "node" + "/" + "balancegetjson:939250d1ce3e543a2f0c3106a12a56649a2199d7ef59b7078ede127".
+        * 4. miningWalletAddress eggpool specific: EGGPOOL_MINER_STATS_URL+"939250d1ce3e543a2f0c3106a12a56649a2199d7ef59b7078ede127".
         * The later two have to be for each registered in settings address.
          */
 

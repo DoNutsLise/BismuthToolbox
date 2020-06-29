@@ -40,6 +40,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+// TODO: dates are not formatted properly on payouts chart axis
+
 public class MiningPayoutsFragment extends Fragment {
 
     private TextView textView_eggpoolImmatureBalance;
