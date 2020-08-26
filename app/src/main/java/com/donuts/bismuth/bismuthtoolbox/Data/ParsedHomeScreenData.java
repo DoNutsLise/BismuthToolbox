@@ -45,7 +45,7 @@ public class ParsedHomeScreenData {
     private int minersHashrate;
 
     @ColumnInfo(name = "block_height")
-    private int blockHeight;
+    private long blockHeight; // POW
 
     @ColumnInfo(name = "bis_to_usd")
     private double bisToUsd;
@@ -136,11 +136,11 @@ public class ParsedHomeScreenData {
         this.minersHashrate = minersHashrate;
     }
 
-    public int getBlockHeight() {
+    public long getBlockHeight() {
         return blockHeight;
     }
 
-    public void setBlockHeight(int blockHeight) {
+    public void setBlockHeight(long blockHeight) {
         this.blockHeight = blockHeight;
     }
 

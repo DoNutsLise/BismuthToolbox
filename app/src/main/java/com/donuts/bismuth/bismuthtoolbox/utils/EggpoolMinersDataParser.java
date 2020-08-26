@@ -15,14 +15,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_STATS_URL;
-import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsize;
+import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsizeMiddle;
 
 /**
 *  This class parses all the data for Eggpool miners from EGGPOOL_MINER_STATS_URL and saves it in several tables of Room database:
@@ -72,8 +71,8 @@ public class EggpoolMinersDataParser {
                     // 1. check: if there are no miners associated with this wallet ("count"<1); if so - send a toast and move to the next address
                         if (miningWalletRawDataJsonObj.getJSONObject("workers").optInt("count", 0)<1) {
                             Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MinersDataParser", "parseMinersData: "+
-                                    "there are no miners associated with the wallet " + ellipsize(entry.getKey(), 10));
-                            Toast.makeText(mContext, "There are no miners associated with the wallet " + ellipsize(entry.getKey(), 10) +
+                                    "there are no miners associated with the wallet " + ellipsizeMiddle(entry.getKey(), 10));
+                            Toast.makeText(mContext, "There are no miners associated with the wallet " + ellipsizeMiddle(entry.getKey(), 10) +
                                     ". Please check the wallet address. ", Toast.LENGTH_LONG).show();
                             continue;
                         }
@@ -82,7 +81,8 @@ public class EggpoolMinersDataParser {
                         if (miningWalletRawDataJsonObj.getJSONObject("workers").isNull("detail")){
                             // if "detail" object is null - go to the next miningWalletAddress
                             Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MinersDataParser", "parseMinersData: "+
-                                    " details object is null for wallet " + ellipsize(entry.getKey(), 10));
+                                    " details object is null for wallet " + ellipsizeMiddle(entry.getKey(), 10));
+                            Toast.makeText(mContext, "details object is null for wallet " + ellipsizeMiddle(entry.getKey(), 10), Toast.LENGTH_LONG).show();
                             continue;
                         }
 
@@ -150,8 +150,8 @@ public class EggpoolMinersDataParser {
                                 Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MinersDataParser", "parseMinersData: "+
                                         "Failed to parse JSON data from "+ EGGPOOL_MINER_STATS_URL + " for wallet " + entry.getValue() + ", miner " +
                                         key);
-                                Toast.makeText(mContext, "Failed to get data from " + ellipsize(EGGPOOL_MINER_STATS_URL, 25) + " for wallet "
-                                        + ellipsize(String.valueOf(entry.getValue()), 10)+ ", miner " + key, Toast.LENGTH_LONG).show();
+                                Toast.makeText(mContext, "Failed to get data from " + ellipsizeMiddle(EGGPOOL_MINER_STATS_URL, 25) + " for wallet "
+                                        + ellipsizeMiddle(String.valueOf(entry.getValue()), 10)+ ", miner " + key, Toast.LENGTH_LONG).show();
                             }
                         }
 
@@ -161,6 +161,7 @@ public class EggpoolMinersDataParser {
                             // if payouts array is null or not an array - move to the next wallet.
                             Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " EggpoolMinersDataParser", "parseMinersData: "+
                                     "unexpected format of payouts data");
+                            Toast.makeText(mContext, "Unexpected format of payouts data from" + ellipsizeMiddle(EGGPOOL_MINER_STATS_URL, 25), Toast.LENGTH_LONG).show();
                             continue;
                         }
 
@@ -198,8 +199,8 @@ public class EggpoolMinersDataParser {
                 }catch(JSONException | ClassCastException e){
                     Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MinersDataParser", "parseMinersData: "+
                             "Failed to parse JSON data from "+ EGGPOOL_MINER_STATS_URL + " for wallet " + entry.getValue());
-                    Toast.makeText(mContext, "Failed to get data from " + ellipsize(EGGPOOL_MINER_STATS_URL, 25) + " for wallet "
-                            + ellipsize(String.valueOf(entry.getValue()), 10), Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "Failed to get data from " + ellipsizeMiddle(EGGPOOL_MINER_STATS_URL, 25) + " for wallet "
+                            + ellipsizeMiddle(String.valueOf(entry.getValue()), 10), Toast.LENGTH_LONG).show();
                 }
             }
         }

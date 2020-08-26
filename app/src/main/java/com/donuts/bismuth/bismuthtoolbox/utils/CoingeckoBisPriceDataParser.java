@@ -7,14 +7,12 @@ import android.widget.Toast;
 import com.donuts.bismuth.bismuthtoolbox.Data.CoingeckoBisPriceData;
 import com.donuts.bismuth.bismuthtoolbox.Data.DataDAO;
 import com.donuts.bismuth.bismuthtoolbox.Data.DataRoomDatabase;
-import com.donuts.bismuth.bismuthtoolbox.Data.EggpoolBisStatsData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.COINGECKO_BIS_PRICE_URL;
-import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_BIS_STATS_URL;
-import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsize;
+import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsizeMiddle;
 
 /**
 *  This class parses Bis price from COINGECKO_BIS_PRICE_URL = "https://api.coingecko.com/api/v3/simple/price?ids=bismuth&vs_currencies=usd,btc"
@@ -54,7 +52,7 @@ public class CoingeckoBisPriceDataParser {
         }catch(JSONException | ClassCastException e){
             Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " CoingeckoBisPriceDataParser", "parseBisStatsData: " +
                     "Failed to parse JSON data from "+ COINGECKO_BIS_PRICE_URL);
-            Toast.makeText(mContext, "Failed to get data from " + ellipsize(COINGECKO_BIS_PRICE_URL, 25), Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "Failed to get data from " + ellipsizeMiddle(COINGECKO_BIS_PRICE_URL, 25), Toast.LENGTH_LONG).show();
         }
 
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " CoingeckoBisPriceDataParser", "parseBisStatsData: " +

@@ -43,6 +43,7 @@ public interface DataDAO {
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insertParsedHomeScreenData(ParsedHomeScreenData parsedUrlData);
 
+
     @Update
     void updateParsedHomeScreenData(ParsedHomeScreenData parsedUrlData);
 
@@ -51,6 +52,9 @@ public interface DataDAO {
 
     @Query("SELECT * from parsed_home_screen_data") // live data for the observer
     LiveData<ParsedHomeScreenData> getParsedHomeScreenLiveData();
+
+    @Query("SELECT block_height from parsed_home_screen_data") // get POS block height
+    long getPosBlockHeightFromParsedHomeScreenData();
 
     @Insert // for initializing the database with default values
     void insertAllParsedHomeScreenData(ParsedHomeScreenData... parsedHomeScreenData);
@@ -168,6 +172,9 @@ public interface DataDAO {
     @Query("SELECT * FROM eggpool_bis_stats_data") // live data for the observer
     LiveData<EggpoolBisStatsData> getEggpoolBisStatsLiveData();
 
+    @Query("SELECT eggpool_bis_network_block_height from eggpool_bis_stats_data")
+    long getPowBlockHeightFromEggpoolBisStatsData();
+
 
     /*
      *  CoingeckoBisPriceData
@@ -189,6 +196,76 @@ public interface DataDAO {
     @Query("SELECT * FROM coingecko_bis_price_data") // live data for the observer
     LiveData<List<CoingeckoBisPriceData>> getCoingeckoBisPriceLiveDataList();
 
+    /*
+     *  AllHypernodesData
+     */
+
+    @Insert // for initializing the database with default values
+    void insertAllHypernodesData(AllHypernodesData... allHypernodesData);
+
+    @Query("SELECT * from all_hypernodes_data") //
+    List<AllHypernodesData> getAllHypernodesDataList();
+
+    @Query("SELECT * from all_hypernodes_data where hypernode_mine")
+    List<AllHypernodesData> getMyHypernodesDataList();
+
+    @Insert (onConflict = OnConflictStrategy.REPLACE)
+    void insertHypernodeData(AllHypernodesData allHypernodesData);
+
+    @Query("DELETE FROM all_hypernodes_data")
+    void clearAllHypernodesDataTableInDb();
+
+    @Query("SELECT COUNT(hypernode_ip) from all_hypernodes_data")
+    long getNumOfHypernodes();
+
+    @Query("SELECT COUNT(hypernode_ip) from all_hypernodes_data where hypernode_status = 'Active'")
+    int getNumOfActiveHypernodesFromAllHypernodesData(); // get currently active hypernodes
+
+    @Query("SELECT COUNT(hypernode_ip) from all_hypernodes_data where hypernode_status = 'Active' and hypernode_mine")
+    int getNumOfMyActiveHypernodesFromAllHypernodesData(); // get only my currently active hypernodes
+
+    @Query("SELECT COUNT(hypernode_ip) from all_hypernodes_data where hypernode_status = 'Inactive' and hypernode_mine")
+    int getNumOfMyInactiveHypernodesFromAllHypernodesData(); // get only my currently active hypernodes
+
+    @Query("SELECT SUM(hypernode_tier) from all_hypernodes_data where hypernode_status = 'Active'")
+    int getSumTierOfActiveHypernodesFromAllHypernodesData(); // get currently active hypernodes
+
+    @Query("SELECT SUM(hypernode_tier) from all_hypernodes_data where hypernode_mine")
+    int getSumTierOfMyHypernodesFromAllHypernodesData(); // get sum tier of all my hypernodes
+
+    @Query("SELECT hypernode_reward_address from all_hypernodes_data WHERE hypernode_ip= :hypernodeIp")
+    String getRewardAddressByHypernodeIp(String hypernodeIp);
+
+    @Query("SELECT * FROM all_hypernodes_data") // live data for the observer - all hypernodes
+    LiveData<List<AllHypernodesData>> getAllHypernodesDataForRecyclerViewLiveData();
+
+    @Query("SELECT * FROM all_hypernodes_data WHERE hypernode_mine") // live data for the observer - my hypernodes only
+    LiveData<List<AllHypernodesData>> getMyHypernodesDataForRecyclerViewLiveData();
+
+    @Query("SELECT hypernode_reward_address FROM all_hypernodes_data WHERE hypernode_mine")
+    List<String> getMyHypernodesRewardAddressesList(); // list of strings with all my hypernode reward addresses, note: there might be 1 reward address for several hns
+
+    @Query("SELECT MAX(hypernode_block_height) FROM all_hypernodes_data")
+    long getPosBlockHeightFromAllHypernodesData(); // get POS network block height by finding a hypernode with max block height hypernode_tier
+
+    /*
+     *  HypernodesRewardAddressesData
+     */
+
+    @Insert // for initializing the database with default values
+    void insertHypernodesRewardAddressesData(HypernodesRewardAddressesData... hypernodesRewardAddressesData);
+
+    @Query("DELETE FROM hypernodes_reward_addresses_data")
+    void clearHypernodesRewardAddressesDataTableInDb();
+
+    @Query("SELECT COUNT(transaction_signature) from hypernodes_reward_addresses_data")
+    long getNumOfHypernodesRewardsTransactions();
+
+    @Query("SELECT * FROM hypernodes_reward_addresses_data WHERE sender_address= '3e08b5538a4509d9daa99e01ca5912cda3e98a7f79ca01248c2bde16'") // live data for the observer - transactions coming from hypernodes rewards address only
+    LiveData<List<HypernodesRewardAddressesData>> getMyHypernodesRewardsForRecyclerViewLiveData();
+
+    @Query("SELECT SUM(transaction_amount) FROM hypernodes_reward_addresses_data WHERE sender_address= '3e08b5538a4509d9daa99e01ca5912cda3e98a7f79ca01248c2bde16' and transaction_timestamp > :timeNow/1000 - 60*60*24*7")
+    double getMyHypernodesLastWeekRewardsFromHypernodesRewards(long timeNow); // get my total reward for the last week; timeNow is time in milliseconds
 
 
 }

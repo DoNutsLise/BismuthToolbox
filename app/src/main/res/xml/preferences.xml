@@ -11,7 +11,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Mining"
+        android:title="Mining (at Eggpool)"
         app:initialExpandedChildrenCount="0"
         android:summary="Enter your mining wallet addresses below"
         android:key="miningWalletAddress">

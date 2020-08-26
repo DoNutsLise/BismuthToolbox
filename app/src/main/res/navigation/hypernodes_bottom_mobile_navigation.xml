@@ -3,20 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_hypernodes_home">
+    app:startDestination="@+id/navigation_hypernodes_my_hypernodes">
 
     <fragment
-        android:id="@+id/navigation_hypernodes_home"
-        android:name="com.donuts.bismuth.bismuthtoolbox.ui.hypernodesscreen.HypernodesHomeFragment"
-        tools:layout="@layout/fragment_hypernodes_home" />
+        android:id="@+id/navigation_hypernodes_my_hypernodes"
+        android:name="com.donuts.bismuth.bismuthtoolbox.ui.hypernodesscreen.HypernodesMyHypernodesFragment"
+        tools:layout="@layout/fragment_hypernodes_my_hypernodes" />
 
     <fragment
-        android:id="@+id/navigation_hypernodes_dashboard"
-        android:name="com.donuts.bismuth.bismuthtoolbox.ui.hypernodesscreen.HypernodesDashboardFragment"
-        tools:layout="@layout/fragment_hypernodes_dashboard" />
+        android:id="@+id/navigation_hypernodes_pos_network"
+        android:name="com.donuts.bismuth.bismuthtoolbox.ui.hypernodesscreen.HypernodesPosNetworkFragment"
+        tools:layout="@layout/fragment_hypernodes_pos_network" />
 
-    <fragment
-        android:id="@+id/navigation_hypernodes_notifications"
-        android:name="com.donuts.bismuth.bismuthtoolbox.ui.hypernodesscreen.HypernodesNotificationsFragment"
-        tools:layout="@layout/fragment_hypernodes_notifications" />
 </navigation>

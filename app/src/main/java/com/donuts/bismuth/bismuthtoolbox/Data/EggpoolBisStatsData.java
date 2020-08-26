@@ -20,7 +20,7 @@ public class EggpoolBisStatsData {
     private int id;
 
     @ColumnInfo(name = "eggpool_bis_network_block_height")
-    private int eggpoolBisNetworkBlockHeight; // network block height
+    private long eggpoolBisNetworkBlockHeight; // network block height
 
     @ColumnInfo(name = "eggpool_bis_network_difficulty")
     private double eggpoolBisNetworkDifficulty; // network difficulty
@@ -50,11 +50,11 @@ public class EggpoolBisStatsData {
         this.id = id;
     }
 
-    public int getEggpoolBisNetworkBlockHeight() {
+    public long getEggpoolBisNetworkBlockHeight() {
         return eggpoolBisNetworkBlockHeight;
     }
 
-    public void setEggpoolBisNetworkBlockHeight(int eggpoolBisNetworkBlockHeight) {
+    public void setEggpoolBisNetworkBlockHeight(long eggpoolBisNetworkBlockHeight) {
         this.eggpoolBisNetworkBlockHeight = eggpoolBisNetworkBlockHeight;
     }
 
