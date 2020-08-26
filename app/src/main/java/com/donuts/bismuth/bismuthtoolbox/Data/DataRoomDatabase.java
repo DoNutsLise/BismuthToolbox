@@ -14,9 +14,6 @@ import java.util.concurrent.Executors;
 
 /*
  * All data is stored in Android Room database.
- * At the moment there are two entities:
- * 1. RawUrlData - with json responses from various web resources
- * 2. ParsedHomeScreenData - with parsed data for Home screen views
  * There will be more entities with parsed data for each iof the activities or screens or fragments
  *
  * Refs:

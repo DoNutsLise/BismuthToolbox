@@ -24,24 +24,19 @@ import com.donuts.bismuth.bismuthtoolbox.utils.MyAxisValueFormatter;
 import com.donuts.bismuth.bismuthtoolbox.utils.TimeLongToStringFormatter;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.data.ScatterData;
-import com.github.mikephil.charting.data.ScatterDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.EntryXComparator;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.Objects.isNull;
@@ -147,12 +142,6 @@ public class HypernodesMyHypernodesFragment extends Fragment {
         allHypernodesDataModel.clear();
         allHypernodesDataModel.addAll(allHypernodesDataList);
         myHypernodesRecyclerViewAdapter.notifyDataSetChanged();
-
-        // TODO update all textviews, where collateral is calculated from tier of all hypernodes (not from wallet balance).
-        // TODO: update calculator. For that we need:
-        //  1. Last POS block height (consider creating a db table "PosNetworkStats"); or just get it from all hns data by looking for max height
-        //  2. sum tier of all my hypernodes;
-        //  3. total number of active and inactive hypernodes
 
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HypernodesMyHypernodesFragment", "updateMyHypernodesRecyclerView: "+
                 " recyclerview updated");
