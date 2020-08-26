@@ -6,24 +6,13 @@ import android.widget.Toast;
 
 import com.donuts.bismuth.bismuthtoolbox.Data.DataDAO;
 import com.donuts.bismuth.bismuthtoolbox.Data.DataRoomDatabase;
-import com.donuts.bismuth.bismuthtoolbox.Data.EggpoolBalanceData;
 import com.donuts.bismuth.bismuthtoolbox.Data.EggpoolBisStatsData;
-import com.donuts.bismuth.bismuthtoolbox.Data.EggpoolMinersData;
-import com.donuts.bismuth.bismuthtoolbox.Data.EggpoolPayoutsData;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_BIS_STATS_URL;
-import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_STATS_URL;
-import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsize;
+import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsizeMiddle;
 
 /**
 *  This class parses all the data for Eggpool EGGPOOL_BIS_STATS_URL = "https://eggpool.net/api/currencies"
@@ -67,7 +56,7 @@ public class EggpoolBisStatsDataParser {
         }catch(JSONException | ClassCastException e){
             Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " EggpoolBisStatsDataParser", "parseBisStatsData: " +
                     "Failed to parse JSON data from "+ EGGPOOL_BIS_STATS_URL);
-            Toast.makeText(mContext, "Failed to get data from " + ellipsize(EGGPOOL_BIS_STATS_URL, 25), Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "Failed to get data from " + ellipsizeMiddle(EGGPOOL_BIS_STATS_URL, 25), Toast.LENGTH_LONG).show();
         }
 
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " EggpoolBisStatsDataParser", "parseBisStatsData: " +

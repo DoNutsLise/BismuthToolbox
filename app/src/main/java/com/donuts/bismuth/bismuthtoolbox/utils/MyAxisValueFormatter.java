@@ -7,7 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 /**
- * Class for formatting axis labels for MPandroidcharts: timestamp long -> string
+ * Class for formatting axis labels for MPandroidcharts: timestamp in milliseconds (long) -> string of "MMM-dd" format
+ * Values for xLabels are taken from x value entries of lineEntries list(not from xLabels list!)
  */
 
 public class MyAxisValueFormatter extends ValueFormatter {
@@ -17,6 +18,6 @@ public class MyAxisValueFormatter extends ValueFormatter {
     }
     @Override
     public String getFormattedValue(float value) {
-        return new SimpleDateFormat("MMM-dd", Locale.US).format(value);
+        return new SimpleDateFormat("MMM-dd", Locale.getDefault()).format(value);
     }
 }

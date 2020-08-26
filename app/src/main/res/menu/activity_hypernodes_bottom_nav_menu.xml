@@ -2,18 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_hypernodes_home"
+        android:id="@+id/navigation_hypernodes_my_hypernodes"
         android:icon="@drawable/ic_hypernodes_home_black_24dp"
-        android:title="@string/title_home" />
+        android:title="@string/title_my_hypernodes" />
 
     <item
-        android:id="@+id/navigation_hypernodes_dashboard"
+        android:id="@+id/navigation_hypernodes_pos_network"
         android:icon="@drawable/ic_hypernodes_dashboard_black_24dp"
-        android:title="@string/title_dashboard" />
-
-    <item
-        android:id="@+id/navigation_hypernodes_notifications"
-        android:icon="@drawable/ic_hypernodes_notifications_black_24dp"
-        android:title="@string/title_notifications" />
+        android:title="@string/title_pos_network" />
 
 </menu>

@@ -56,9 +56,10 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
 
         // TODO: below are shared preferences added for testing purpose:
         sharedPreferences.edit().putString("hypernodeIP1", "163.172.222.163").apply(); // active
+        sharedPreferences.edit().putString("hypernodeIP5", "162.213.123.200").apply(); // active
         sharedPreferences.edit().putString("hypernodeIP2", "142.93.93.4").apply(); // inactive
         sharedPreferences.edit().putString("hypernodeIP3", "142.93.1.1").apply(); // doesn't exist
-        sharedPreferences.edit().putString("hypernodeIP4", "114.207.111.94").apply(); // lagging
+        sharedPreferences.edit().putString("hypernodeIP4", "114.207.111.94").apply(); // lagging 62.213.123.200
         sharedPreferences.edit().putString("bisWalletAddress1", "4f92743a7f5549fe19205842b117aa9c8a611fa8533b1934b43a9ce1").apply(); // random
         sharedPreferences.edit().putString("bisWalletAddress2", "7d5c2999f9a2e44c23e7b2b73b4c0edae308e9d39482bf44da481edc").apply(); // casino
         sharedPreferences.edit().putString("bisWalletAddress3", "f9b7baef3d7fa6d452719396d5782fef2020b51dcb10defa52213b9c").apply(); // non-existent
@@ -69,7 +70,6 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         sharedPreferences.edit().putString("miningWalletAddress4", "70a799988c7a80300915b9a1d4ca83237b296a5e0f16b72a90391e24").apply(); // problem
 
         // https://eggpool.net/index.php?action=api&type=detail&miner=15158a334b969fa7486a2a1468d04a583f3b51e6e0a7d330723701c3
-
 
         FrameLayout contentFrameLayout = findViewById(R.id.content_frame); //Remember this is the FrameLayout area within BaseActivity.xml
         getLayoutInflater().inflate(R.layout.activity_home, contentFrameLayout);

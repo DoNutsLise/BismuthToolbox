@@ -21,13 +21,14 @@ import com.donuts.bismuth.bismuthtoolbox.Data.EggpoolPayoutsData;
 import com.donuts.bismuth.bismuthtoolbox.R;
 import com.donuts.bismuth.bismuthtoolbox.utils.CurrentTime;
 import com.donuts.bismuth.bismuthtoolbox.utils.MyAxisValueFormatter;
-import com.github.mikephil.charting.charts.ScatterChart;
+import com.donuts.bismuth.bismuthtoolbox.utils.TimeLongToStringFormatter;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.ScatterData;
-import com.github.mikephil.charting.data.ScatterDataSet;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.EntryXComparator;
 
@@ -36,11 +37,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
-// TODO: dates are not formatted properly on payouts chart axis
+import static java.util.Objects.isNull;
 
 public class MiningPayoutsFragment extends Fragment {
 
@@ -142,55 +144,102 @@ public class MiningPayoutsFragment extends Fragment {
          */
 
             //
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss", Locale.US);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
         List<Entry> lineEntries = new ArrayList<>();
         List<String> xLabels = new ArrayList<>();
         long payoutTimeStampLong;
+//        for(EggpoolPayoutsData eggpoolPayoutsData : eggpoolPayoutsDataList){
+//            //convert timeStamps (strings e.g. "2019-06-03 08:17:26") to long
+//            try {
+//                String timeStampString = eggpoolPayoutsData.getPayoutTime();
+//                Date timeStampDate = dateFormat.parse(timeStampString);
+//                payoutTimeStampLong = timeStampDate.getTime();
+//            } catch (ParseException e) {
+//                continue;
+//            }
+//
+//            // add X and Y values (time and payout amount) to the List of values for plotting
+//            lineEntries.add(new Entry(payoutTimeStampLong, (float) eggpoolPayoutsData.getPayoutAmount()));
+//            xLabels.add(eggpoolPayoutsData.getPayoutTime());
+//        }
+
         for(EggpoolPayoutsData eggpoolPayoutsData : eggpoolPayoutsDataList){
             //convert timeStamps (strings e.g. "2019-06-03 08:17:26") to long
             try {
-                payoutTimeStampLong = Objects.requireNonNull(dateFormat.parse(eggpoolPayoutsData.getPayoutTime())).getTime();
+                String timeStampString = eggpoolPayoutsData.getPayoutTime();
+                Date timeStampDate = dateFormat.parse(timeStampString);
+                payoutTimeStampLong = timeStampDate.getTime();
             } catch (ParseException e) {
                 continue;
             }
+            // if the timestamp for the current transaction < 90 days old, we add it to the list of lineEntries (x,y values) and xLabels
+            if((System.currentTimeMillis() - payoutTimeStampLong*1000)/1000/60/60/24 < 90){
+                // convert timestamp from seconds (double) to days (int)
+                int timestampDays = (int) TimeUnit.SECONDS.toDays((long) payoutTimeStampLong/1000); // epoch in days - now you can sort and sum by day
+                double transactionAmount = eggpoolPayoutsData.getPayoutAmount();
+                // now loop through lineEntries list and either add a new Entry or modify an existing one if that date already present
+                Integer indexOfEntryToModify = null;
+                float valueOfEntryToModify = (float) transactionAmount;
+                for(Entry entry : lineEntries){
+                    if (entry.getX() == timestampDays){
+                        // entry with this date already exists and it's index is:
+                        indexOfEntryToModify = lineEntries.indexOf(entry);
+                        valueOfEntryToModify = valueOfEntryToModify + entry.getY();
+                    }
+                }
 
-            // add X and Y values (time and payout amount) to the List of values for plotting
-            lineEntries.add(new Entry(payoutTimeStampLong, (float) eggpoolPayoutsData.getPayoutAmount()));
-            xLabels.add(eggpoolPayoutsData.getPayoutTime());
+                // if a record with the same date already exists in lineEntries - then modify it with new value of
+                // transaction (which is a sum of previous and current) with set method; otherwise add a new entry with add method
+                if (isNull(indexOfEntryToModify) || lineEntries.size() == 0){
+                    lineEntries.add(new Entry(timestampDays, (float) valueOfEntryToModify));
+                    xLabels.add(TimeLongToStringFormatter.formatTimeLongToString((long) payoutTimeStampLong*1000, "MMM-dd"));
+                }else{
+                    lineEntries.set(indexOfEntryToModify, new Entry(timestampDays, (float) valueOfEntryToModify));
+                    xLabels.set(indexOfEntryToModify, TimeLongToStringFormatter.formatTimeLongToString((long) payoutTimeStampLong*1000, "MMM-dd"));
+                }
+            }
         }
+
+        // convert timestamps from days back to seconds (that is needed for proper x-labels formatting with MyAxisValueFormatter). Note: xLabels list actually does nothing.
+        for(Entry entry : lineEntries){
+            entry.setX(TimeUnit.DAYS.toMillis((long) entry.getX()));
+            int b=4;
+        }
+
 
         // x values MUST be sorted - see doc
         Collections.sort(lineEntries, new EntryXComparator());
 
         // setting up the Line chart
-        ScatterDataSet scatterDataSet = new ScatterDataSet(lineEntries, "Payouts, BIS"); // add entries to dataset
-        scatterDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        scatterDataSet.setColor(Color.rgb(156, 39, 176));
+        LineDataSet lineDataSet = new LineDataSet(lineEntries, "Payouts, BIS"); // add entries to dataset
+        lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        lineDataSet.setColor(Color.rgb(156, 39, 176));
 //        scatterDataSet.setCircleColor(Color.rgb(156, 39, 176));
 //        scatterDataSet.setCircleHoleColor(Color.rgb(156, 39, 176));
 //        scatterDataSet.setCircleRadius(3f);
-        scatterDataSet.setDrawValues(false);
-        ScatterData scatterData = new ScatterData(scatterDataSet);
+        lineDataSet.setDrawValues(false);
+        LineData lineData = new LineData(lineDataSet);
 
         // setting up the Combined chart
-        ScatterChart scatterChart = getView().findViewById(R.id.scatterChartPayouts);
-        scatterChart.setData(scatterData);
-        scatterChart.invalidate(); // refresh
+        LineChart lineChart = getView().findViewById(R.id.lineChartPayouts);
+        lineChart.setData(lineData);
+        lineDataSet.setDrawFilled(true);
+        lineChart.invalidate(); // refresh
 
         // decorate the chart
 
         // legend
-        Legend legend = scatterChart.getLegend();
+        Legend legend = lineChart.getLegend();
         legend.setTextColor(Color.DKGRAY);
 
         // description
-        scatterChart.getDescription().setText("Recent payouts from Eggpool");
-        scatterChart.getDescription().setTextColor(Color.DKGRAY);
+        lineChart.getDescription().setText("Recent payouts from Eggpool");
+        lineChart.getDescription().setTextColor(Color.DKGRAY);
         //combinedChart.getDescription().setPosition(3f,3f);
 
         //  X axis
-        ValueFormatter valueFormatter = new MyAxisValueFormatter(scatterChart);
-        XAxis xAxis = scatterChart.getXAxis();
+        ValueFormatter valueFormatter = new MyAxisValueFormatter(lineChart);
+        XAxis xAxis = lineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextSize(10f);
         xAxis.setTextColor(Color.DKGRAY);
@@ -201,7 +250,7 @@ public class MiningPayoutsFragment extends Fragment {
         xAxis.setValueFormatter(valueFormatter);
 
         // left Y axis
-        YAxis leftAxis = scatterChart.getAxisLeft();
+        YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.setTextSize(10f);
         leftAxis.setTextColor(Color.rgb(156, 39, 176));
         //leftAxis.setAxisLineColor(Color.WHITE);

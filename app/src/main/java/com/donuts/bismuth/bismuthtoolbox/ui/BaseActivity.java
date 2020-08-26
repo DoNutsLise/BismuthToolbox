@@ -42,7 +42,6 @@ import java.util.Map;
  * BottomNavigationView in each of of the activities, where items of BottomNavigationView  are fragments, and
  * in android you cannot have nested fragments (fragment in fragment).
  * This activity handles Navigation Drawer.
- * Also requests asynctask to refresh data every time any activity is resumed and handles the response through interface
  */
 
 public class BaseActivity extends AppCompatActivity

@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Switch;
-import android.widget.Toast;
 
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
@@ -15,7 +13,6 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
 import androidx.preference.PreferenceScreen;
 import androidx.preference.SwitchPreference;
-import androidx.preference.SwitchPreferenceCompat;
 
 import com.donuts.bismuth.bismuthtoolbox.Data.DataDAO;
 import com.donuts.bismuth.bismuthtoolbox.Data.DataRoomDatabase;
@@ -27,13 +24,11 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.PREFERENCES_CATEGORIES_KEYS;
-import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsize;
+import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsizeMiddle;
 
 /**
  * All the preferences are stored in DefaultSharedPreferences. For settings like radiobuttons and switches it is simple to do
@@ -44,6 +39,10 @@ import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsize
  * At the moment there are three Categories ("hypernodeIP", "miningWalletAddress", "bisWalletAddress") and they are stored
  * in the Constant PREFERENCES_CATEGORIES_KEYS. In preference.xml file these names correspond to android:key value.
  * The details on how the views are inflated are below.
+ * A special case of preferences - hypernodes rewards address. These are not readily available and have to be extracted
+ * from hypernodes api (e.g. https://hypernodes.bismuth.live/status_ex.json) after a hypernode ip was entered in settings by a user. To do it: every time the settings
+ * changed by a user we will ask asynctask to fetch fresh hypernodes data and then parse it to extract HNs reward addresses and store them in Room database. So when a user
+ * navigates to hypernodes screen, we will first search room database for rewards addresses corresponding to HN IP addresses in shared preferences.
  */
 
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -101,7 +100,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                     // ...create a new EditTextPreference
                     EditTextPreference editTextPreference = new EditTextPreference(preferenceScreen.getContext());
                     editTextPreference.setKey(entry.getKey());
-                    editTextPreference.setSummary(ellipsize(String.valueOf(entry.getValue()),16));
+                    editTextPreference.setSummary(ellipsizeMiddle(String.valueOf(entry.getValue()),16));
                     editTextPreference.setText((String) entry.getValue());
                     preferenceGroup.addPreference(editTextPreference);
                 }
@@ -209,13 +208,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             * Now act depending on what action was done by the user (see three cases above)
              */
 
-            /*if the ID of the modified preference is the last one in the list, it means that a new record was added by the user, since
+            /*
+            * if the ID of the modified preference is the last one in the list, it means that a new record was added by the user, since
             * blank EditTextPReferences are always created with the largest ID.
             * Problem here is allPreferencesKeys returns only records stored in the sharedPreferences, leaving the blank EditTextPreference unaccounted.
             * So if I have three records stored in SharedPreferences and modify the 3rd one -it will appear as I modified the last one. Also if I enter a new record in the
             * blank EditTextReference - it will appear that I modified the 4th one - the last one. How do I know which one I modified?
             * Answer: numOfEditTextPreferencesInGroup == numOfSharedPreferenceInGroup only when a blank EditTextPreference used to enter a new preference, - see below.
-             *
              */
             int numOfEditTextPreferencesInGroup = preferenceGroup.getPreferenceCount(); // number of EditTextPreferences in the corresponding preference category
             int numOfSharedPreferenceInGroup = categoryRecordsIds.size(); // number of preferences stored in sharedPreferences
@@ -234,8 +233,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().remove(preferenceKey).apply();
             }
 
-            // for user's sake heck if it's a duplicate entry (notify and ask to delete manually if so)
-            //
+            /*
+            * for user's sake check if it's a duplicate entry (notify and ask to delete manually if so)
+             */
             int numOfDuplicates = 0;
             for (Map.Entry<String, ?> entry : allPreferencesKeys.entrySet()) {
                 if (String.valueOf(entry.getValue()).equals(preferenceValue)) {
@@ -262,10 +262,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
         if (isSettingsChanged) {
             /*
-            * whenever settings are changed, two things need to be done:
+            * whenever settings are changed, the following things need to be done:
             * 1. activities should pull fresh data: that can be forced by setting time of last refresh to >5 min from now.
             * 2. Firebase database has to be updated with new wallet addresses and hypernodes IPs (only if data sharing consent was given): that can be done by
             * obtaining new firebase registration token and sending data to firebase.
+            * 3. request asynctask to pull hypernodes data, so that we can extract hypernodes rewards address and store them in the database
              */
 
             // 1. settings were changed, so we set url_last_update_time in RawUrlData Room database entity to a
@@ -280,6 +281,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                     Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " SettingsFragment", "onSuccess: " +
                             "new token is " + newRegistrationToken);
                 });
+
+            // 3. call "getFreshData" from the Settings activity to fetch fresh hypernodes data so that we can extract hypernodes rewards
+            // addresses and store them in Room database.
+            ((SettingsActivity)getActivity()).getFreshData();
 
             isSettingsChanged = false;
         }

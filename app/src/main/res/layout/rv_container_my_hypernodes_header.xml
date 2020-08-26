@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:focusable="true">
+
+    <TextView
+        android:layout_weight="1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Hypernode IP"
+        android:textSize = "12sp"
+        android:layout_marginStart="5dp"
+        android:id="@+id/textView_my_hypernode_ip_header"
+        android:singleLine="true"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:layout_weight="1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text = "Reward address"
+        android:textSize = "12sp"
+        android:layout_marginStart="5dp"
+        android:id="@+id/textView_my_hypernode_reward_address_header"
+        android:singleLine="true"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:layout_weight="1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Status"
+        android:textSize = "12sp"
+        android:layout_marginStart="5dp"
+        android:id="@+id/textView_my_hypernode_status_header"
+        android:singleLine="true"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:layout_weight="1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Block height"
+        android:textSize = "12sp"
+        android:layout_marginStart="5dp"
+        android:id="@+id/textView_my_hypernode_block_height_header"
+        android:singleLine="true"
+        android:ellipsize="end"/>
+
+</LinearLayout>

@@ -8,7 +8,6 @@ import com.donuts.bismuth.bismuthtoolbox.Data.DataDAO;
 import com.donuts.bismuth.bismuthtoolbox.Data.DataRoomDatabase;
 import com.donuts.bismuth.bismuthtoolbox.Data.ParsedHomeScreenData;
 import com.donuts.bismuth.bismuthtoolbox.Data.RawUrlData;
-import com.donuts.bismuth.bismuthtoolbox.utils.CurrentTime;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +23,7 @@ import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_API_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_HN_BASIC_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.COINGECKO_BIS_PRICE_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_STATS_URL;
-import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsize;
+import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsizeMiddle;
 
 public class HomeScreenDataParser {
     private Context mContext;
@@ -120,7 +119,7 @@ public class HomeScreenDataParser {
         }catch (JSONException e) {
             Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                     "Failed to parse JSON data from"+BIS_HN_BASIC_URL);
-            Toast.makeText(mContext, "Failed to get data from"+ellipsize(BIS_HN_BASIC_URL, 25), Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "Failed to get data from"+ ellipsizeMiddle(BIS_HN_BASIC_URL, 25), Toast.LENGTH_LONG).show();
 
         }
 
@@ -154,7 +153,7 @@ public class HomeScreenDataParser {
         }catch(JSONException e){
             Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                     "Failed to parse JSON data from "+ COINGECKO_BIS_PRICE_URL);
-            Toast.makeText(mContext, "Failed to get data from" + ellipsize(COINGECKO_BIS_PRICE_URL, 25), Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "Failed to get data from" + ellipsizeMiddle(COINGECKO_BIS_PRICE_URL, 25), Toast.LENGTH_LONG).show();
         }
 
         /*
@@ -185,8 +184,8 @@ public class HomeScreenDataParser {
                 }catch(JSONException | ClassCastException e){
                     Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                             "Failed to parse JSON data from "+ BIS_API_URL + " for wallet " + entry.getValue());
-                    Toast.makeText(mContext, "Failed to get data from" + ellipsize(BIS_API_URL, 25)+ " for wallet "
-                            + ellipsize(String.valueOf(entry.getValue()), 8), Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "Failed to get data from" + ellipsizeMiddle(BIS_API_URL, 25)+ " for wallet "
+                            + ellipsizeMiddle(String.valueOf(entry.getValue()), 8), Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -255,8 +254,8 @@ public class HomeScreenDataParser {
                 }catch(JSONException | ClassCastException e){
                     Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                             "Failed to parse JSON data from "+ EGGPOOL_MINER_STATS_URL + " for wallet " + entry.getValue());
-                    Toast.makeText(mContext, "Failed to get data from " + ellipsize(EGGPOOL_MINER_STATS_URL, 25)+ " for wallet "
-                            + ellipsize(String.valueOf(entry.getValue()), 8), Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "Failed to get data from " + ellipsizeMiddle(EGGPOOL_MINER_STATS_URL, 25)+ " for wallet "
+                            + ellipsizeMiddle(String.valueOf(entry.getValue()), 8), Toast.LENGTH_LONG).show();
                 }
             }
         }

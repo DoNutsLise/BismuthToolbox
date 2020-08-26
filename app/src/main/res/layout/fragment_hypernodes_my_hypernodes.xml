@@ -6,7 +6,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:background="@color/Lavender"
-    tools:context=".ui.miningscreen.MiningActivity">
+    tools:context=".ui.hypernodesscreen.HypernodesActivity">
 
 
     <!--top part of the screen with stats-->
@@ -38,7 +38,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Immature"
+                        android:text="My Hypernodes"
                         android:gravity="center"
                         android:background="@color/MediumSlateBlue"
                         android:textColor="@color/LightGrey"
@@ -46,13 +46,24 @@
                         android:layout_weight="0.7"/>
 
                     <TextView
-                        android:id="@+id/payouts_textView_immatureBalance"
+                        android:id="@+id/textView_my_hypernodes_active"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="0.3"
+                        android:layout_weight="0.67"
                         android:ellipsize="end"
                         android:gravity="center"
-                        android:text="0 $BIS"
+                        android:text="0 active"
+                        android:textColor="@color/LightGrey"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/textView_my_hypernodes_inactive"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.67"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:text="0 inactive"
                         android:textColor="@color/LightGrey"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -77,7 +88,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Unpaid"
+                        android:text="Last week pay"
                         android:gravity="center"
                         android:background="@color/MediumSlateBlue"
                         android:textSize = "12sp"
@@ -85,7 +96,7 @@
                         android:layout_weight="0.7"/>
 
                     <TextView
-                        android:id="@+id/payouts_textView_unpaidBalance"
+                        android:id="@+id/textView_my_hypernodes_last_week_pay"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="0.3"
@@ -115,7 +126,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Total Paid"
+                        android:text="My Total Collateral"
                         android:gravity="center"
                         android:background="@color/MediumSlateBlue"
                         android:textSize = "12sp"
@@ -123,7 +134,7 @@
                         android:layout_weight="0.7"/>
 
                     <TextView
-                        android:id="@+id/payouts_textView_totalPaid"
+                        android:id="@+id/textView_my_hypernodes_total_collateral"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="0.3"
@@ -166,7 +177,7 @@
                 android:padding="3sp" >
 
                 <TextView
-                    android:text="Profitability calculator"
+                    android:text="Hypernodes profitability calculator ($BIS)"
                     android:gravity="center"
                     android:layout_span="4"
                     android:textSize = "12sp"/>
@@ -184,77 +195,107 @@
                     android:textSize = "12sp"/>
 
                 <TextView
-                    android:text="BIS"
+                    android:text="week"
                     android:gravity="center"
                     android:textSize = "12sp"/>
 
                 <TextView
-                    android:text="&#181;BTC"
+                    android:text="month"
                     android:gravity="center"
                     android:textSize = "12sp"/>
 
                 <TextView
-                    android:text="USD"
+                    android:text="year"
                     android:gravity="center"
                     android:textSize = "12sp"/>
             </TableRow>
 
 
-            <!-- 3rd row daily profit-->
+            <!-- 3rd row with 10K node profit-->
             <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:padding="3sp">
 
                 <TextView
-                    android:text="Day"
+                    android:text="10K Node"
                     android:gravity="center"
                     android:textSize = "12sp"/>
 
                 <TextView
-                    android:id="@+id/payouts_textView_profitBisDay"
+                    android:id="@+id/textView_week_profit_10K_hypernode"
                     android:text="0"
                     android:gravity="center"
                     android:textSize = "12sp"/>
 
                 <TextView
-                    android:id="@+id/payouts_textView_profitBtcDay"
+                    android:id="@+id/textView_month_profit_10K_hypernode"
                     android:text="0"
                     android:gravity="center"
                     android:textSize = "12sp"/>
 
                 <TextView
-                    android:id="@+id/payouts_textView_profitUsdDay"
+                    android:id="@+id/textView_year_profit_10K_hypernode"
                     android:text="0"
                     android:gravity="center"
                     android:textSize = "12sp"/>
             </TableRow>
 
-            <!-- 4th row with monthly profit -->
+            <!-- 4th row with 20K node profit -->
             <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:padding="3sp">
 
                 <TextView
-                    android:text="Month"
+                    android:text="20K Node"
                     android:gravity="center"
                     android:textSize = "12sp"/>
 
                 <TextView
-                    android:id="@+id/payouts_textView_profitBisMonth"
+                    android:id="@+id/textView_week_profit_20K_hypernode"
                     android:text="0"
                     android:gravity="center"
                     android:textSize = "12sp"/>
 
                 <TextView
-                    android:id="@+id/payouts_textView_profitBtcMonth"
+                    android:id="@+id/textView_month_profit_20K_hypernode"
                     android:text="0"
                     android:gravity="center"
                     android:textSize = "12sp"/>
 
                 <TextView
-                    android:id="@+id/payouts_textView_profitUsdMonth"
+                    android:id="@+id/textView_year_profit_20K_hypernode"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize = "12sp"/>
+            </TableRow>
+
+            <!-- 5th row with 20K node profit -->
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="3sp">
+
+                <TextView
+                    android:text="30K Node"
+                    android:gravity="center"
+                    android:textSize = "12sp"/>
+
+                <TextView
+                    android:id="@+id/textView_week_profit_30K_hypernode"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize = "12sp"/>
+
+                <TextView
+                    android:id="@+id/textView_month_profit_30K_hypernode"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize = "12sp"/>
+
+                <TextView
+                    android:id="@+id/textView_year_profit_30K_hypernode"
                     android:text="0"
                     android:gravity="center"
                     android:textSize = "12sp"/>
@@ -277,7 +318,7 @@
             android:background="@color/colorBackground" />
 
         <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/lineChartPayouts"
+            android:id="@+id/lineChartMyHypernodesPayouts"
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
@@ -285,7 +326,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Recent payouts from Eggpool"
+                android:text="My Hypernodes Payouts"
                 android:textAlignment="center"
                 android:textSize="12sp" />
         </com.github.mikephil.charting.charts.LineChart>
@@ -320,14 +361,55 @@
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_gravity="start"
-                    android:layout_weight="1.5"
+                    android:layout_weight="1"
                     app:cardBackgroundColor="@color/SteelBlue">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Date"
+                        android:text="Hypernode IP"
+                        android:textAlignment="center"
+                        android:textColor="@color/LightGrey"
+                        android:ellipsize="end"
+                        android:textSize="12sp" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="0.5sp"
+                    android:layout_marginEnd="0.5sp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/SteelBlue">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Reward address"
+                        android:ellipsize = "end"
+                        android:textAlignment="center"
+                        android:textColor="@color/LightGrey"
+                        android:textSize="12sp" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0sp"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/SteelBlue">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Status"
+                        android:ellipsize="end"
                         android:textAlignment="center"
                         android:textColor="@color/LightGrey"
                         android:textSize="12sp" />
@@ -347,25 +429,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Amount (BIS)"
-                        android:textAlignment="center"
-                        android:textColor="@color/LightGrey"
-                        android:textSize="12sp" />
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0sp"
-                    android:layout_height="fill_parent"
-                    android:layout_gravity="end"
-                    android:layout_weight="2"
-                    app:cardBackgroundColor="@color/SteelBlue">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Tx ID"
+                        android:text="Block height"
+                        android:ellipsize="end"
                         android:textAlignment="center"
                         android:textColor="@color/LightGrey"
                         android:textSize="12sp" />
@@ -375,7 +440,7 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_payouts"
+                android:id="@+id/recyclerView_my_hypernodes"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginStart="5sp"
