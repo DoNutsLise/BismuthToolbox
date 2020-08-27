@@ -61,6 +61,7 @@ public abstract class DataRoomDatabase extends RoomDatabase {
                     }
                 })
                 .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
                 .build();
     }
 
