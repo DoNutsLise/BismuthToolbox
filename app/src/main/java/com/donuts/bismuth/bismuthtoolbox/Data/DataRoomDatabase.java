@@ -8,6 +8,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.Executors;
@@ -40,6 +41,18 @@ public abstract class DataRoomDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
+    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL(
+                    "CREATE TABLE all_hypernodes_data (hypernode_ip TEXT NOT NULL, hypernode_port TEXT, hypernode_id TEXT, hypernode_tier INTEGER NOT NULL, hypernode_collateral_address TEXT, " +
+                            "hypernode_reward_address TEXT, hypernode_block_height INTEGER NOT NULL, hypernode_version TEXT, hypernode_status TEXT, hypernode_mine INTEGER, PRIMARY KEY(hypernode_ip))");
+            database.execSQL(
+                    "CREATE TABLE hypernodes_reward_addresses_data (transaction_signature TEXT NOT NULL, transaction_block_height INTEGER NOT NULL, transaction_timestamp REAL NOT NULL, " +
+                            "sender_address TEXT, recipient_address TEXT, transaction_amount REAL NOT NULL, PRIMARY KEY(transaction_signature))");
+        }
+    };
+
     private static DataRoomDatabase buildDatabase(final Context context) {
         return Room.databaseBuilder(context.getApplicationContext(),
                 DataRoomDatabase.class, "bis-database")
@@ -61,6 +74,7 @@ public abstract class DataRoomDatabase extends RoomDatabase {
                     }
                 })
                 .allowMainThreadQueries()
+                .addMigrations(MIGRATION_2_3)
                 .fallbackToDestructiveMigration()
                 .build();
     }
