@@ -41,9 +41,6 @@ import java.util.concurrent.TimeUnit;
 
 import static java.util.Objects.isNull;
 
-
-//TODO: expandable recycler view: https://medium.com/@nikola.jakshic/how-to-expand-collapse-items-in-recyclerview-49a648a403a6
-
 public class HypernodesMyHypernodesFragment extends Fragment {
 
     private TextView textView_myHypernodesActive;
