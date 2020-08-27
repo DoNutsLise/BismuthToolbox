@@ -7,25 +7,6 @@ import com.donuts.bismuth.bismuthtoolbox.utils.MyNotificationManager;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-
-/**
-* Design:
-* 1. Users send their registration tokens together with HN ips and wallet addresses to a Firebase
-*   Realtime Database: registration tokens are required for targeted push notifications.
-* 2. My server connects to the database through API using my personal authentication key and retrieves the data.
-* 3. At the same time my server connects to different BIS servers to get data.
-* 4. My server does all the processing and then sends targeted notifications using registration tokens.
-* 5. See python script for my server
-*
-* Firebase tutorials:
-* 1. https://www.simplifiedcoding.net/firebase-cloud-messaging-tutorial-android/
- *
- * Requirements:
- * login firebase, create a project, obtain google.json and place it in the app directory, modify gradle as per firebase tutorial
- */
-
-// TODO: remove comments from above for production and github
-
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     /*
