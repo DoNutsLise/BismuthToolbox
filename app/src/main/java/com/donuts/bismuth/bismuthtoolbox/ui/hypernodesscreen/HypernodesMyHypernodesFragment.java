@@ -42,8 +42,6 @@ import java.util.concurrent.TimeUnit;
 
 import static java.util.Objects.isNull;
 
-//TODO: expandable recycler view: https://medium.com/@nikola.jakshic/how-to-expand-collapse-items-in-recyclerview-49a648a403a6
-
 public class HypernodesMyHypernodesFragment extends Fragment {
 
     private TextView textView_myHypernodesActive;
@@ -160,7 +158,6 @@ public class HypernodesMyHypernodesFragment extends Fragment {
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HypernodesMyHypernodesFragment", "updateMyHypernodesRecyclerView: "+
                 "updating calculator textviews");
         // get highest POW block
-        // TODO this may not be available, get pow blockheight somewhere else
         long powBlockHeight = ((HypernodesActivity) requireActivity()).dataDAO.getPowBlockHeightFromEggpoolBisStatsData();
 
         // calculate HN reward per block (every 10 min):
