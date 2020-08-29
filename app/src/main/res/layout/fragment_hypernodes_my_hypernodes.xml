@@ -361,7 +361,7 @@
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_gravity="start"
-                    android:layout_weight="1"
+                    android:layout_weight="1.7"
                     app:cardBackgroundColor="@color/SteelBlue">
 
                     <TextView
@@ -372,27 +372,6 @@
                         android:textAlignment="center"
                         android:textColor="@color/LightGrey"
                         android:ellipsize="end"
-                        android:textSize="12sp" />
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="0.5sp"
-                    android:layout_marginEnd="0.5sp"
-                    android:layout_weight="1"
-                    app:cardBackgroundColor="@color/SteelBlue">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Reward address"
-                        android:ellipsize = "end"
-                        android:textAlignment="center"
-                        android:textColor="@color/LightGrey"
                         android:textSize="12sp" />
 
                 </androidx.cardview.widget.CardView>

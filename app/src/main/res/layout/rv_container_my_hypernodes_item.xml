@@ -3,56 +3,103 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="10dp"
     android:focusable="true">
 
-    <TextView
-        android:layout_weight="1"
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="Hypernode IP"
-        android:textSize = "12sp"
-        android:layout_marginStart="5dp"
-        android:id="@+id/textView_my_hypernode_ip_item"
-        android:singleLine="true"
-        android:ellipsize="middle"/>
+        android:orientation="horizontal">
 
-    <TextView
-        android:layout_weight="1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text = "Reward address"
-        android:textSize = "12sp"
-        android:layout_marginStart="5dp"
-        android:id="@+id/textView_my_hypernode_reward_address_item"
-        android:singleLine="true"
-        android:ellipsize="middle"/>
+        <TextView
+            android:layout_weight="0.75"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="Hypernode IP"
+            android:textSize = "12sp"
+            android:layout_marginStart="5dp"
+            android:id="@+id/textView_my_hypernode_ip_item"
+            android:singleLine="true"
+            android:ellipsize="middle"/>
 
-    <TextView
-        android:layout_weight="1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="Status"
-        android:textSize = "12sp"
-        android:layout_marginStart="5dp"
-        android:id="@+id/textView_my_hypernode_status_item"
-        android:singleLine="true"
-        android:ellipsize="end"/>
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="Status"
+            android:textSize = "12sp"
+            android:layout_marginStart="5dp"
+            android:id="@+id/textView_my_hypernode_status_item"
+            android:singleLine="true"
+            android:ellipsize="end"/>
 
-    <TextView
-        android:layout_weight="1"
-        android:layout_width="fill_parent"
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="Block height"
+            android:textSize = "12sp"
+            android:layout_marginStart="5dp"
+            android:id="@+id/textView_my_hypernode_block_height_item"
+            android:singleLine="true"
+            android:ellipsize="start"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/sub_item"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="Block height"
-        android:textSize = "12sp"
-        android:layout_marginStart="5dp"
-        android:id="@+id/textView_my_hypernode_block_height_item"
-        android:singleLine="true"
-        android:ellipsize="start"/>
+        android:padding="15dp"
+        android:visibility = "gone"
+        android:orientation="vertical">
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewStart"
+            android:text = "Reward address"
+            android:textSize = "12sp"
+            android:layout_marginStart="5dp"
+            android:id="@+id/textView_my_hypernode_reward_address_item"
+            android:singleLine="true"
+            android:ellipsize="middle"/>
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewStart"
+            android:text = "Collateral address"
+            android:textSize = "12sp"
+            android:layout_marginStart="5dp"
+            android:id="@+id/textView_my_hypernode_collateral_address_item"
+            android:singleLine="true"
+            android:ellipsize="middle"/>
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewStart"
+            android:text = "Tier"
+            android:textSize = "12sp"
+            android:layout_marginStart="5dp"
+            android:id="@+id/textView_my_hypernode_tier_item"
+            android:singleLine="true"
+            android:ellipsize="middle"/>
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewStart"
+            android:text = "Version"
+            android:textSize = "12sp"
+            android:layout_marginStart="5dp"
+            android:id="@+id/textView_my_hypernode_version_item"
+            android:singleLine="true"
+            android:ellipsize="middle"/>
+
+    </LinearLayout>
 
 </LinearLayout>

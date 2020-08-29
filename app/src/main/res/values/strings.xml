@@ -19,7 +19,7 @@
     <string name="wallets_number">Registered wallets</string>
     <string name="bis_balance">Balance, BIS</string>
     <string name="usd_balance">Balance, USD</string>
-    <string name="block_height">Block height</string>
+    <string name="block_height">POS block height</string>
     <string name="bis_to_btc">BIS/&#181;BTC price</string>
     <string name="bis_to_usd">BIS/USD price</string>
     <string name="loading_data">Loading data…</string>
@@ -38,6 +38,10 @@
     <string name="my_inactive_hns_tv">%1$s (inactive)</string>
     <string name="last_week_hn_pay_tv">%1$s $BIS</string>
     <string name="my_hns_total_collateral_tv">%1$s $BIS</string>
+    <string name="my_hns_collateral_address_rv_tv">Collateral address: %1$s</string>
+    <string name="my_hns_reward_address_rv_tv">Reward address: %1$s</string>
+    <string name="my_hns_tier_rv_tv">Hypernode tier: %1$s</string>
+    <string name="my_hns_version_rv_tv">Hypernode version: %1$s</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>

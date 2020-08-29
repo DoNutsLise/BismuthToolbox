@@ -20,7 +20,7 @@ public class EggpoolBisStatsData {
     private int id;
 
     @ColumnInfo(name = "eggpool_bis_network_block_height")
-    private long eggpoolBisNetworkBlockHeight; // network block height
+    private long eggpoolBisNetworkBlockHeight; // POW network block height
 
     @ColumnInfo(name = "eggpool_bis_network_difficulty")
     private double eggpoolBisNetworkDifficulty; // network difficulty

@@ -77,7 +77,7 @@ public class HomeScreenDataParser {
 
         try {
             JSONObject basicHypernodeRawDataJsonObj = new JSONObject(basicHypernodeRawData);
-            // get block height as the max height of all hypernodes:
+            // get POS block height as the max height of all hypernodes:
             // get all heights in List and get maximum of the List
             List<Integer> blockHeightList = new ArrayList<>(Arrays.asList(0));
             for (Iterator<String> iterator = basicHypernodeRawDataJsonObj.keys(); iterator.hasNext(); ) {
@@ -148,8 +148,8 @@ public class HomeScreenDataParser {
             }else{
                 Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                         "Can't get BIS price in BTC");
-
             }
+
         }catch(JSONException e){
             Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeScreenDataParser", "parseHomeScreenData: "+
                     "Failed to parse JSON data from "+ COINGECKO_BIS_PRICE_URL);

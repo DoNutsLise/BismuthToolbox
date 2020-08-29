@@ -12,6 +12,7 @@ import java.util.List;
 /**
  * Entity for storing data for all hypernodes:  parsed verbose data coming from "https://hypernodes.bismuth.live/hypernodes.php"
  *
+ *
  */
 
 @Entity(tableName = "all_hypernodes_data")

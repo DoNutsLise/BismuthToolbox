@@ -37,9 +37,12 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.Objects.isNull;
+
+//TODO: expandable recycler view: https://medium.com/@nikola.jakshic/how-to-expand-collapse-items-in-recyclerview-49a648a403a6
 
 public class HypernodesMyHypernodesFragment extends Fragment {
 
@@ -80,7 +83,6 @@ public class HypernodesMyHypernodesFragment extends Fragment {
          */
         ((HypernodesActivity) requireActivity()).dataDAO.getMyHypernodesDataForRecyclerViewLiveData().observe(requireActivity(), this::updateMyHypernodesRecyclerView);
         ((HypernodesActivity) requireActivity()).dataDAO.getMyHypernodesRewardsForRecyclerViewLiveData().observe(requireActivity(), this::updateMyHypernodesPayoutsChart);
-
     }
 
     private void getMyHypernodesFragmentViews() {
@@ -124,7 +126,7 @@ public class HypernodesMyHypernodesFragment extends Fragment {
         myHypernodesRecyclerView.addItemDecoration(dividerItemDecoration);
 
         // Initialize and set the RecyclerView Adapter
-        myHypernodesRecyclerViewAdapter = new MyHypernodesRecyclerViewAdapter(allHypernodesDataModel);
+        myHypernodesRecyclerViewAdapter = new MyHypernodesRecyclerViewAdapter(allHypernodesDataModel, getActivity());
         myHypernodesRecyclerView.setAdapter(myHypernodesRecyclerViewAdapter);
 
     }
@@ -158,6 +160,7 @@ public class HypernodesMyHypernodesFragment extends Fragment {
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HypernodesMyHypernodesFragment", "updateMyHypernodesRecyclerView: "+
                 "updating calculator textviews");
         // get highest POW block
+        // TODO this may not be available, get pow blockheight somewhere else
         long powBlockHeight = ((HypernodesActivity) requireActivity()).dataDAO.getPowBlockHeightFromEggpoolBisStatsData();
 
         // calculate HN reward per block (every 10 min):
@@ -279,7 +282,7 @@ public class HypernodesMyHypernodesFragment extends Fragment {
         LineData lineData = new LineData(lineDataSet);
 
         // setting up the Combined chart
-        LineChart lineChart = getView().findViewById(R.id.lineChartMyHypernodesPayouts);
+        LineChart lineChart = requireView().findViewById(R.id.lineChartMyHypernodesPayouts);
         lineChart.setData(lineData);
         lineChart.invalidate(); // refresh
 

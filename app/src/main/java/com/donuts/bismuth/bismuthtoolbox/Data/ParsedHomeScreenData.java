@@ -45,7 +45,7 @@ public class ParsedHomeScreenData {
     private int minersHashrate;
 
     @ColumnInfo(name = "block_height")
-    private long blockHeight; // POW
+    private long blockHeight; // POS
 
     @ColumnInfo(name = "bis_to_usd")
     private double bisToUsd;

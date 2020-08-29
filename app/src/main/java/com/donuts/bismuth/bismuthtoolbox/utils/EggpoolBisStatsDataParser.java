@@ -7,10 +7,12 @@ import android.widget.Toast;
 import com.donuts.bismuth.bismuthtoolbox.Data.DataDAO;
 import com.donuts.bismuth.bismuthtoolbox.Data.DataRoomDatabase;
 import com.donuts.bismuth.bismuthtoolbox.Data.EggpoolBisStatsData;
+import com.donuts.bismuth.bismuthtoolbox.Data.RawUrlData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.BIS_HN_VERBOSE_URL;
 import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_BIS_STATS_URL;
 import static com.donuts.bismuth.bismuthtoolbox.utils.StringEllipsizer.ellipsizeMiddle;
 
@@ -33,8 +35,17 @@ public class EggpoolBisStatsDataParser {
 
         DataDAO dataDAO = DataRoomDatabase.getInstance(mContext.getApplicationContext()).getDataDAO();
 
-        // Get json response with Bis stats from EGGPOOL_BIS_STATS_URL from Room database.
-        String eggpoolBisStatsRawData = dataDAO.getUrlDataByUrl(EGGPOOL_BIS_STATS_URL).getUrlJsonResponse();
+        // Get json response with hypernodes stats from BIS_HN_VERBOSE_URL from Room database.
+        String eggpoolBisStatsRawData = "";
+        RawUrlData rawUrlData = dataDAO.getUrlDataByUrl(EGGPOOL_BIS_STATS_URL);
+        if (rawUrlData != null) {
+            eggpoolBisStatsRawData = rawUrlData.getUrlJsonResponse();
+        }else{
+            Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " EggpoolBisStatsDataParser", "parseBisStatsData: "+
+                    "no data to parse. Probably no entries in Room database");
+            Toast.makeText(mContext, "EggpoolBisStatsDataParser failed to parse data. No data available", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " EggpoolBisStatsDataParser", "parseBisStatsData: " +
                 "parsing eggpool Bis stats data...");
@@ -47,7 +58,7 @@ public class EggpoolBisStatsDataParser {
             eggpoolBisStatsData.setEggpoolBisNetworkHashrate(eggpoolBisStatsRawDataJsonObj.getJSONObject("BIS").optLong("network_hashrate", 1));
             eggpoolBisStatsData.setEggpool24hPoolHashrate(eggpoolBisStatsRawDataJsonObj.getJSONObject("BIS").optLong("24h_hashrate", 1));
             eggpoolBisStatsData.setEggpool24hPoolReward(eggpoolBisStatsRawDataJsonObj.getJSONObject("BIS").optDouble("24h_rewards", 0));
-            eggpoolBisStatsData.setEggpoolBisNetworkBlockHeight(eggpoolBisStatsRawDataJsonObj.getJSONObject("BIS").optInt("height", 1));
+            eggpoolBisStatsData.setEggpoolBisNetworkBlockHeight(eggpoolBisStatsRawDataJsonObj.getJSONObject("BIS").optLong("height", 1));
             eggpoolBisStatsData.setEggpoolBisNetworkDifficulty(eggpoolBisStatsRawDataJsonObj.getJSONObject("BIS").optDouble("difficulty", 1));
             eggpoolBisStatsData.setEggpoolBisNetworkHashrate(eggpoolBisStatsRawDataJsonObj.getJSONObject("BIS").optLong("hashrate", 1));
 

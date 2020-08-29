@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.donuts.bismuth.bismuthtoolbox.Data.AllHypernodesData;
 import com.donuts.bismuth.bismuthtoolbox.Data.DataDAO;
 import com.donuts.bismuth.bismuthtoolbox.Data.DataRoomDatabase;
+import com.donuts.bismuth.bismuthtoolbox.Data.RawUrlData;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +44,16 @@ public class HypernodesVerboseDataParser {
         dataDAO.clearAllHypernodesDataTableInDb();
 
         // Get json response with hypernodes stats from BIS_HN_VERBOSE_URL from Room database.
-        String hypernodesVerboseRawData = dataDAO.getUrlDataByUrl(BIS_HN_VERBOSE_URL).getUrlJsonResponse();
+        String hypernodesVerboseRawData = "";
+        RawUrlData rawUrlData = dataDAO.getUrlDataByUrl(BIS_HN_VERBOSE_URL);
+        if (rawUrlData != null) {
+            hypernodesVerboseRawData = rawUrlData.getUrlJsonResponse();
+        }else{
+            Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HypernodesVerboseDataParser", "parseHypernodesVerboseData: "+
+                    "no data to parse. Probably no entries in Room database");
+            Toast.makeText(mContext, "HypernodesVerboseDataParser failed to parse data. No data available", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         // Get a list of my hypernodes IPs from shared preferences
         Map<String, ?> allPreferencesKeys = android.preference.PreferenceManager.getDefaultSharedPreferences(mContext).getAll();
@@ -103,7 +113,7 @@ public class HypernodesVerboseDataParser {
                 }
             }
 
-        }catch(JSONException | ClassCastException e){
+        }catch(JSONException | ClassCastException | NullPointerException e){
             Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HypernodesVerboseDataParser", "parseHypernodesVerboseData: "+
                     "Failed to parse JSON data from "+ BIS_HN_VERBOSE_URL);
             Toast.makeText(mContext, "Failed to get data from " + ellipsizeMiddle(BIS_HN_VERBOSE_URL, 25), Toast.LENGTH_LONG).show();
