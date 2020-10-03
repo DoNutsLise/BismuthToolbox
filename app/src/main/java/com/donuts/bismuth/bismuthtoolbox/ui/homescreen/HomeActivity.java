@@ -34,8 +34,6 @@ import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_S
  * This activity, just like all other activities, extends BaseActivity that implements most of the UI stuff (navigation drawer, etc)
  */
 
-//TODO: 1. git branch -d Buffer; 2. git branch -d buffer; 3. git checkout --orphan Buffer; 3.1 git commit; (clean up here); 4. git checkout --orphan buffer git commit; 5. git push master buffer
-
 public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched {
 
     private TextView tv_hypernodes_active;
