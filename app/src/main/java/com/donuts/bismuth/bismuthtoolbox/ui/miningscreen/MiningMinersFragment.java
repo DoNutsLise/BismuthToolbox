@@ -45,6 +45,7 @@ public class MiningMinersFragment extends Fragment {
     private TextView textView_workersOnline;
     private TextView textView_workersOffline;
     private MiningMinersRecyclerViewAdapter minersRecyclerViewAdapter;
+    private CombinedChart combinedChart;
     private List<EggpoolMinersData> eggpoolMinersDataModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -87,6 +88,7 @@ public class MiningMinersFragment extends Fragment {
         textView_averageShares = getView().findViewById(R.id.dashboard_textView_averageShares);
         textView_workersOnline = getView().findViewById(R.id.dashboard_textView_workersOnline);
         textView_workersOffline =getView().findViewById(R.id.dashboard_textView_workersOffline);
+        combinedChart = getView().findViewById(R.id.combinedChartMinersStats);
 
         /*
         * set recyclerview for miners
@@ -120,8 +122,14 @@ public class MiningMinersFragment extends Fragment {
     private void updateMinersFragmentViews(List<EggpoolMinersData> eggpoolMinersData) {
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningMinersFragment", "updateMiningMinersFragmentViews: "+
                 "called");
-        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningMinersFragment", "updateFragmentViews: " +
+        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningMinersFragment", "updateMinersFragmentViews: "+
                 "updating recyclerview, all textviews and chart...");
+
+        if (!isAdded()){
+            Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningMinersFragment", "updateMinersFragmentViews: "+
+                    "fragment detached from the activity - views will not be updated");
+            return;
+        }
 
         if (eggpoolMinersData == null) {
             return;
@@ -204,7 +212,7 @@ public class MiningMinersFragment extends Fragment {
         barData.setBarWidth(0.5f);
 
         // setting up the Combined chart
-        CombinedChart combinedChart = getView().findViewById(R.id.combinedChartMinersStats);
+        //CombinedChart combinedChart = getView().findViewById(R.id.combinedChartMinersStats);
         CombinedData combinedData = new CombinedData();
         combinedData.setData(lineData);
         combinedData.setData(barData);

@@ -17,7 +17,6 @@ import java.util.concurrent.Executors;
  * All data is stored in Android Room database.
  * There will be more entities with parsed data for each iof the activities or screens or fragments
  *
- *
  * Refs:
  * 1. https://developer.android.com/training/data-storage/room/
  * 2. https://medium.com/@ajaysaini.official/building-database-with-room-persistence-library-ecf7d0b8f3e9

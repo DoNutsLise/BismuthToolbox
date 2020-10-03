@@ -11,7 +11,7 @@ tools:context=".ui.miningscreen.MiningActivity">
 <RelativeLayout
     android:layout_width="fill_parent"
     android:layout_height="0sp"
-    android:layout_weight="0.7">
+    android:layout_weight="0.08">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -21,7 +21,7 @@ tools:context=".ui.miningscreen.MiningActivity">
         <!--view with three cardviews with hashrate, shares and workers-->
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:orientation="horizontal"
             android:layout_margin="10sp">
 
@@ -40,7 +40,9 @@ tools:context=".ui.miningscreen.MiningActivity">
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:gravity="center"
                         android:text="HashRate, MH/s"
                         android:textAlignment="center"
                         android:background="@color/MediumSlateBlue"
@@ -49,7 +51,9 @@ tools:context=".ui.miningscreen.MiningActivity">
                     <TextView
                         android:id="@+id/dashboard_textView_currentHashRate"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:gravity="center"
                         android:textColor="@color/LightGrey"
                         android:text="0 (current)"
                         android:textAlignment="center"
@@ -57,7 +61,9 @@ tools:context=".ui.miningscreen.MiningActivity">
                     <TextView
                         android:id="@+id/dashboard_textView_averageHashRate"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:gravity="center"
                         android:textColor="@color/LightGrey"
                         android:text="0 (average)"
                         android:textAlignment="center"
@@ -83,7 +89,9 @@ tools:context=".ui.miningscreen.MiningActivity">
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:gravity="center"
                         android:text="Shares"
                         android:textAlignment="center"
                         android:background="@color/MediumSlateBlue"
@@ -92,7 +100,9 @@ tools:context=".ui.miningscreen.MiningActivity">
                     <TextView
                         android:id="@+id/dashboard_textView_currentShares"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:gravity="center"
                         android:textColor="@color/LightGrey"
                         android:text="0 (current)"
                         android:textAlignment="center"
@@ -100,7 +110,9 @@ tools:context=".ui.miningscreen.MiningActivity">
                     <TextView
                         android:id="@+id/dashboard_textView_averageShares"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:gravity="center"
                         android:textColor="@color/LightGrey"
                         android:text="0 (average)"
                         android:textAlignment="center"
@@ -124,7 +136,9 @@ tools:context=".ui.miningscreen.MiningActivity">
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:gravity="center"
                         android:text="Workers"
                         android:textAlignment="center"
                         android:background="@color/MediumSlateBlue"
@@ -133,9 +147,10 @@ tools:context=".ui.miningscreen.MiningActivity">
                     <TextView
                         android:id="@+id/dashboard_textView_workersOnline"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
                         android:textColor="@color/LightGrey"
-
+                        android:gravity="center"
                         android:text="0 (online)"
                         android:textAlignment="center"
                         android:textSize = "12sp"/>
@@ -143,6 +158,8 @@ tools:context=".ui.miningscreen.MiningActivity">
                         android:id="@+id/dashboard_textView_workersOffline"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:gravity="center"
                         android:textColor="@color/LightGrey"
                         android:text="0 (offline)"
                         android:textAlignment="center"
@@ -152,28 +169,29 @@ tools:context=".ui.miningscreen.MiningActivity">
 
         </LinearLayout>
 
-        <!--graphs-->
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="0sp"
-            android:orientation="horizontal"
-            android:layout_weight="1" >
-
-            <com.github.mikephil.charting.charts.CombinedChart
-                android:id="@+id/combinedChartMinersStats"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Hashrate and shares for Eggpool miners"
-                android:textAlignment="center"
-                android:textSize="12sp" />
-            </com.github.mikephil.charting.charts.CombinedChart>
-        </LinearLayout>
-
     </LinearLayout>
+
+</RelativeLayout>
+
+    <!--relative layout for chart (middle of the screen-->
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="0sp"
+    android:layout_weight="0.35">
+
+    <com.github.mikephil.charting.charts.CombinedChart
+        android:id="@+id/combinedChartMinersStats"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Hashrate and shares for Eggpool miners"
+            android:textAlignment="center"
+            android:textSize="12sp" />
+    </com.github.mikephil.charting.charts.CombinedChart>
 
 </RelativeLayout>
 
@@ -181,7 +199,7 @@ tools:context=".ui.miningscreen.MiningActivity">
 <RelativeLayout
     android:layout_width="fill_parent"
     android:layout_height="0sp"
-    android:layout_weight="0.3">
+    android:layout_weight="0.2">
 
     <LinearLayout
         android:layout_width="fill_parent"

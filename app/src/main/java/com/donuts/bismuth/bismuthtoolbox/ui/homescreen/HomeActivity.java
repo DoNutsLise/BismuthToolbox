@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.donuts.bismuth.bismuthtoolbox.Data.ParsedHomeScreenData;
 import com.donuts.bismuth.bismuthtoolbox.Data.RawUrlData;
 import com.donuts.bismuth.bismuthtoolbox.R;
@@ -32,6 +34,8 @@ import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_S
  * This activity, just like all other activities, extends BaseActivity that implements most of the UI stuff (navigation drawer, etc)
  */
 
+//TODO: 1. git branch -d Buffer; 2. git branch -d buffer; 3. git checkout --orphan Buffer; 3.1 git commit; (clean up here); 4. git checkout --orphan buffer git commit; 5. git push master buffer
+
 public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched {
 
     private TextView tv_hypernodes_active;
@@ -47,6 +51,8 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
     private TextView tv_bis_to_btc;
     private TextView tv_bis_to_usd;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +62,21 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         getLayoutInflater().inflate(R.layout.activity_home, contentFrameLayout);
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss"), "MainActivity(onCreate): view inflated");
 
+        // create swipe-to-refresh layout
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout_home);
+        // Setup refresh listener which triggers new data loading
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // call asynctask to fetch fresh data; refresh timer set to 0.
+                getFreshData(0);
+            }
+        });
+
+        // get all screen views
         getMainScreenViews();
 
-        /*
-         * register listener for Room db update of the ParsedHomeScreenData entity
-         */
+        // register listener for Room db update of the ParsedHomeScreenData entity
         dataDAO.getParsedHomeScreenLiveData().observe(this, this::updateHomeScreenViews);
     }
 
@@ -73,7 +89,7 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         sharedPreferences.edit().putBoolean("isMainActivityForeground", true).apply();
 
         // check if the data is up-to-date (<5 min old), and if not - request asynctask to pull new data
-         getFreshData();
+         getFreshData(5);
     }
 
     @Override
@@ -105,10 +121,11 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
 //            asyncFetchFreshData.cancel(true);
     }
 
-
     private void getMainScreenViews(){
         // get all screen view when activity is created
-        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeActivity", "getMainScreenViews: "+"called");
+        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeActivity", "getMainScreenViews: "
+                +"called");
+
         tv_hypernodes_active = findViewById(R.id.tv_mainactivity_hypernodes_active);
         tv_hypernodes_inactive = findViewById(R.id.tv_mainactivity_hypernodes_inactive);
         tv_hypernodes_lagging = findViewById(R.id.tv_mainactivity_hypernodes_lagging);
@@ -127,6 +144,7 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         // this is called whenever the LiveData changes are detected by the observer (registered in onCreate)
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeActivity", "updateHomeScreenViews: " +
                 "called");
+
         DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
         DecimalFormat decimalFormat1 = new DecimalFormat("#,###.###");
 
@@ -146,11 +164,11 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
         }
     }
 
-    private void getFreshData(){
+    private void getFreshData(int refreshTimerMinutes){
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeActivity", "getFreshData: "+
                 "called");
         /*
-        * This method checks if the data in Room database is up-to-date (<5 min old), and if not it will request AsyncFetchData to fetch fresh data.
+        * This method checks if the data in Room database is up-to-date (<X min old, where X = refreshTimerMinutes), and if not it will request AsyncFetchData to fetch fresh data.
         * 1. Identify all urls that are needed to be updated for Home Screen and add them to the list.
         * 2. Check every url in Room database - when was it last updated.
         * 3. If the url does'n needs to be updated - delete it from the list.
@@ -182,11 +200,11 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
 
         /* At this point List<urls> contains all the urls for Home screen update.
         * Now we loop through the List<urls> and for each of them get timeLastUpdated from Room database.
-        * If the timeLatUpdate <5 min - delete url from the list and pass the remaining List to AsyncFetchData.
+        * If the timeLastUpdate < refreshTimerMinutes min - delete url from the list and pass the remaining List to AsyncFetchData.
         */
         for (Iterator<String> iterator = urls.listIterator(); iterator.hasNext(); ){
             RawUrlData rawUrlDataFromDb = dataDAO.getUrlDataByUrl(iterator.next());
-            if (rawUrlDataFromDb != null && (System.currentTimeMillis() - rawUrlDataFromDb.getUrlLastUpdatedTime() )<300000) {
+            if (rawUrlDataFromDb != null && (System.currentTimeMillis() - rawUrlDataFromDb.getUrlLastUpdatedTime()) < refreshTimerMinutes*60*1000) {
                 iterator.remove();
             }
         }
@@ -207,10 +225,14 @@ public class HomeActivity extends BaseActivity implements InterfaceOnDataFetched
 
     public void onDataFetched(){
         // this method is called through a InterfaceOnFreshData listener when AsyncFetchFreshData is finished
-        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeActivity", "onDataFetched: " + "called");
+        Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeActivity", "onDataFetched: "
+                + "called");
 
-        //disable progressbar
+        //disable my progressbar
         linearLayoutProgress.setVisibility(View.GONE);
+
+        //disable swipe-to-refresh progress bar
+        swipeRefreshLayout.setRefreshing(false);
 
         // request to parse the data
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HomeActivity", "onDataFetched: " +

@@ -63,8 +63,10 @@ public class MyNotificationManager {
                 new NotificationCompat.Builder(mContext, Constants.CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_launcher_background)
                         .setContentTitle(title)
+                        .setContentText(body)
                         .setContentIntent(pendingIntent)
-                        .setContentText(body);
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(body));
 
         /*
          * fire up a notification

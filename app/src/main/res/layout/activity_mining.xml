@@ -4,10 +4,9 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 android:layout_width="match_parent"
 android:layout_height="match_parent">
 
-
-    <fragment
-        android:id="@+id/mining_bottom_nav_host_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_refresh_layout_mining"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:defaultNavHost="true"
@@ -15,8 +14,17 @@ android:layout_height="match_parent">
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_dodgeInsetEdges="bottom"
-        app:navGraph="@navigation/mining_bottom_mobile_navigation" />
+        app:layout_dodgeInsetEdges="bottom">
+
+
+        <fragment
+            android:id="@+id/mining_bottom_nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:navGraph="@navigation/mining_bottom_mobile_navigation" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/mining_bottom_nav_view"

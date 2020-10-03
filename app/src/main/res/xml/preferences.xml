@@ -10,6 +10,7 @@
 
     </PreferenceCategory>
 
+
     <PreferenceCategory
         android:title="Mining (at Eggpool)"
         app:initialExpandedChildrenCount="0"

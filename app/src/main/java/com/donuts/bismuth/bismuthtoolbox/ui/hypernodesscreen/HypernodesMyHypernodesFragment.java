@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import com.donuts.bismuth.bismuthtoolbox.Data.AllHypernodesData;
 import com.donuts.bismuth.bismuthtoolbox.Data.HypernodesRewardAddressesData;
 import com.donuts.bismuth.bismuthtoolbox.R;
 import com.donuts.bismuth.bismuthtoolbox.utils.CurrentTime;
+import com.donuts.bismuth.bismuthtoolbox.utils.MyAlertDialogMessage;
 import com.donuts.bismuth.bismuthtoolbox.utils.MyAxisValueFormatter;
 import com.donuts.bismuth.bismuthtoolbox.utils.TimeLongToStringFormatter;
 
@@ -37,7 +39,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.Objects.isNull;
@@ -57,6 +58,8 @@ public class HypernodesMyHypernodesFragment extends Fragment {
     private TextView textView_yearProfit10kHypernode;
     private TextView textView_yearProfit20kHypernode;
     private TextView textView_yearProfit30kHypernode;
+    private LineChart lineChart;
+    private ImageButton button_help_profit;
     private MyHypernodesRecyclerViewAdapter myHypernodesRecyclerViewAdapter;
     private List<AllHypernodesData> allHypernodesDataModel;
 
@@ -99,6 +102,15 @@ public class HypernodesMyHypernodesFragment extends Fragment {
         textView_yearProfit10kHypernode = getView().findViewById(R.id.textView_year_profit_10K_hypernode);
         textView_yearProfit20kHypernode = getView().findViewById(R.id.textView_year_profit_20K_hypernode);
         textView_yearProfit30kHypernode = getView().findViewById(R.id.textView_year_profit_30K_hypernode);
+        lineChart = getView().findViewById(R.id.lineChartMyHypernodesPayouts);
+        button_help_profit = getView().findViewById(R.id.button_help_hn_profitability_calculator);
+
+        button_help_profit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MyAlertDialogMessage(getContext()).warningMessage("Hypernodes Profitability Calculator.", "Calculations are based on: 1. Current $BIS price at Coingecko; 2. Current number of active hypernodes; 3. Current POS block reward based on the current $BIS distribution scheme; 4. Optimum performance of your hypernode.");
+            }
+        });
 
         /*
          * set recyclerview for hypernodes
@@ -132,6 +144,14 @@ public class HypernodesMyHypernodesFragment extends Fragment {
     private void updateMyHypernodesRecyclerView(List<AllHypernodesData> allHypernodesDataList) {
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HypernodesMyHypernodesFragment", "updateMyHypernodesRecyclerView: "+
                 "called");
+
+        // check if the fragment is attached to the activity (common bug)
+        if (!isAdded()){
+            Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HypernodesMyHypernodesFragment", "updateMyHypernodesRecyclerView: "+
+                    "fragment detached from the activity - views will not be updated");
+            return;
+        }
+
         /*
          * 1. update recyclerview: To update myHypernodesRecyclerViewAdapter: 1. clear previous data; 2. Set new data
          */
@@ -193,6 +213,12 @@ public class HypernodesMyHypernodesFragment extends Fragment {
     private void updateMyHypernodesPayoutsChart(List<HypernodesRewardAddressesData> hypernodesRewardAddressesDataList) {
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HypernodesMyHypernodesFragment", "updateMyHypernodesPayoutsChart: "+
                 "called");
+
+        if (!isAdded()){
+            Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " HypernodesMyHypernodesFragment", "updateMyHypernodesPayoutsChart: "+
+                    "fragment detached from the activity - views will not be updated");
+            return;
+        }
 
         /*
          * 1. update textviews at the top
@@ -279,7 +305,7 @@ public class HypernodesMyHypernodesFragment extends Fragment {
         LineData lineData = new LineData(lineDataSet);
 
         // setting up the Combined chart
-        LineChart lineChart = requireView().findViewById(R.id.lineChartMyHypernodesPayouts);
+        //LineChart lineChart = getView().findViewById(R.id.lineChartMyHypernodesPayouts);
         lineChart.setData(lineData);
         lineChart.invalidate(); // refresh
 

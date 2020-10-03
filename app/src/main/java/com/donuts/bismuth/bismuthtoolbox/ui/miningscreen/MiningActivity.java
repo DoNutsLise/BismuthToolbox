@@ -9,6 +9,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.donuts.bismuth.bismuthtoolbox.Data.RawUrlData;
 import com.donuts.bismuth.bismuthtoolbox.R;
@@ -33,6 +34,8 @@ import static com.donuts.bismuth.bismuthtoolbox.Models.Constants.EGGPOOL_MINER_S
 
 public class MiningActivity extends BaseActivity implements InterfaceOnDataFetched {
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningActivity", "onCreate: "+
@@ -54,6 +57,17 @@ public class MiningActivity extends BaseActivity implements InterfaceOnDataFetch
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+        // create swipe-to-refresh layout
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout_mining);
+        // Setup refresh listener which triggers new data loading
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // call asynctask to fetch fresh data; refresh timer set to 0.
+                getFreshData(0);
+            }
+        });
+
     }
 
     @Override
@@ -63,7 +77,7 @@ public class MiningActivity extends BaseActivity implements InterfaceOnDataFetch
                 "called");
 
         // check if the data is up-to-date (<5 min old), and if not - request asynctask to pull new data
-        getFreshData();
+        getFreshData(5);
     }
 
     @Override
@@ -80,7 +94,7 @@ public class MiningActivity extends BaseActivity implements InterfaceOnDataFetch
                 "called");
     }
 
-    private void getFreshData(){
+    private void getFreshData(int refreshTimerMinutes){
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningActivity", "getFreshData: "+
                 "called");
         /*
@@ -112,11 +126,11 @@ public class MiningActivity extends BaseActivity implements InterfaceOnDataFetch
 
         /* At this point List<urls> contains all the urls for Mining Screen update.
          * Now we loop through the List<urls> and for each of them get timeLastUpdated from Room database.
-         * If the timeLatUpdate <5 min - delete url from the list and pass the remaining List to AsyncFetchData.
+         * If the timeLastUpdate < refreshTimerMinutes min - delete url from the list and pass the remaining List to AsyncFetchData.
          */
         for (Iterator<String> iterator = urls.listIterator(); iterator.hasNext(); ){
             RawUrlData rawUrlDataFromDb = dataDAO.getUrlDataByUrl(iterator.next());
-            if (rawUrlDataFromDb != null && (System.currentTimeMillis() - rawUrlDataFromDb.getUrlLastUpdatedTime() )<300000) {
+            if (rawUrlDataFromDb != null && (System.currentTimeMillis() - rawUrlDataFromDb.getUrlLastUpdatedTime()) < refreshTimerMinutes*60*1000) {
                 iterator.remove();
             }
         }
@@ -140,6 +154,9 @@ public class MiningActivity extends BaseActivity implements InterfaceOnDataFetch
 
         //disable progressbar
         linearLayoutProgress.setVisibility(View.GONE);
+
+        //disable swipe-to-refresh progress bar
+        swipeRefreshLayout.setRefreshing(false);
 
         // request to parse the data
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningActivity", "onDataFetched: " +

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import com.donuts.bismuth.bismuthtoolbox.Data.EggpoolBisStatsData;
 import com.donuts.bismuth.bismuthtoolbox.Data.EggpoolPayoutsData;
 import com.donuts.bismuth.bismuthtoolbox.R;
 import com.donuts.bismuth.bismuthtoolbox.utils.CurrentTime;
+import com.donuts.bismuth.bismuthtoolbox.utils.MyAlertDialogMessage;
 import com.donuts.bismuth.bismuthtoolbox.utils.MyAxisValueFormatter;
 import com.donuts.bismuth.bismuthtoolbox.utils.TimeLongToStringFormatter;
 import com.github.mikephil.charting.charts.LineChart;
@@ -55,6 +57,8 @@ public class MiningPayoutsFragment extends Fragment {
     private TextView textView_profitBisMonth;
     private TextView textView_profitBtcMonth;
     private TextView textView_profitUsdMonth;
+    private LineChart lineChart;
+    private ImageButton button_help_profit;
     private MiningPayoutsRecyclerViewAdapter payoutsRecyclerViewAdapter;
     private List<EggpoolPayoutsData> eggpoolPayoutsDataModel;
 
@@ -94,7 +98,17 @@ public class MiningPayoutsFragment extends Fragment {
         textView_profitUsdDay =getView().findViewById(R.id.payouts_textView_profitUsdDay);
         textView_profitBisMonth = getView().findViewById(R.id.payouts_textView_profitBisMonth);
         textView_profitBtcMonth = getView().findViewById(R.id.payouts_textView_profitBtcMonth);
-        textView_profitUsdMonth =getView().findViewById(R.id.payouts_textView_profitUsdMonth);
+        textView_profitUsdMonth = getView().findViewById(R.id.payouts_textView_profitUsdMonth);
+        button_help_profit = getView().findViewById(R.id.button_help_profitability_calculator);
+        lineChart = getView().findViewById(R.id.lineChartPayouts);
+
+        button_help_profit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MyAlertDialogMessage(getContext()).warningMessage("Mining Profitability Calculator", "Calculations are based on: 1. Current $BIS price at Coingecko; 2. The average hashrate of all your miners during the last 12h; 3. 10% pool fee is included into calculations.");
+            }
+        });
+
 
         /*
          * set recyclerview for miners
@@ -128,6 +142,13 @@ public class MiningPayoutsFragment extends Fragment {
     private void updatePayoutsRecyclerView(List<EggpoolPayoutsData> eggpoolPayoutsDataList) {
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningPayoutsFragment", "updatePayoutsRecyclerView: "+
                 "called");
+
+        // check if the fragment is attached to the activity (common bug)
+        if (!isAdded()){
+            Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningPayoutsFragment", "updatePayoutsRecyclerView: "+
+                    "fragment detached from the activity - views will not be updated");
+            return;
+        }
         /*
         * 1. update recyclerview: To update minersRecyclerViewAdapter: 1. clear previous data; 2. Set new data
          */
@@ -221,7 +242,7 @@ public class MiningPayoutsFragment extends Fragment {
         LineData lineData = new LineData(lineDataSet);
 
         // setting up the Combined chart
-        LineChart lineChart = getView().findViewById(R.id.lineChartPayouts);
+        //LineChart lineChart = getView().findViewById(R.id.lineChartPayouts);
         lineChart.setData(lineData);
         lineDataSet.setDrawFilled(true);
         lineChart.invalidate(); // refresh
@@ -260,9 +281,15 @@ public class MiningPayoutsFragment extends Fragment {
 
     private void updatePayoutsBalanceView(List<EggpoolBalanceData> eggpoolBalanceData) {
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningPayoutsFragment", "updatePayoutsBalanceView: " +
-                "called");
+                "called and isAdded = " + isAdded());
 
         DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
+
+        if (!isAdded()){
+            Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningPayoutsFragment", "updatePayoutsBalanceView: "+
+                    "fragment detached from the activity - views will not be updated");
+            return;
+        }
 
         textView_eggpoolImmatureBalance.setText(decimalFormat.format(((MiningActivity) requireActivity()).dataDAO.getAllEggpoolWalletsImmatureBalance()));
         textView_eggpoolUnpaidBalance.setText(decimalFormat.format(((MiningActivity) requireActivity()).dataDAO.getAllEggpoolWalletsUnpaidBalance()));
@@ -275,6 +302,12 @@ public class MiningPayoutsFragment extends Fragment {
     private void updatePayoutsProfitTableView(EggpoolBisStatsData eggpoolBisStatsData) {
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningPayoutsFragment", "updatePayoutsProfitTableView: " +
                 "called");
+
+        if (!isAdded()){
+            Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MiningPayoutsFragment", "updatePayoutsProfitTableView: "+
+                    "fragment detached from the activity - views will not be updated");
+            return;
+        }
         // the update of the table with profit calculations is only triggered by fresh data received (saved in Room database) from EGGPOOL_BIS_STATS_URL.
         // Bis price obtained from Coingecko is also required for this calculations, but the update of the view is not triggered by fresh data from Coingecko.
 
