@@ -14,8 +14,6 @@ All-in-one app for monitoring Bismuth network vitals.
     <img src="https://user-images.githubusercontent.com/49869348/83572017-be644400-a520-11ea-84de-0569c39e868c.png" width="250" title="hover text">
 </p>
 
-Note: Push notifications are disabled in settings by default. When you enable this option you will be asked if you accept sharing your hypernode IPs and mining wallets addresses. The wallet addresses and hypernode IPs you enter in the settings screen will be sent to Google's Firebase together with your device's unique ID. This data is totally anonymous and is used ONLY to serve targeted push notifications (e.g. about problems with your hypernodes and/or miners). If you are not happy about it - just click "decline" (you will receive no push notifications though).
-
 ## HOW TO INSTALL:
 
 Option 1 (easy way) - install from Google Play (https://play.google.com/store/apps/details?id=com.donuts.bismuth.bismuthtoolbox). I would choose this option because it's easy to get updates.
